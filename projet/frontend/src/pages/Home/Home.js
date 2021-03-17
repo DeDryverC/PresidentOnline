@@ -1,4 +1,5 @@
 import React from "react";
+import "./Home.css"
 
 export default function Home(){
     return (
@@ -14,15 +15,15 @@ export default function Home(){
                 <h4 class="menuItem" onclick='hello world'>How to play</h4>
                 <h4 class="menuItem" onclick='hello world'>Rules</h4>
             </div>
-            <div class="create">
-                <button onclick=''> Create Game </button>
+            <div>
+                <button class="create" onclick=''> Create Game </button>
             </div>
             <div class="zoneFind">
-                <h2 class="menu">Find games</h2>
+                <h2 class="menuRecherche">Find games</h2>
                 <ul>
-                    <li>game 1</li>
-                    <li>game 2</li>
-                    <li>game 3</li>
+                    <li class="itemliste">game 1</li>
+                    <li class="itemliste">game 2</li>
+                    <li class="itemliste">game 3</li>
                 </ul>
             </div>
         </html>
