@@ -37,6 +37,7 @@
 .zoneFind{
     margin-top:20px;
     margin-left:800px;
+    border: 1px, solid;
 }
 .menuRecherche{
    font-size:25px;
@@ -52,6 +53,5 @@
     margin-top:40px;
     margin-left:15px;
 }
-
 
 
