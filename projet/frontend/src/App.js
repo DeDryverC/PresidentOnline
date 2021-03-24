@@ -7,12 +7,13 @@ function App() {
   return (
     <div style={{
       backgroundImage : `url(${background})`, height: 1000, margin: 0,
-      backgroundSize: 'cover', backgroundRepeat: 'no-repeat', 
+      backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
       }}>
+
       <Navbar />
       <Home />
     </div>
-    
+
   );
 }
 
