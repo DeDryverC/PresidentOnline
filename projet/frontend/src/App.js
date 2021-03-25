@@ -1,6 +1,11 @@
 import React from "react";
+<<<<<<< HEAD
 /*import Navbar from './Navbar/navbar';
 import background from './Navbar/images/fond.png';*/
+=======
+import Navbar from './Navbar/navbar';
+import background from './Navbar/images/cardbackground.jpg';
+>>>>>>> 7ce7abda7a900a3f18ac0eb250b264edf1e1268c
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Jeu from "./pages/Jeu/Jeu";
@@ -14,12 +19,20 @@ import Historique from "./pages/Profil/Historique";
 
 function App() {
   return (
+<<<<<<< HEAD
     /*<div style={{
       backgroundImage : `url(${background})`, height:1000,
       backgroundSize: 'cove',
+=======
+    <div style={{
+      backgroundImage : `url(${background})`, height: 1000, margin: 0,
+      backgroundSize: 'cover', backgroundRepeat: 'no-repeat',
+>>>>>>> 7ce7abda7a900a3f18ac0eb250b264edf1e1268c
       }}>
+
       <Navbar />
       <Home />
+<<<<<<< HEAD
     </div>*/
     <Switch>
       <Route exact path="/" component={Home} />
@@ -33,6 +46,10 @@ function App() {
       <Route exact path="/howto" component={HowTo} />
       <Redirect to="/" />
     </Switch>
+=======
+    </div>
+
+>>>>>>> 7ce7abda7a900a3f18ac0eb250b264edf1e1268c
   );
 }
 
