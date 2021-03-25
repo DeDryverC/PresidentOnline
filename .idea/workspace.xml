@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d093b36f-af70-4709-be35-74723bbcdd27" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/projet/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/projet/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/projet/frontend/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/projet/frontend/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +41,16 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
+  <component name="RunManager">
+    <configuration name="Jeu.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js" working-dir="$PROJECT_DIR$/projet/frontend/src/pages/Jeu">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.Jeu.js" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -56,10 +64,23 @@
       <workItem from="1615974470450" duration="18000" />
       <workItem from="1615974490725" duration="1100000" />
       <workItem from="1616574481087" duration="2269000" />
+      <workItem from="1616685263434" duration="2467000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js</url>
+          <line>1</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
