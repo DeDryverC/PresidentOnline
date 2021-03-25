@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d093b36f-af70-4709-be35-74723bbcdd27" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/DuringGame.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js" beforeDir="false" afterPath="$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js" afterDir="false" />
     </list>
@@ -70,17 +71,5 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/projet/frontend/src/pages/Jeu/Jeu.js</url>
-          <line>1</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
