@@ -1,0 +1,22 @@
+.nav-profil{
+    cursor:pointer;
+    display:flex;
+    transition: .5s;
+    
+    &:hover .comp-profil, 
+    .comp-profil:hover {
+
+        visibility:visible;
+        opacity: 1;
+    }
+
+    .comp-profil{
+        position:absolute;
+        visibility: hidden;
+        opacity:0;
+    
+    }
+
+}
+
+

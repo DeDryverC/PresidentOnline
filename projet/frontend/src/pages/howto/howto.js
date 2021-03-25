@@ -1,7 +1,7 @@
 import React from "react";
 import Navigation from "../../components/Navigation";
 
-export default function Login(){
+export default function HowTo(){
     return (
         <html>
             <div class="hautpage">
@@ -12,4 +12,4 @@ export default function Login(){
         </html>
 
     )
-}
+};
