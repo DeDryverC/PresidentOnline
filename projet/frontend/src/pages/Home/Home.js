@@ -5,9 +5,7 @@ import "./Home.css"
 export default function Home(){
     return (
         <html>
-            <div>
-                <Navigation />
-            </div>
+            <Navigation />
             
         </html>
 
