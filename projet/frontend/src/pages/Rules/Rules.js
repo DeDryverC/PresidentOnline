@@ -1,12 +1,12 @@
 import React from "react";
-import Navigation from "../../components/Navigation";
+import NavigationRules from "../../components/NavigationRules";
 
 export default function Rules(){
     return (
         <html>
             <div class="hautpage">
-
-                <Navigation />
+ 
+                <NavigationRules />
             </div>
            
         </html>

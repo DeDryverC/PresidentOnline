@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import "./Navigation.css" 
+import "./NavigationHome.css" 
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 
 
-const Navigation =() => {
+const NavigationHowto =() => {
     return (
         <main>
             <Container fluid="lg"> 
@@ -103,11 +103,8 @@ const Navigation =() => {
                             backgroundColor: 'palegoldenrod'
                             }}>
                                 <Row> 
-                                    <Button variant="outline-primary" style={{
-                                    display: 'block',
-                                    margin: 'auto'
-                                }}>Create Game</Button>
-                                    <br/>
+                                    
+                                <h2>How to play </h2>
                                 </Row>
                                 <Row>
                                 {/* Ici un composant réactif qui changera selon ce qu'on touche (Genre le home c'est la liste des games, puis lorsque l'on naviguera sur la barre "menu", cela changera ce qu'il y a ici.) 
@@ -115,19 +112,37 @@ const Navigation =() => {
                                     <Container>
                                         <Col>
                                             <Row>
-                                                <h4>Find games</h4>
-                                                <br/>
-                                            </Row>
-                                            <Row>
-                                                <Button variant="success">Joinable</Button><br/>__
-                                                <p>  Victor's party</p>
-                                                <p>[3/4]</p>
-                                            </Row>
-                                            <br/>
-                                            <Row>
-                                                <Button variant="danger" disabled>Full</Button><br/>__
-                                                <p>  Gamepass Challenge</p>
-                                                <p>[4/4]</p>
+                                                <ul>
+                                                <li> Play as guest : </li><br></br>
+                                                    <ul>
+                                                        <li> blabla </li>
+                                                        <li> blabla2 </li>
+                                                    </ul>  <br></br>                                          
+                                                <li> Play logged : </li><br></br>
+                                                    <ul>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                <li> Create a game : </li><br></br>
+                                                    <ul>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                <li> Join a game : </li><br></br>
+                                                    <ul>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                <li> Join a game with friends : </li>
+                                                    <ul><br></br>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                <li> Use a card : </li>
+                                                    <ul><br></br>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                <li> Change cards : </li>
+                                                    <ul><br></br>
+                                                        <li> blabla </li>
+                                                    </ul><br></br>
+                                                </ul>
                                             </Row>
                                         </Col>
                                     </Container>
@@ -142,4 +157,4 @@ const Navigation =() => {
     );
 };
 
-export default Navigation;
+export default NavigationHowto;
