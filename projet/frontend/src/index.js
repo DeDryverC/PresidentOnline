@@ -1,16 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-/*import background from './Navbar/images/fond.jpg'*/
+
+import background from './Navbar/images/bg_dark.webp'
 import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
   <Router>
     <div style={{
-      /*backgroundImage : `url(${background})`, height:1000,
-      backgroundSize: 'cover',*/
-      backgroundColor: 'green',
-      backgroundSize: 'cover'
+      backgroundImage : `url(${background})`, height:1000,
+      backgroundRepeat: 'repeat',
       }}>
         <App />
     </div>
