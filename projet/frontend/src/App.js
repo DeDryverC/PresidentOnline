@@ -4,10 +4,11 @@ import background from './Navbar/images/fond.png';*/
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import Jeu from "./pages/Jeu/Jeu";
+import Create from "./pages/Jeu/Create";
 import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import HowTo from "./pages/Howto/Howto";
+import HowTo from "./pages/howto/howto";
 import Stats from "./pages/Profil/Stats";
 import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";
@@ -47,6 +48,7 @@ class App extends Component {
         <Route exact path="/signin" component={Signin} />
         <Route exact path="/rules" component={Rules} />
         <Route exact path="/howto" component={HowTo} />
+        <Route exact path="/create" component={Create} />
         <Redirect to="/" />
       </Switch>
     );

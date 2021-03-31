@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import "./Navigation.css" 
 import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
@@ -103,10 +103,12 @@ const Navigation =() => {
                             backgroundColor: 'palegoldenrod'
                             }}>
                                 <Row> 
+                                   <NavLink to='/create' exact className="hover" activeClassName='nav-active'>
                                     <Button variant="outline-primary" style={{
-                                    display: 'block',
-                                    margin: 'auto'
-                                }}>Create Game</Button>
+                                        display: 'block',
+                                        margin: 'auto'
+                                    }}>Create Game</Button>
+                                   </NavLink>
                                     <br/>
                                 </Row>
                                 <Row>
