@@ -11,6 +11,7 @@ import HowTo from "./pages/Howto/Howto";
 import Stats from "./pages/Profil/Stats";
 import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";
+import HowTo from "./pages/Howto/Howto";
 
 class App extends Component {
   state = {
@@ -25,7 +26,7 @@ class App extends Component {
   }
     // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
   callBackendAPI = async () => {
-    const response = await fetch('/express_backend');
+    const response = await fetch('/test');
     const body = await response.json();
 
     if (response.status !== 200) {
@@ -42,7 +43,7 @@ class App extends Component {
         <Route exact path="/login" component={Login} />
         <Route exact path="/stats" component={Stats} />
         <Route exact path="/myprofile" component={Me} />
-        <Route exact path="/Historique" component={Historique} />
+        <Route exact path="/historique" component={Historique} />
         <Route exact path="/jeu" component={Jeu} />
         <Route exact path="/signin" component={Signin} />
         <Route exact path="/rules" component={Rules} />
