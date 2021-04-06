@@ -7,6 +7,7 @@ import Jeu from "./pages/Jeu/Jeu";
 import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
+import HowTo from "./pages/Howto/Howto";
 import Stats from "./pages/Profil/Stats";
 import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";

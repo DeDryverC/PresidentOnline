@@ -1,12 +1,12 @@
 import React from "react";
-import Navigation from "../../components/Navigation";
+import NavigationAutres from "../../components/NavigationAutres";
 
 export default function Me(){
     return (
         <html>
             <div class="hautpage">
  
-                <Navigation />
+                <NavigationAutres />
             </div>
            
         </html>

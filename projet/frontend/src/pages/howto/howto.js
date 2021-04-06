@@ -1,15 +1,15 @@
 import React from "react";
-import Navigation from "../../components/Navigation";
+import NavigationHowto from "../../components/NavigationHowto";
 
-export default function HowTo(){
+export default function Howto(){
     return (
         <html>
             <div class="hautpage">
-
-                <Navigation />
+ 
+                <NavigationHowto />
             </div>
            
         </html>
 
     )
-};
+}
