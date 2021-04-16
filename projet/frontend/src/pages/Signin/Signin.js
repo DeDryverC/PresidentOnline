@@ -11,6 +11,7 @@ class Signin extends React.Component {
         this.state={
             name:'',
             surname:'',
+            pseudo:'',
             email:'',
             birthDate:'',
             password:'',
@@ -30,9 +31,10 @@ class Signin extends React.Component {
             alert("Password doesn't match")
         }
         else{
-        console.log('Le nom a été soumis : ' + this.state.nom);
-        console.log('Le prenom a été soumis : ' + this.state.prenom);
-        console.log('La date de naissance a été soumis : ' + this.state.dateNaiss);
+        console.log('Le nom a été soumis : ' + this.state.name);
+        console.log('Le prenom a été soumis : ' + this.state.surname);
+        console.log('Le pseudo a été soumis : ' + this.state.pseudo);
+        console.log('La date de naissance a été soumis : ' + this.state.birthDate);
         console.log('Le mail a été soumis : ' + this.state.email);
         console.log('Le password a été soumis : ' + this.state.password);
         console.log('Le confirmPassword a été soumis : ' + this.state.confirmPassword);
@@ -62,6 +64,10 @@ class Signin extends React.Component {
                             <label>
                                 Surname :
                             <input type="text" value={this.state.prenom} onChange={text => this.setState({surname: text.target.value})} />
+                            </label><br></br>
+                            <label>
+                                Pseudo :
+                            <input type="text" value={this.state.pseudo} onChange={text => this.setState({pseudo: text.target.value})} />
                             </label><br></br>
                             <label>
                                 Email :
