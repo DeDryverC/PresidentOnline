@@ -12,7 +12,7 @@ const NavigationHowto =() => {
         <main>
             <Container fluid="lg"> 
                 <Row>
-                    <Col md="auto" style = {{
+                    <Col md="auto" fluid="md" style = {{
                         border: '2px solid moccasin',
                         borderRadius: '10px',
                         backgroundColor: 'palegoldenrod'
