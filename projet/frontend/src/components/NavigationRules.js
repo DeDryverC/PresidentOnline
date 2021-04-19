@@ -51,6 +51,11 @@ const NavigationRules =() => {
                                         <h4 style={{textAlign: "center", fontSize: 24}}>Log In</h4>
                                     </NavLink>
                                 </Col>
+                                <Col sm='auto'>
+                                    <NavLink to="/profile" className ="hover" activeClassName='nav-active'> 
+                                        <h4 style={{textAlign: "center", fontSize: 24}}>Profil</h4>
+                                    </NavLink>
+                                </Col>
                             </Row>
                         </Container>
                     </Col>

@@ -8,9 +8,8 @@ import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import HowTo from "./pages/Howto/Howto"
-import Stats from "./pages/Profil/Stats";
-import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";
+import Profil from "./pages/Profil/Profil";
 
 class App extends Component {
   state = {
@@ -40,8 +39,7 @@ class App extends Component {
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/stats" component={Stats} />
-        <Route exact path="/myprofile" component={Me} />
+        <Route exact path="/profile" component={Profil} />
         <Route exact path="/historique" component={Historique} />
         <Route exact path="/jeu" component={Jeu} />
         <Route exact path="/signin" component={Signin} />
