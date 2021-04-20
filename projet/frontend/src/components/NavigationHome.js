@@ -123,16 +123,45 @@ const NavigationHome =() => {
                                                 <br/>
                                             </Row>
                                             <Row>
-                                                <Button variant="success">Joinable</Button><br/>__
-                                                <p>  Victor's party</p>
-                                                <p>[3/4]</p>
+                                                <form>
+                                                    <label for="searchname">Search Room:</label>
+                                                    <input type="text" name="searchname"></input>
+                                                    <input type="submit" value="Find Room"></input>
+                                                </form>
                                             </Row>
-                                            <br/>
-                                            <Row>
-                                                <Button variant="danger" disabled>Full</Button><br/>__
-                                                <p>  Gamepass Challenge</p>
-                                                <p>[4/4]</p>
-                                            </Row>
+                                            <Container>
+                                                <Col>
+                                                    <Row>
+                                                        <Button variant="success">Joinable</Button><br/>__
+                                                        <p>  Victor's party </p>
+                                                        <p> [3/4] </p>
+                                                        <p> -Public- </p>
+                                                    </Row>
+                                                    <Row>
+                                                        <Button variant="warning">Joinable</Button><br/>__
+                                                        <p>  Chaos </p>
+                                                        <p> [2/4] </p>
+                                                        <p> -Private- </p>
+                                                        <Container>
+                                                            <Col>
+                                                                <Row>
+                                                                    <form>
+                                                                        <label for="pass">Enter Passcode:</label>
+                                                                        <input type="text" name="pass"></input>
+                                                                        <input type="submit" value="Enter?"></input>
+                                                                    </form>
+                                                                </Row>
+                                                            </Col>
+                                                        </Container>
+                                                    </Row>
+                                                    <br/>
+                                                    <Row>
+                                                        <Button variant="danger" disabled>Full</Button><br/>__
+                                                        <p>  Gamepass Challenge</p>
+                                                        <p>[4/4]</p>
+                                                    </Row>
+                                                </Col>
+                                            </Container>
                                         </Col>
                                     </Container>
                                 </Row>

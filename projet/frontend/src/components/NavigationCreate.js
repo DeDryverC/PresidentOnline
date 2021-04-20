@@ -145,6 +145,11 @@ const NavigationCreate =() => {
                                                     <input type="text" />
                                                 </label>
                                                 </Row>
+                                                <Row>
+                                                    <label>
+                                                        <input type="submit" value="Create Game"></input>
+                                                    </label>
+                                                </Row>
                                             </form>
                                             </Row> 
                                            
