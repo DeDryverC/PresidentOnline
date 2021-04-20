@@ -10,6 +10,8 @@ import {Redirect, Route, Switch} from 'react-router-dom';
 import HowTo from "./pages/Howto/Howto"
 import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
+import CreateGame from "./pages/CreateGame/CreateGame";
+
 
 class App extends Component {
   state = {
@@ -45,7 +47,7 @@ class App extends Component {
         <Route exact path="/signin" component={Signin} />
         <Route exact path="/rules" component={Rules} />
         <Route exact path="/howto" component={HowTo} />
-        <Redirect to="/" />
+        <Route exact path="/creategame" component={CreateGame} />
       </Switch>
     );
   }

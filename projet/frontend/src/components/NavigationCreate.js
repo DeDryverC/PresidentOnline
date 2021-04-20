@@ -5,9 +5,20 @@ import Container from 'react-bootstrap/Container'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
+import Select from 'react-select'
+
+const options = [
+    { value: '1', label: '1' },
+    { value: '2', label: '2' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+    { value: '5', label: '5' },
+    { value: '6', label: '6' },
+
+  ]
 
 
-const NavigationHome =() => {
+const NavigationCreate =() => {
     return (
         <main>
             <Container fluid="lg"> 
@@ -86,10 +97,7 @@ const NavigationHome =() => {
                             backgroundColor: 'palegoldenrod'
                             }}>
                                 <Row>
-                                    <h2 style={{
-                                    display: 'block',
-                                    margin: 'auto'
-                                }}> Menu </h2>
+                                    <h2 style={{display: 'block',margin: 'auto'}}> Menu </h2>
                                 </Row>
                                 <Row>
                                     <NavLink to="/howto" exact className ="hover" activeClassName='nav-active'>How to play ?</NavLink>
@@ -107,32 +115,40 @@ const NavigationHome =() => {
                             borderRadius: '10px',
                             backgroundColor: 'palegoldenrod'
                             }}>
-                                <Row> 
-                                    <NavLink to="/creategame" className ="hover" activeClassName='nav-active'> 
-                                        <Button variant="outline-primary" style={{display: 'block',margin: 'auto'}}>Create Game</Button>
-                                        <br/>
-                                    </NavLink>
-                                </Row>
+                                
                                 <Row>
                                 {/* Ici un composant réactif qui changera selon ce qu'on touche (Genre le home c'est la liste des games, puis lorsque l'on naviguera sur la barre "menu", cela changera ce qu'il y a ici.) 
                                     En attendant je hardcode le listing des game disponible*/}
                                     <Container>
                                         <Col>
                                             <Row>
-                                                <h4>Find games</h4>
-                                                <br/>
-                                            </Row>
+                                                <h2>Create a game</h2>
+                                                <br/><br/>
+                                            </Row> 
                                             <Row>
-                                                <Button variant="success">Joinable</Button><br/>__
-                                                <p>  Victor's party</p>
-                                                <p>[3/4]</p>
-                                            </Row>
-                                            <br/>
-                                            <Row>
-                                                <Button variant="danger" disabled>Full</Button><br/>__
-                                                <p>  Gamepass Challenge</p>
-                                                <p>[4/4]</p>
-                                            </Row>
+                                            <form>
+                                                <Row>
+                                                <label>
+                                                    <p>Name of the lobby :</p>
+                                                    <input type="text" />
+                                                </label>
+                                                </Row><br/><br/>
+                                                <Row>
+                                                <label>
+                                                    <p>Amount of player : </p>
+                                                    <Select options={options} />
+                                                </label>
+                                                </Row><br/><br/>
+                                                <Row>
+                                                <label>
+                                                    <p>Code :</p>
+                                                    <input type="text" />
+                                                </label>
+                                                </Row>
+                                            </form>
+                                            </Row> 
+                                           
+
                                         </Col>
                                     </Container>
                                 </Row>
@@ -146,4 +162,4 @@ const NavigationHome =() => {
     );
 };
 
-export default NavigationHome;
+export default NavigationCreate;
