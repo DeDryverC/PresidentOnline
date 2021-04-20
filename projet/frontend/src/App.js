@@ -1,20 +1,21 @@
 import React, {Component} from "react";
 /*import Navbar from './Navbar/navbar';
 import background from './Navbar/images/fond.png';*/
-import Home from "./pages/Home/Home";
+import Home from "./components/NavigationHome";
 import Login from "./pages/Login/Login";
 import Jeu from "./pages/Jeu/Jeu";
 import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import HowTo from "./pages/howto/Howto"
+import HowTo from "./pages/howto/howto"
 import Stats from "./pages/Profil/Stats";
 import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";
 
 class App extends Component {
   state = {
-    data: null
+    data: null,
+    page : 'home'
   };
 
   componentDidMount() {

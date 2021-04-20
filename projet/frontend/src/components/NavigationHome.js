@@ -2,8 +2,40 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import "./NavigationHome.css" 
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
+import { useState } from 'react'
+import Home from '../pages/Home/Home';
+import Howto from '../pages/howto/howto'; 
+import Rules from '../pages/Rules/Rules';
 
+let statePage = "home"
 
+function setHome() {
+    statePage ="home";
+}
+function setHowto() {
+    statePage = "howto";
+}
+function setRules() {
+    statePage = "rules";
+    console.log(statePage);
+}
+function PageSwitch(){
+    const [page, setPage] = useState();
+
+    const refresh = () =>{
+        this.setState({});
+    }
+    switch(statePage){
+        case 'home':
+            return <Home/>;
+        case 'howto':
+            return <Howto/>;
+        case 'rules':
+            return <Rules/>;
+        default :
+            return <Home/>;
+    }
+}
 const NavigationHome =() => {
     return (
         <main>
@@ -71,7 +103,6 @@ const NavigationHome =() => {
             <Container fluid="lg">
                 <Row>
                     <Col fluid="xs" lg={2}>
-                    
                        <Container style={{
                            height: 200,
                        }}>
@@ -90,63 +121,18 @@ const NavigationHome =() => {
                                 <br/><br/>
                                 <Row className="justify-content-md-center">
                                     <ButtonGroup vertical center>
-                                        <Button variant="outline-info" size="lg">
-                                            <NavLink to="/" exact className ="hover" activeClassName='nav-active'> Home </NavLink>
-                                        </Button>
+                                        <Button variant="outline-info" size="lg" onClick={()=> {setHome(); PageSwitch();}}>Home</Button>
                                         <br/>
-                                        <Button variant="outline-info" size="lg">
-                                            <NavLink to="/howto" exact className ="hover" activeClassName='nav-active'>How to play ?</NavLink>
-                                        </Button>
+                                        <Button variant="outline-info" size="lg" onClick={setHowto}>How to play ?</Button>
                                         <br/>
-                                        <Button variant="outline-info" size="lg">
-                                            <NavLink to="/rules" exact className ="hover" activeClassName='nav-active'>Rules</NavLink>
-                                        </Button>
+                                        <Button variant="outline-info" size="lg" onClick={setRules}>Rules</Button>
                                     </ButtonGroup>
                                 </Row>
                             </Col>
                         </Container>
                     </Col>
-                    <Col fluid>
-                    {/* DYNAMIC CONTAINER FOR RULES, HOW TO PLAY ETC*/}
-                        <Container className="Dynamic" fluid="lg">
-                            <Col style = {{
-                            border: '2px solid moccasin',
-                            borderRadius: '10px',
-                            backgroundColor: 'palegoldenrod'
-
-                            }}>
-                                <Row> 
-                                    <Button variant="outline-primary" style={{
-                                    display: 'block',
-                                    margin: 'auto'
-                                }}>Create Game</Button>
-                                    <br/>
-                                </Row>
-                                <Row>
-                                {/* Ici un composant réactif qui changera selon ce qu'on touche (Genre le home c'est la liste des games, puis lorsque l'on naviguera sur la barre "menu", cela changera ce qu'il y a ici.) 
-                                    En attendant je hardcode le listing des game disponible*/}
-                                    <Container>
-                                        <Col>
-                                            <Row>
-                                                <h4>Find games</h4>
-                                                <br/>
-                                            </Row>
-                                            <Row>
-                                                <Button variant="success">Joinable</Button><br/>__
-                                                <p>  Victor's party</p>
-                                                <p>[3/4]</p>
-                                            </Row>
-                                            <br/>
-                                            <Row>
-                                                <Button variant="danger" disabled>Full</Button><br/>__
-                                                <p>  Gamepass Challenge</p>
-                                                <p>[4/4]</p>
-                                            </Row>
-                                        </Col>
-                                    </Container>
-                                </Row>
-                            </Col>
-                       </Container>
+                    <Col fluid = "lg">
+                        {PageSwitch()}
                     </Col>
                 </Row>
             

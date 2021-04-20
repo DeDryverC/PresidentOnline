@@ -1,11 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import "./NavigationHome.css" 
-import Container from 'react-bootstrap/Container'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import Button from 'react-bootstrap/Button'
-
+import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 const NavigationRules =() => {
     return (
@@ -73,28 +69,42 @@ const NavigationRules =() => {
             <br/>
             <Container>
                 <Row>
-                    <Col>
-                       <Container>
-                            <Col md= 'auto' style = {{
-                            border: '2px solid moccasin',
-                            borderRadius: '10px',
-                            backgroundColor: 'palegoldenrod'
-                            }}>
-                                <Row>
-                                    <h2 style={{
-                                    display: 'block',
-                                    margin: 'auto'
-                                }}> Menu </h2>
-                                </Row>
-                                <Row>
-                                    <NavLink to="/howto" exact className ="hover" activeClassName='nav-active'>How to play ?</NavLink>
-                                </Row>
-                                <Row>
-                                    <NavLink to="/rules" exact className ="hover" activeClassName='nav-active'>Rules</NavLink>
-                                </Row>
-                            </Col>
-                        </Container>
-                    </Col>
+                <Col fluid="xs" lg={2}>
+                    
+                    <Container style={{
+                        height: 200,
+                    }}>
+                         <Col md='auto' style = {{
+                         border: '2px solid moccasin',
+                         borderRadius: '10px',
+                         backgroundColor: 'palegoldenrod',
+                         height : '500px'
+                         }}>
+                             <Row>
+                                 <h2 style={{
+                                 display: 'block',
+                                 margin: 'auto'
+                             }}> Menu </h2>
+                             </Row>
+                             <br/><br/>
+                             <Row className="justify-content-md-center">
+                                 <ButtonGroup vertical center>
+                                     <Button variant="outline-info" size="lg">
+                                         <NavLink to="/" exact className ="hover" activeClassName='nav-active'> Home </NavLink>
+                                     </Button>
+                                     <br/>
+                                     <Button variant="outline-info" size="lg">
+                                         <NavLink to="/howto" exact className ="hover" activeClassName='nav-active'>How to play ?</NavLink>
+                                     </Button>
+                                     <br/>
+                                     <Button variant="outline-info" size="lg">
+                                         <NavLink to="/rules" exact className ="hover" activeClassName='nav-active'>Rules</NavLink>
+                                     </Button>
+                                 </ButtonGroup>
+                             </Row>
+                         </Col>
+                     </Container>
+                 </Col>
                     <Col>
                         <Container>
                             <Col style = {{
