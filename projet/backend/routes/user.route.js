@@ -7,4 +7,5 @@ module.exports = (app) => {
     app.get("/getRules", rules.getRules);
     app.get("/getHistory", history.getHistory);
     app.get("/getStatistics/:pseudo", statistics.getStatistics);
+
 };
