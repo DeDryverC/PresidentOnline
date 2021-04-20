@@ -1,7 +1,7 @@
 const mysql = require("./db");
 
 const statistics = function(user){
-    this.id = demande.id
+    this.id = statistics.id
 }
 
 statistics.getStatistics = (pseudo, result) => {

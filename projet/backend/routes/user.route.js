@@ -3,9 +3,10 @@ module.exports = (app) => {
     const history = require("../controllers/history.controller");
     const signin = require ("../controllers/signin.controller");
     const statistics = require("../controllers/statistics.controller");
+    const profil = require("../controllers/profil.controller");
 
     app.get("/getRules", rules.getRules);
     app.get("/getHistory", history.getHistory);
     app.get("/getStatistics/:pseudo", statistics.getStatistics);
-
+    app.get("/getProfil/:pseudo", profil.getProfil);
 };
