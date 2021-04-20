@@ -5,4 +5,5 @@ module.exports = (app) => {
     
     app.get("/getRules", rules.getRules)
     app.get("/getHistory", history.getHistory)
+    app.post("/postSign", signin.createUser1)
 };

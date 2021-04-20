@@ -3,29 +3,29 @@ import NavigationAutres from "../../components/NavigationAutres";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
+
 class Signin extends React.Component {
 
     constructor(props) {
         super(props);
        
         this.state={
-            name:'',
-            surname:'',
-            pseudo:'',
-            email:'',
-            birthDate:'',
-            password:'',
-            confirmPassword:'',
-            
+            name:'flo',
+            surname:'zz',
+            pseudo:'zz',
+            email:'zz',
+            birthDate:'zz',
+            password:'zz',
+            confirmPassword:'zz',
+            gameCount:'0'
         }
         
 
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
-      
 
-      handleSubmit(event) {
+        handleSubmit(event) {
 
         if(this.state.password != this.state.confirmPassword){
             alert("Password doesn't match")
@@ -38,9 +38,42 @@ class Signin extends React.Component {
         console.log('Le mail a été soumis : ' + this.state.email);
         console.log('Le password a été soumis : ' + this.state.password);
         console.log('Le confirmPassword a été soumis : ' + this.state.confirmPassword);
+        console.log('Le gameCount a été soumis : ' + this.state.gameCount);
         console.log(this.state)
+
+        fetch('http://localhost:5000/postSign/',{
+            
+              method:'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin":"true"
+              },
+              body: JSON.stringify({
+                pseudo:this.state.pseudo,
+                name:this.state.name,
+                surname:this.state.surname,      
+                email:this.state.email,
+                birthDate:this.state.birthDate,
+                password:this.state.password,
+                gameCount:this.state.gameCount
+              }),
+              
+            }).then(response => response.json())
+            .then(json => {
+     
+                    console.log(json.message)
+                
+        
+                
+              }).catch((error) => {
+                console.log(error)
+                alert("Echec d'inscription'. Réessayez.");
+                
+          });
         }
         event.preventDefault();
+        console.log(this.state.pseudo)
       }
 
 
@@ -59,11 +92,11 @@ class Signin extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <label>
                                 Name :
-                            <input type="text" value={this.state.nom}  onChange={text => this.setState({name: text.target.value})} />
+                            <input type="text" value={this.state.name}  onChange={text => this.setState({name: text.target.value})} />
                             </label><br></br>
                             <label>
                                 Surname :
-                            <input type="text" value={this.state.prenom} onChange={text => this.setState({surname: text.target.value})} />
+                            <input type="text" value={this.state.surname} onChange={text => this.setState({surname: text.target.value})} />
                             </label><br></br>
                             <label>
                                 Pseudo :
@@ -75,7 +108,7 @@ class Signin extends React.Component {
                             </label>
                             <label>
                                 Birthdate :
-                            <input type="text" value={this.state.dateNaiss} onChange={text => this.setState({birthDate: text.target.value})} />
+                            <input type="text" value={this.state.birthDate} onChange={text => this.setState({birthDate: text.target.value})} />
                             </label><br></br>
                             <label>
                                 Password :

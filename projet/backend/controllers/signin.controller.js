@@ -1,16 +1,17 @@
 const signin = require('../model/signin.model');
+const sql = require('../model/db');
 
-exports.createUser = (req, res) => {
+exports.createUser1 = (req, res) => {
     const User={
-        pseudo : req.body.pseudo,
+        pseudo : res.body.pseudo,
         name : req.body.name,
         surname : req.body.surname,
-        email : req.body.email,
-        birthdate : req.body.birthDate,
-        password : req.body.password,
+        email : req.email,
+        birthdate : req.birthDate,
+        password : req.password,
+        gameCount:req.gameCount,
     };
-     signin.createUser1(User, (err, data) => {
-        console.log(data)
+     signin.createUser2(User, (err, data) => {
         if (err) {
               res.status(500).send({
                 message: "Error while sign in "

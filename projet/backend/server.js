@@ -19,6 +19,8 @@ app.get("/", (req, res) => {
   res.json({message : "welcome to our api"})
 });
 
+app.use(cors());
+
 const routes = require("./routes/user.route")(app);
 
 // console.log that your server is up and running

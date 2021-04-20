@@ -10,22 +10,25 @@ class Profil extends React.Component {
         super(props);
        
         this.state={
-            name:'Albert',
-            surname:'Tygnon',
-            email:'albertTygnon@gmail.com',
-            pseudo:'Tygnouff',
-            password:'1564864qqAA',
+            name:'',
+            surname:'',
+            email:'',
+            pseudo:'',
+            password:'',
             winrate:'39 %',
             victory:'214',
             roundpresi:'107',
             roundvp:'58',
             roundvtdc:'137',
             roundtdc:'72',
+            donnees:'',
 
 
    
         }
       }
+
+      
 
 
 
