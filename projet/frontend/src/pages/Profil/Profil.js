@@ -53,7 +53,7 @@ class Profil extends React.Component {
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.password} </h2><br></br>
                     </Col>
                     <Col>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white',marginTop:'10%'}}> Winrate : </h2>
+                        <h2 style={{textAlign: "center", fontSize: 32, color:'white',marginTop:'%'}}> Winrate : </h2>
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.winrate} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Victory : </h2>
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.victory} </h2><br></br>
