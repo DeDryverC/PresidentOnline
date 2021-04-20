@@ -132,16 +132,20 @@ const NavigationHome =() => {
                                             <Container>
                                                 <Col>
                                                     <Row>
+                                                        {/* Green buttons are for public rooms */}
                                                         <Button variant="success">Joinable</Button><br/>__
                                                         <p>  Victor's party </p>
                                                         <p> [3/4] </p>
                                                         <p> -Public- </p>
                                                     </Row>
                                                     <Row>
+                                                        {/* Yellow buttons are for private rooms */}
                                                         <Button variant="warning">Joinable</Button><br/>__
                                                         <p>  Chaos </p>
                                                         <p> [2/4] </p>
                                                         <p> -Private- </p>
+                                                        {/* If you wish to join a private room, a pop-up appears that asks you to
+                                                        input the room's password */}
                                                         <Container>
                                                             <Col>
                                                                 <Row>
@@ -156,6 +160,7 @@ const NavigationHome =() => {
                                                     </Row>
                                                     <br/>
                                                     <Row>
+                                                        {/* Red buttons are for rooms that are full */}
                                                         <Button variant="danger" disabled>Full</Button><br/>__
                                                         <p>  Gamepass Challenge</p>
                                                         <p>[4/4]</p>
