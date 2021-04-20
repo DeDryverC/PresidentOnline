@@ -4,16 +4,6 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 
-/*
-// create a GET route
-app.get('/test', (req, res) => {
-  con.query('SELECT * FROM joueurs',function(err, result, fields) {
-    if(err) throw err;
-    res.send(result);
-    
-  })
-});
-*/
 
 app.get("/", (req, res) => {
   res.json({message : "welcome to our api"})

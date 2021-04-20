@@ -13,7 +13,7 @@ class Profil extends React.Component {
             name:'',
             surname:'',
             email:'',
-            pseudo:'',
+            pseudo:'Neshhtai',
             password:'',
             winrate:'39 %',
             victory:'214',
@@ -28,7 +28,18 @@ class Profil extends React.Component {
         }
       }
 
-      
+      componentDidMount(){
+
+        fetch(`http://localhost:5000/getProfil/${this.state.pseudo}`)
+          .then(response => response.json())
+          .then(json => {
+            this.setState({donnees: json[0]})
+            
+            console.log(this.state.donnees)
+            
+            
+          })
+    }
 
 
 
@@ -45,7 +56,7 @@ class Profil extends React.Component {
                 <Row>
                     <Col>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white',marginTop:'10%'}}> Name : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.name} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donnees.name} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Surname : </h2>
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.surname} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Email : </h2>
