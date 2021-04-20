@@ -6,7 +6,7 @@ module.exports = (app) => {
     const profil = require("../controllers/profil.controller");
 
     app.get("/getRules", rules.getRules);
-    app.get("/getHistory", history.getHistory);
+    app.get("/getHistory/:userId", history.getHistory);
     app.get("/getStatistics/:pseudo", statistics.getStatistics);
     app.get("/getProfil/:pseudo", profil.getProfil);
     app.post("/postSign", signin.createUser1)

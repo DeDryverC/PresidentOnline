@@ -10,35 +10,56 @@ class Profil extends React.Component {
         super(props);
        
         this.state={
-            name:'',
+            /*name:'',
             surname:'',
-            email:'',
-            pseudo:'Neshhtai',
-            password:'',
+            email:'',*/
+            pseudo:'Neshtai',
+            /*password:'',
             winrate:'39 %',
             victory:'214',
             roundpresi:'107',
             roundvp:'58',
             roundvtdc:'137',
-            roundtdc:'72',
-            donnees:'',
-
+            roundtdc:'72',*/
+            donneesprofil:'',
+            donneesstats:[],
+            gameAmount:'',
+            
 
    
         }
       }
 
-      componentDidMount(){
+      gameCount(){
+        
+      }
 
+      componentDidMount(){
+        
         fetch(`http://localhost:5000/getProfil/${this.state.pseudo}`)
           .then(response => response.json())
           .then(json => {
-            this.setState({donnees: json[0]})
+            this.setState({donneesprofil: json[0]})
             
-            console.log(this.state.donnees)
+            console.log(this.state.donneesprofil)
             
             
           })
+
+        fetch(`http://localhost:5000/getStatistics/${this.state.pseudo}`)
+          .then(response => response.json())
+          .then(json => {
+            this.setState({donneesstats: json})
+            this.setState({gameAmount:this.state.donneesstats.length})
+            console.log(this.state.donneesstats.length)
+            
+            
+          })
+
+        
+        
+       
+        
     }
 
 
@@ -56,29 +77,20 @@ class Profil extends React.Component {
                 <Row>
                     <Col>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white',marginTop:'10%'}}> Name : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donnees.name} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Name} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Surname : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.surname} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Surname} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Email : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.email} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Email} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Pseudo : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.pseudo} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Pseudo} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Password : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.password} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Password} </h2><br></br>
                     </Col>
                     <Col>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white',marginTop:'%'}}> Winrate : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.winrate} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Victory : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.victory} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Rounds as President : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.roundpresi} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Round as vice President : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.roundvp} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Round as Vice Tdc : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.roundvtdc} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Round as Tdc : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.roundtdc} </h2><br></br>
+                        
+                        <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Game amount : </h2>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.gameAmount} </h2><br></br>
                     </Col>
                     
                 </Row>     
