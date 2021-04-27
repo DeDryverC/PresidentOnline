@@ -52,5 +52,17 @@ game.delCard = (gameId, user, card, result) => {
     });
 };
 
+game.getDeck = (gameId, userId, result) =>{
+    mysql.query(`select * from ${gameId} where user=${userId}`, (err,res) => {
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+};
+
 
 module.exports = game;

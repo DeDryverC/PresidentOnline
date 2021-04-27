@@ -77,3 +77,23 @@ exports.delCard = (req, res) =>{
         }
       });
 };
+
+
+exports.getDeck = (req, res) =>{
+  game.getDeck(req.params.gameId, req.params.user, (err, data) =>{
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving pot with gameId " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+};
