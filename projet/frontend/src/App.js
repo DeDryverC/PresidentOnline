@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 /*import Navbar from './Navbar/navbar';
 import background from './Navbar/images/fond.png';*/
-import Home from "./components/NavigationHome";
+import Navigation from "./components/Navigation";
+import Home from './pages/Home/Home';
 import Login from "./pages/Login/Login";
 import Jeu from "./pages/Jeu/Jeu";
 import Signin from "./pages/Signin/Signin";
@@ -15,8 +16,16 @@ import Historique from "./pages/Profil/Historique";
 class App extends Component {
   state = {
     data: null,
-    page : 'home'
+    actualPage: 'home'
   };
+
+  
+
+  pageStateSwitch = ( page ) => {
+        
+        this.setState({actualPage: page})
+
+  }
 
   componentDidMount() {
       // Call our fetch function below once the component mounts
@@ -39,15 +48,37 @@ class App extends Component {
     return (
       
       <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/stats" component={Stats} />
-        <Route exact path="/myprofile" component={Me} />
-        <Route exact path="/historique" component={Historique} />
-        <Route exact path="/jeu" component={Jeu} />
-        <Route exact path="/signin" component={Signin} />
-        <Route exact path="/rules" component={Rules} />
-        <Route exact path="/howto" component={HowTo} />
+        <Route exact path="/">
+          <Navigation
+            actualPage={this.state.actualPage} 
+            action = {this.pageSwitch}
+            actionSwitchPage = {this.pageStateSwitch}
+          />
+        </Route>
+        <Route exact path="/login">
+          <Login/>
+        </Route>
+        <Route exact path="/stats">
+          <Stats/>
+        </Route>
+        <Route exact path="/myprofile">
+          <Me/>
+        </Route>
+        <Route exact path="/historique">
+          <Historique/>
+        </Route>
+        <Route exact path="/jeu">
+          <Jeu/>
+        </Route>
+        <Route exact path="/signin">
+          <Signin/>
+        </Route>
+        <Route exact path="/rules">
+          <Rules/>
+        </Route>
+        <Route exact path="/howto">
+          <HowTo/>
+        </Route>
         <Redirect to="/" />
       </Switch>
     );

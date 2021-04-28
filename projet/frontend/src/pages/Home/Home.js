@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationHome from "../../components/NavigationHome";
+
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Home(){

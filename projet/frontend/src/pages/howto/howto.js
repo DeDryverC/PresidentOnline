@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationHowto from "../../components/NavigationHowto";
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Howto(){
