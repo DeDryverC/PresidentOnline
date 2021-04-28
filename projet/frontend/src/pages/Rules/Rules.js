@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationRules from "../../components/NavigationRules";
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Rules(){
