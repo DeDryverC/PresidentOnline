@@ -27,7 +27,7 @@ class Navigation extends Component {
 
     render() {
         return (
-            <main>
+            <main id="maincomponent">
                 <Container fluid="lg">
                     <Row>
                         <Col md="auto" style={{
@@ -77,15 +77,15 @@ class Navigation extends Component {
                 <br/>
                 <Container fluid="lg">
                     <Row>
-                        <Col fluid="xs" lg={2}>
+                        <Col fluid="md" lg={2}>
                             <Container style={{
-                                height: 200,
+                                height: 'auto',
                             }}>
                                 <Col md='auto' style={{
                                     border: '2px solid moccasin',
                                     borderRadius: '10px',
                                     backgroundColor: 'palegoldenrod',
-                                    height: '500px'
+                                    height: '400px'
                                 }}>
                                     <Row>
                                         <h2 style={{
@@ -118,7 +118,7 @@ class Navigation extends Component {
                                 </Col>
                             </Container>
                         </Col>
-                        <Col fluid="lg">
+                        <Col fluid sm='auto'>
                             {this.pageSwitch()}
                         </Col>
                     </Row>

@@ -3,8 +3,7 @@ import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Howto(){
     return (
-        <html>
-            <Container>
+            <Container fluid>
                 <Col style = {{
                     border: '2px solid moccasin',
                     borderRadius: '10px',
@@ -56,7 +55,6 @@ export default function Howto(){
                     </Row>
                 </Col>
             </Container>
-        </html>
 
     )
 }

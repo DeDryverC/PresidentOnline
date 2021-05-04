@@ -4,7 +4,7 @@ import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Home(){
     return (
-            <Container>
+            <Container fluid>
                 <Col style = {{
                     border: '2px solid moccasin',
                     borderRadius: '10px',

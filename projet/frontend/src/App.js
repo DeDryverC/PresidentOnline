@@ -12,6 +12,7 @@ import HowTo from "./pages/howto/howto"
 import Stats from "./pages/Profil/Stats";
 import Me from "./pages/Profil/Me";
 import Historique from "./pages/Profil/Historique";
+import './App.css'
 
 class App extends Component {
   state = {
@@ -24,7 +25,6 @@ class App extends Component {
   pageStateSwitch = ( page ) => {
         
         this.setState({actualPage: page})
-
   }
 
   componentDidMount() {
