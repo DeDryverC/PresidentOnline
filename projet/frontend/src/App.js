@@ -59,11 +59,8 @@ class App extends Component {
         <Route exact path="/login">
           <Login/>
         </Route>
-        <Route exact path="/stats">
-          <Stats/>
-        </Route>
-        <Route exact path="/myprofile">
-          <Me/>
+        <Route exact path="/profile">
+          <Profil/>
         </Route>
         <Route exact path="/historique">
           <Historique/>
@@ -79,6 +76,9 @@ class App extends Component {
         </Route>
         <Route exact path="/howto">
           <HowTo/>
+        </Route>
+        <Route exact path="/creategame">
+          <CreateGame/>
         </Route>
         <Redirect to="/" />
       </Switch>
