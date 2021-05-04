@@ -8,11 +8,12 @@ import Jeu from "./pages/Jeu/Jeu";
 import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
-import HowTo from "./pages/howto/howto"
-import Stats from "./pages/Profil/Stats";
-import Me from "./pages/Profil/Me";
+
+import HowTo from "./pages/Howto/Howto"
 import Historique from "./pages/Profil/Historique";
-import './App.css'
+import Profil from "./pages/Profil/Profil";
+import CreateGame from "./pages/CreateGame/CreateGame";
+
 
 class App extends Component {
   state = {
