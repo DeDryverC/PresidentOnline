@@ -9,5 +9,5 @@ module.exports = (app) => {
     app.get("/getHistory/:userId", history.getHistory);
     app.get("/getStatistics/:pseudo", statistics.getStatistics);
     app.get("/getProfil/:pseudo", profil.getProfil);
-    app.post("/postSign", signin.createUser1)
+    app.post("/postSign", signin.createUser)
 };

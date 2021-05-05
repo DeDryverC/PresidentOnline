@@ -10,6 +10,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(cors());
+app.use(require("body-parser").json())
 
 const routes = require("./routes/user.route")(app);
 
