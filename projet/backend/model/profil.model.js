@@ -1,7 +1,7 @@
 const mysql = require("./db");
 
 const profil = function(user){
-    this.id = profil.id
+    this.id = profil.id;
 }
 
 profil.getProfil = (pseudo, result) => {
