@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 
 
+
 class Signin extends React.Component {
 
     constructor(props) {
@@ -27,7 +28,7 @@ class Signin extends React.Component {
 
         handleSubmit(event) {
 
-        if(this.state.password != this.state.confirmPassword){
+        if(this.state.password !== this.state.confirmPassword){
             alert("Password doesn't match")
         }
         else{

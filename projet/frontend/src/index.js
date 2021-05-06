@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import "./index.css";
-import background from './images/bg_dark.webp'
+import background from './img/bg_dark.webp'
 import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
-  <div className="overflow-auto" style={{
+  <div style={{
     backgroundImage: `url(${background})`,
     height: '100%',
     margin: 0,

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
+import { Button, Row, Col, Container } from 'react-bootstrap'
 
 export default function Home(){
     return (

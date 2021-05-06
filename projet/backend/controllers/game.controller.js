@@ -78,9 +78,8 @@ exports.delCard = (req, res) =>{
       });
 };
 
-
-exports.getDeck = (req, res) =>{
-  game.getDeck(req.params.gameId, req.params.user, (err, data) =>{
+exports.getDeck = (req, res) => { 
+  game.getDeck(req.params.gameId, req.params.userId, (err, data) =>{
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

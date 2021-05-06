@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
+import { Row, Col, Container } from 'react-bootstrap'
 
 export default function Howto(){
     return (

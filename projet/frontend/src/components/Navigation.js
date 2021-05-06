@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
-import { useState } from 'react';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import Rules from '../pages/Rules/Rules';
