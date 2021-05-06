@@ -7,7 +7,7 @@ exports.createTable = (req, res) =>{
     const gameInfo = {
       gameId: req.body.gameId
     };
-    console.log("gameid: "+ gameInfo.gameId);
+
     game.createTable(gameInfo.gameId, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
@@ -23,8 +23,52 @@ exports.createTable = (req, res) =>{
     });
 }
 
+exports.putInPool = (req, res) => {
 
-exports.getPot = (req, res) =>{
+  const gameInfo = {
+    gameId: req.body.gameId,
+    maxPlayers: req.body.maxPlayers
+  };
+
+  game.putInPool(gameInfo.gameId, gameInfo.maxPlayers, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error putting in pool ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.getCode = (req, res) => {
+  game.getCode(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving code with gameId " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+
+exports.getPot = (req, res) => {
     game.getPot(req.params.gameId, (err, data) => {
         if (err) {
           if (err.kind === "not_found") {

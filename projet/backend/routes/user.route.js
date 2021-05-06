@@ -11,12 +11,14 @@ module.exports = (app) => {
 
 
     app.post("/table", game.createTable);
-
+    app.post("/pool", game.putInPool);
+    
+    app.get("/code/:gameId", game.getCode);
     app.get("/pot/:gameId", game.getPot);
     app.get("/potd/:gameId", game.delPot);
     app.get("/pots/:gameId/:card", game.setOnePot);
     app.get("/deck/:gameId/:userId", game.getDeck);
     app.get("/dcard/:gameId/:user/:card", game.delCard);
     
-    app.post("/sign", signin.createUser1);
+    app.post("/sign", signin.createUser);
 };

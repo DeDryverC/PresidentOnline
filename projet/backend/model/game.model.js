@@ -18,8 +18,22 @@ game.createTable = (gameId, result) => {
     
 }
 
-game.setCode = (gameId, code, result) => {
-    mysql.query(`INSERT INTO ${gameId} (user, card) VALUES ('code', ${code});`, (err, res) =>{
+game.putInPool = (gameId, maxPlayers, result) =>{
+   
+    let code = Math.random().toString(36).substring(7).toUpperCase();
+    mysql.query(`INSERT INTO GamePool (gameId, code, maxPlayers) VALUES ("${gameId}", "${code}", ${maxPlayers});`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.getCode = (gameId, result) => {
+    mysql.query(`select code from GamePool where gameId=${gameId}`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
