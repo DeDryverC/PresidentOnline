@@ -7,10 +7,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
   <Router>
-    <div style={{
+    /*<div style={{
       backgroundImage : `url(${background})`, height:1000,
       backgroundRepeat: 'repeat',
-      }}>
+      }}>*/
         <App />
     </div>
   </Router>,

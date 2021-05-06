@@ -1,7 +1,7 @@
 const sql = require('../model/db');
 const signin = function () {
 
-}
+} 
 
 signin.createUser2=(User, result) => {
     var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
