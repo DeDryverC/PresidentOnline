@@ -9,10 +9,9 @@ module.exports = (app) => {
     app.get("/statistics/:pseudo", statistics.getStatistics);
     app.get("/profil/:pseudo", profil.getProfil);
 
+
     app.post("/table", game.createTable);
-    /*
-    app.post("/code/:gameId/:code", game.setCode);
-    */
+
     app.get("/pot/:gameId", game.getPot);
     app.get("/potd/:gameId", game.delPot);
     app.get("/pots/:gameId/:card", game.setOnePot);

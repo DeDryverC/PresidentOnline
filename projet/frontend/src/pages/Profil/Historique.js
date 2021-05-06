@@ -2,6 +2,8 @@ import React from "react";
 import NavigationProfil from "../../components/NavigationProfil";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import Container from 'react-bootstrap/Container'
+import ListItem from '@material-ui/core/ListItem';
 
 class Historique extends React.Component {
 
@@ -44,9 +46,17 @@ class Historique extends React.Component {
                 <Row>
                     <Col>
                         <h2 style={{textAlign: "center", fontSize: 50, color:'white',marginTop:'5%'}}> Games : </h2><br></br><br></br>
-                        
-
-                        
+                        {
+                            this.state.donnees.map((l, i) => (
+                                
+                                    <Col>
+                                        <h2 className="mt-5" style={{color:'white',textAlign: "center"}}> Game {l.GameId} : Position {l.Position} </h2>
+                                    </Col> 
+                                
+                                
+                            
+                            ))
+                        }
                     </Col>
                     
                 </Row>     
