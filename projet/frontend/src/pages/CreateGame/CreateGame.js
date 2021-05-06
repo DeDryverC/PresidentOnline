@@ -21,13 +21,13 @@ class CreateGame extends React.Component {
         super(props);
         this.state={
             gameId: undefined,
-            players: undefined,
-            code: undefined
+            maxPlayers: undefined
         }
         this.handleCreate = this.handleCreate.bind(this);
     }
     handleCreate(event) {
         event.preventDefault();
+        //creating table for the game
         fetch('http://localhost:5000/table', {
             method: 'POST',
             headers: {
@@ -37,8 +37,29 @@ class CreateGame extends React.Component {
             },
             body: JSON.stringify({
                 gameId: this.state.gameId,
-                players: this.state.players,
-                code: this.state.code
+            }),
+
+        }).then(response => response.json())
+            .then(json => {
+
+                console.log(json.message)
+
+            }).catch((error) => {
+                alert("Echec de creation'. Réessayez.");
+
+            });
+        console.log(this.state.maxPlayers.value);
+        //setting the game in the game pool
+        fetch('http://localhost:5000/pool', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: this.state.gameId,
+                maxPlayers: this.state.maxPlayers.value,
             }),
 
         }).then(response => response.json())
@@ -53,6 +74,7 @@ class CreateGame extends React.Component {
 
         console.log(this.state)
     };
+
 
     componentDidMount() {
         this.handleCreate = this.handleCreate.bind(this);
@@ -86,7 +108,7 @@ class CreateGame extends React.Component {
 
                                     <label>
                                         <p>Amount of player : </p>
-                                        <Select options={options} />
+                                        <Select options={options} value ={this.state.maxPlayers} onChange={value => this.setState({maxPlayers: value})} />
                                     </label>
                                     <br /><br />
                                     <input type="submit" value="Create lobby" />
