@@ -30,9 +30,7 @@ class Profil extends React.Component {
         }
       }
 
-      gameCount(){
-        
-      }
+    
 
       componentDidMount(){
         

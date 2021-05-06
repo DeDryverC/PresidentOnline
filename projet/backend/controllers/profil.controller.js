@@ -14,7 +14,7 @@ exports.getProfil = (req, res) => {
           });
         }
       } else {
-        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Origin", "*"); /* Mettre param pour limiter l'accès */
         res.send(data);
       }
     });
