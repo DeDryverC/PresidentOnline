@@ -4,6 +4,7 @@ import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
 import { useState } from 'react';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
+import CreateGame from '../pages/CreateGame/CreateGame';
 import Rules from '../pages/Rules/Rules';
 
 class Navigation extends Component {
@@ -11,19 +12,28 @@ class Navigation extends Component {
     pageSwitch= () => {
 
         const actualPage = this.props.actualPage;
-        
         switch(actualPage){
-            case 'home':
-                return <Home/>;
+            
             case 'howto':
                 return <Howto/>;
             case 'rules':
                 return <Rules/>;
+            case 'crgame':
+                return <CreateGame/>;
             default :
-                return <Home/>;
+                return <Home OnClick = {this.createGame}/>;
         }
+
         
       }
+
+    createGame = (name) => {
+        this.props.actionSwitchPage(name);
+    
+        
+    }
+    
+
 
     render() {
         return (
