@@ -1,9 +1,10 @@
 const signin = require('../model/signin.model');
-const sql = require('../model/db');
+const mysql = require('../model/db');
 
 exports.createUser = (req, res) => {
 
     const donneesUser={
+        main
         pseudo : req.body.pseudo,
         name : req.body.name,
         surname : req.body.surname,

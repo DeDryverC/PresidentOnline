@@ -1,7 +1,7 @@
 const sql = require('../model/db');
 const signin = function () {
 
-}
+} 
 
 signin.createUser=(User, result) => {
     let bcrypt = require('bcryptjs');

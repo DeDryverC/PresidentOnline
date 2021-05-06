@@ -21,7 +21,6 @@ class App extends Component {
     actualPage: 'home'
   };
 
-  
 
   pageStateSwitch = ( page ) => {
         
@@ -46,8 +45,7 @@ class App extends Component {
   };
 
   render() {
-    return (
-      
+    return ( 
       <Switch>
         <Route exact path="/">
           <Navigation

@@ -1,20 +1,22 @@
 module.exports = (app) => {
-    const rules = require("../controllers/rules.controller");
     const history = require("../controllers/history.controller");
     const signin = require ("../controllers/signin.controller");
     const statistics = require("../controllers/statistics.controller");
     const profil = require("../controllers/profil.controller");
     const game = require("../controllers/game.controller");
 
-    app.get("/getHistory/:userId", history.getHistory);
-    app.get("/getStatistics/:pseudo", statistics.getStatistics);
-    app.get("/getProfil/:pseudo", profil.getProfil);
-    app.post("/postSign", signin.createUser)
+    app.get("/history/:userId", history.getHistory);
+    app.get("/statistics/:pseudo", statistics.getStatistics);
+    app.get("/profil/:pseudo", profil.getProfil);
 
-    app.get("/getPot/:gameId", game.getPot);
-    app.get("/delPot/:gameId", game.delPot);
-    app.get("/setOnePot/:gameId/:card", game.setOnePot);
-    app.get("/getDeck/:gameId/:userId", game.getDeck);
-    app.get("/delCard/:gameId/:user/:card", game.delCard);
+
+    app.post("/table", game.createTable);
+
+    app.get("/pot/:gameId", game.getPot);
+    app.get("/potd/:gameId", game.delPot);
+    app.get("/pots/:gameId/:card", game.setOnePot);
+    app.get("/deck/:gameId/:userId", game.getDeck);
+    app.get("/dcard/:gameId/:user/:card", game.delCard);
     
+    app.post("/sign", signin.createUser1);
 };
