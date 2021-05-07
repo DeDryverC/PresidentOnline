@@ -21,7 +21,43 @@ game.createTable = (gameId, result) => {
 game.putInPool = (gameId, maxPlayers, result) =>{
    
     let code = Math.random().toString(36).substring(7).toUpperCase();
-    mysql.query(`INSERT INTO GamePool (gameId, code, maxPlayers) VALUES ("${gameId}", "${code}", ${maxPlayers});`, (err, res) =>{
+    mysql.query(`INSERT INTO GamePool (gameId, code, currPlayers, maxPlayers) VALUES ("${gameId}", "${code}", 0, ${maxPlayers});`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.getPool = (result) => {
+    mysql.query(`SELECT * from GamePool`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.deletePool = (gameId, result) => {
+    mysql.query(`DELETE from GamePool where gameId=${gameId}`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.addPlayerCount = (gameId, result) => {
+    mysql.query(`UPDATE GamePool SET currPlayers = (currPlayers + 1) WHERE gameId = "${gameId}";`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
