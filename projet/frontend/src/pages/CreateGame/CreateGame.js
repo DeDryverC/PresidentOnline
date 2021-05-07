@@ -50,7 +50,7 @@ class CreateGame extends React.Component {
             });
         console.log(this.state.maxPlayers.value);
         //setting the game in the game pool
-        fetch('http://localhost:5000/pool', {
+        fetch('http://localhost:5000/spool', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

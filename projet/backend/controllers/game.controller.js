@@ -34,7 +34,68 @@ exports.putInPool = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found game pool.`,
+          message: `Not found pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error putting in pool ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.getPool = (req, res) => {
+  game.getPool((err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error getting pool ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.deletePool = (req, res) => {
+  game.deletePool(gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error deleting pool ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.addPlayerCount = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+  };
+
+  game.addPlayerCount(gameInfo.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pool.`,
         });
       } else {
         res.status(500).send({
@@ -64,7 +125,7 @@ exports.getCode = (req, res) => {
       res.header("Access-Control-Allow-Origin", "*");
       res.send(data);
     }
-  })
+  });
 }
 
 
@@ -73,7 +134,7 @@ exports.getPot = (req, res) => {
         if (err) {
           if (err.kind === "not_found") {
             res.status(404).send({
-              message: `Not found game with gameId ${req.params.gameId}.`,
+              message: `Not found pot in ${req.params.gameId}.`,
             });
           } else {
             res.status(500).send({
@@ -96,7 +157,7 @@ exports.delPot = (req, res) =>{
             });
           } else {
             res.status(500).send({
-              message: "Error retrieving pot with gameId " + req.params.gameId,
+              message: "Error deleting pot in" + req.params.gameId,
             });
           }
         } else {
@@ -115,7 +176,7 @@ exports.setOnePot = (req, res) =>{
             });
           } else {
             res.status(500).send({
-              message: "Error retrieving pot with gameId " + req.params.gameId,
+              message: "Error setting in pot in " + req.params.gameId,
             });
           }
         } else {
@@ -135,7 +196,7 @@ exports.delCard = (req, res) =>{
             });
           } else {
             res.status(500).send({
-              message: "Error retrieving pot with gameId " + req.params.gameId,
+              message: "Error deleting card in " + req.params.gameId,
             });
           }
         } else {
@@ -154,7 +215,7 @@ exports.setDeck = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error setting decks with gameId " + req.params.gameId,
+          message: "Error setting decks in " + req.params.gameId,
         });
       }
     } else {
@@ -173,7 +234,7 @@ exports.getDeck = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving pot with gameId " + req.params.gameId,
+          message: "Error getting deck from " + req.params.gameId,
         });
       }
     } else {
