@@ -56,8 +56,8 @@ game.deletePool = (gameId, result) => {
     });
 }
 
-game.addPlayerCount = (gameId, result) => {
-    mysql.query(`UPDATE GamePool SET currPlayers = (currPlayers + 1) WHERE gameId = "${gameId}";`, (err, res) =>{
+game.decrementPlayers = (gameId, result) => {
+    mysql.query(`UPDATE GamePool SET currPlayers = (currPlayers - 1) WHERE gameId = "${gameId}";`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);

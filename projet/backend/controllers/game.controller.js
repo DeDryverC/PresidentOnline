@@ -86,12 +86,12 @@ exports.deletePool = (req, res) => {
   });
 }
 
-exports.addPlayerCount = (req, res) => {
+exports.incrementPlayers = (req, res) => {
   const gameInfo = {
     gameId: req.body.gameId,
   };
 
-  game.addPlayerCount(gameInfo.gameId, (err, data) => {
+  game.incrementPlayers(gameInfo.gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -99,7 +99,30 @@ exports.addPlayerCount = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error putting in pool ",
+          message: "Error incrementing players count ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.decrementPlayers = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+  };
+
+  game.decrementPlayers(gameInfo.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error decrementing players count ",
         });
       }
     } else {

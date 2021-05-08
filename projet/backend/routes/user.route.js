@@ -1,3 +1,5 @@
+const { decrementPlayers } = require("../model/game.model");
+
 module.exports = (app) => {
     const history = require("../controllers/history.controller");
     const signin = require ("../controllers/signin.controller");
@@ -7,7 +9,8 @@ module.exports = (app) => {
 
     app.post("/table", game.createTable);
     app.post("/spool", game.putInPool);
-    app.post("/counta", game.addPlayerCount);
+    app.post("/icount", game.incrementPlayers);
+    app.post("/dcount", game.decrementPlayers);
     app.post("/sign", signin.createUser);
     
 
