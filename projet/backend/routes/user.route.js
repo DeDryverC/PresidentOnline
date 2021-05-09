@@ -27,6 +27,7 @@ module.exports = (app) => {
     app.get("/dcard/:gameId/:user/:card", game.delCard);
     app.get("/pool", game.getPool);
     app.get("/code/:gameId", game.getCode);
+    app.get("/ccount/:gameId/:userId", game.getCardsCount);
     
     app.delete("/poold", game.deletePool);
 };

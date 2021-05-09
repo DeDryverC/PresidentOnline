@@ -164,5 +164,15 @@ game.getDeck = (gameId, userId, result) =>{
     });
 };
 
-
+game.getCardsCount = (gameId, userId, result) => {
+    mysql.query(`select user, count(distinct card) as Ncards from ${gameId} where user !=${userId} and user !='pot' group by user`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    })
+}
 module.exports = game;

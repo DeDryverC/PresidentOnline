@@ -266,3 +266,23 @@ exports.getDeck = (req, res) => {
     }
   });
 };
+
+
+exports.getCardsCount = (req, res) => {
+  game.getCardsCount(req.params.gameId, req.params.userId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error getting deck from " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+};
