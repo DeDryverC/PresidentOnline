@@ -6,6 +6,7 @@ import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import CreateGame from '../pages/CreateGame/CreateGame';
 import Rules from '../pages/Rules/Rules';
+import Login from '../pages/Login/Login'
 
 class Navigation extends Component {
 
@@ -78,6 +79,15 @@ class Navigation extends Component {
                                         <NavLink to="/login" className="hover" activeClassName='nav-active'>
                                             <h4 style={{ textAlign: "center", fontSize: 24 }}>Log In</h4>
                                         </NavLink>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                    <Button
+                                        variant="outline-info"
+                                        size="lg">
+                                        Log in as a guest
+                                    </Button>
                                     </Col>
                                 </Row>
                             </Container>
