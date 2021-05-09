@@ -74,7 +74,7 @@ class Navigation extends Component {
                     </Row>
                 </Container>
                 <br/>
-                <Container fluid="lg">
+                <Container fluid>
                     <Row>
                         <Col fluid="md" lg={2}>
                             <Container style={{
@@ -117,7 +117,7 @@ class Navigation extends Component {
                                 </Col>
                             </Container>
                         </Col>
-                        <Col fluid sm='auto'>
+                        <Col fluid>
                             {this.pageSwitch()}
                         </Col>
                     </Row>
