@@ -1,4 +1,4 @@
-const sql = require('../model/db');
+const mysql = require('../model/db');
 const signin = function () {
 
 } 
@@ -9,7 +9,7 @@ signin.createUser=(User, result) => {
         bcrypt.hash(User.password, salt, function(err, hash) {
             var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
             var values = [[User.pseudo, User.name, User.surname, User.email, User.birthdate, hash ,User.gameCount]];
-            sql.query(requete, [values],
+            mysql.query(requete, [values],
                 (err, res) => {
                     if (err) {
                         console.log("error : ", err);
@@ -24,6 +24,27 @@ signin.createUser=(User, result) => {
             });
         });
     };
-    
+
+signin.createGuest=(result) => {
+    let randomName = "guest" + Math.random().toString(36).substring(7);
+    let randomEmail = randomName + "@guestuser.com";
+    let randomPassword = Math.random().toString(36).substring(7);
+    let date = new Date();
+    date = date.getDate() +"/"+ date.getMonth() +"/"+date.getFullYear();
+    let guestUser = {pseudo : randomName, name : randomName, surname : randomName, email : randomEmail, birthdate : date, password : randomPassword, gameCount : 0};
+
+    var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
+    var values = [[guestUser.pseudo, guestUser.name, guestUser.surname, guestUser.email, guestUser.birthdate, guestUser.password, guestUser.gameCount]];
+
+    mysql.query(requete, [values],(err, res) => {
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(guestUser.pseudo, res);
+    })
+}
 
 module.exports = signin;

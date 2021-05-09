@@ -31,4 +31,18 @@ exports.createUser = (req, res) => {
             res.send(data);
           }
       });
+    };
+
+exports.createGuest = (req, res) => {
+  signin.createGuest( (err, data) => {
+    if (err) {
+      res.status(500).send({
+        message: "Error while sign in "
+      });
     }
+    else {
+      res.header("Access-Control-Allow-Origin","*");
+      res.send(data);
+    }
+  });
+};

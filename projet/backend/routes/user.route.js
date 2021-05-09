@@ -12,6 +12,7 @@ module.exports = (app) => {
     app.post("/icount", game.incrementPlayers);
     app.post("/dcount", game.decrementPlayers);
     app.post("/sign", signin.createUser);
+    app.post("/guest", signin.createGuest);
     
 
     app.get("/history/:userId", history.getHistory);
