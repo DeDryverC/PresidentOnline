@@ -38,6 +38,12 @@ html, body, #root, .App {
     width:115px;
     justify-items: center;
 }
+#othercards{
+    box-sizing: border-box;
+    height:81px;
+    width:53px;
+    justify-items: center;
+}
 
 #empty{
 
