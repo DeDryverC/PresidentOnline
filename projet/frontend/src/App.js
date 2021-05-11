@@ -18,9 +18,13 @@ import CreateGame from "./pages/CreateGame/CreateGame";
 class App extends Component {
   state = {
     data: null,
-    actualPage: 'home'
+    actualPage: 'home',
+    pseudo: 'testPseudo'
   };
 
+  updatePseudo () {
+    this.setState({pseudo: this.state.pseudo})
+  }
 
   pageStateSwitch = ( page ) => {
         

@@ -39,7 +39,7 @@ signin.createGuest=(result) => {
 
     let bcrypt = require('bcryptjs');
     bcrypt.genSalt(10, function(err, salt) {
-        bcrypt.hash(User.password, salt, function(err, hash) {
+        bcrypt.hash(guestUser.password, salt, function(err, hash) {
             var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
             var values = [[guestUser.pseudo, guestUser.name, guestUser.surname, guestUser.email, guestUser.birthdate, hash, guestUser.gameCount]];
             mysql.query(requete, [values],

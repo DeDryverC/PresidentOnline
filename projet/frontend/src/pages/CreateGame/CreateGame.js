@@ -45,7 +45,7 @@ class CreateGame extends React.Component {
                 console.log(json.message)
 
             }).catch((error) => {
-                alert("Echec de creation'. Réessayez.");
+                console.log('error');
 
             });
         console.log(this.state.maxPlayers.value);
@@ -68,17 +68,32 @@ class CreateGame extends React.Component {
                 console.log(json.message)
 
             }).catch((error) => {
-                alert("Echec de creation'. Réessayez.");
+                console.log('error');
 
             });
+        fetch('http://localhost:5000/lobby', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: this.state.gameId,
+            }),
 
+        }).then(response => response.json())
+            .then(json => {
+
+                console.log(json.message)
+
+            }).catch((error) => {
+                console.log('error');
+
+            });
         console.log(this.state)
     };
 
-
-    componentDidMount() {
-        this.handleCreate = this.handleCreate.bind(this);
-    }
 
     render() {
         return (
