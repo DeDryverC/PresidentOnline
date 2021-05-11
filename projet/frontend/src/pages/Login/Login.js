@@ -12,6 +12,11 @@ class Signin extends React.Component {
         this.state={
             email:'',
             password:'',
+            bdd:'',
+            emailsPassbdd:'',
+            connected:false,
+            passwordtest:''
+            
    
         }
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -21,29 +26,77 @@ class Signin extends React.Component {
 
       handleSubmit(event) {
         event.preventDefault();
-        fetch('http://localhost:5000/guest', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                "Acces-Control-Allow-Origin": "true"
-            },
-            body: JSON.stringify({
-                email : this.state.email,
-                password : this.state.password
-            }),
 
-        }).then(response => response.json())
-            .then(json => {
+        /*let pass=this.state.password
+        var bcrypt = require('bcryptjs');
+        bcrypt.genSalt(10,function(err,salt){
+                bcrypt.hash(pass, salt, function(err, hash){
+                    console.log(hash)
+                })
+            })*/
 
-                console.log(json.message)
+        
+        //console.log(this.state.email)
+        //console.log(typeof(this.state.email))
+        //console.log(this.state.emailsbdd)
+        //console.log(this.state.password)
+        //console.log(this.state.bdd)
+       
 
-            }).catch((error) => {
-                alert("Echec de connexion'. Réessayez.");
+        for (let i=0; i<this.state.bdd.length;i++){
+            //console.log(this.state.email)
+            if (this.state.email != this.state.bdd[i].Email){
+                console.log("unknown mail")
+            }
+            else{
+                alert("Mail in bdd")
+                this.state.passwordtest= this.state.bdd[i].Password
+                /*let pass=this.state.password
+                var bcrypt = require('bcryptjs');
+                bcrypt.genSalt(10,function(err,salt){
+                    bcrypt.hash(pass, salt, function(err, hash){
+                        console.log(hash)
+                    })
+                })*/
+                
+                //console.log(this.state.password)
+                //console.log(this.state.bdd[i].Password)
+                var bcrypt = require('bcryptjs');
+                bcrypt.compare( this.state.password,this.state.bdd[i].Password, function(err,res){
+                    console.log(res)
+                    console.log(err)
+                    if(res){
+                        console.log(null , {message: "logged"});
+                        }else{
+                          console.log(null , {message:'error'});
+                          
+                        } 
+                })
 
-            });
+                
+                /*if(this.state.password != this.state.passwordtest){
+                    console.log("Password error")
+                }
+                else{
+                    console.log("logged")
+                    this.setState({connected: true})
+                    window.location.href= "http://localhost:3000/"
+                }*/
+            }
+        }
       }
 
+      componentDidMount(){
+          fetch('http://localhost:5000/loginall')
+          .then(response => response.json())
+          .then(json => {
+            
+            this.setState({bdd: json})
+            
+          })
+      }
+
+     
 
     render() {
         return (
@@ -68,7 +121,7 @@ class Signin extends React.Component {
                             <Col>
                             <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'67%'}}>
                                 Password :
-                            <input type="text" value={this.state.password} onChange={text => this.setState({password: text.target.value})} />
+                            <input type="password" value={this.state.password} onChange={text => this.setState({password: text.target.value})} />
                             </label>
                             <br></br><br></br><br></br>
                             <input style={{textAlign: "center", fontSize: 45, color:'red',marginTop:'8%', marginLeft:'73%'}} type="submit" value="Connexion" />

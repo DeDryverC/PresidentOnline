@@ -69,7 +69,7 @@ class Signin extends React.Component {
         console.log(this.state)*/
 
         event.preventDefault();
-        fetch('http://localhost:5000/postSign',{
+        fetch('http://localhost:5000/sign',{
              
               method:'POST',
               headers: {
