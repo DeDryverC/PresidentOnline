@@ -1,4 +1,3 @@
-
 import React from "react";
 import NavigationAutres from "../../components/NavigationAutres";
 import Col from 'react-bootstrap/Col'
@@ -9,39 +8,25 @@ class Signin extends React.Component {
 
     constructor(props) {
         super(props);
+       
         this.state={
             email:'',
             password:'',
    
         }
+        
+
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
       
 
       handleSubmit(event) {
+        console.log('Le mail a été soumis : ' + this.state.email);
+        console.log('Le password a été soumis : ' + this.state.password);
+
+        console.log(this.state)
         event.preventDefault();
-        fetch('http://localhost:5000/guest', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                "Acces-Control-Allow-Origin": "true"
-            },
-            body: JSON.stringify({
-                email : this.state.email,
-                password : this.state.password
-            }),
-
-        }).then(response => response.json())
-            .then(json => {
-
-                console.log(json.message)
-
-            }).catch((error) => {
-                alert("Echec de connexion'. Réessayez.");
-
-            });
       }
 
 

@@ -24,17 +24,40 @@ class Navigation extends Component {
             default :
                 return <Home OnClick = {this.createGame}/>;
         }
-
-        
       }
 
     createGame = (name) => {
         this.props.actionSwitchPage(name);
-    
-        
     }
     
+    constructor(props){
+        super(props);
 
+        this.state={
+            guestPseudo : '',
+        }
+        this.handleLogin = this.handleLogin.bind(this);
+    }
+
+
+    handleLogin(event){
+        event.preventDefault();
+        fetch('http://localhost:5000/guest', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+        }).then(response => response.json())
+            .then(json => {
+                this.setState({guestPseudo: json["message"]});
+            }).catch((error) => {
+
+            });
+        
+            //afficher en tant qu'user connecté
+    }
 
     render() {
         return (
@@ -85,7 +108,9 @@ class Navigation extends Component {
                                     <Col>
                                     <Button
                                         variant="outline-info"
-                                        size="lg">
+                                        size="lg"
+                                        onClick={this.handleLogin}    
+                                    >
                                         Log in as a guest
                                     </Button>
                                     </Col>
