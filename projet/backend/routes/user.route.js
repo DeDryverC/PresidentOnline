@@ -16,7 +16,7 @@ module.exports = (app) => {
     app.post("/guest", signin.createGuest);
     app.post("/lobbyp", game.putPlayerLobby);
     app.post("/lobbyr", game.removePlayerLobby);
-    app.get("/toggle", game.togglePlayerLobby);
+    app.post("/toggle", game.togglePlayerLobby);
 
 
     app.get("/history/:userId", history.getHistory);
