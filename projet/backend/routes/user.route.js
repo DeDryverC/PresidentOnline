@@ -6,6 +6,7 @@ module.exports = (app) => {
     const statistics = require("../controllers/statistics.controller");
     const profil = require("../controllers/profil.controller");
     const game = require("../controllers/game.controller");
+    const login = require("../controllers/login.controller")
 
     app.post("/table", game.createTable);
     app.post("/lobby", game.createLobby);
@@ -22,6 +23,9 @@ module.exports = (app) => {
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
     app.get("/profil/:pseudo", profil.getProfil);
+    app.get("/login/:mail", login.login)
+    app.get("/loginall", login.findAllUsers)
+    //app.get("/loginOne/:mail", login.findPasswordUser)
 
     
     app.get("/pot/:gameId", game.getPot);
