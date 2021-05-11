@@ -30,21 +30,32 @@ signin.createGuest=(result) => {
     let randomEmail = randomName + "@guestuser.com";
     let randomPassword = Math.random().toString(36).substring(7);
     let date = new Date();
-    date = date.getDate() +"/"+ date.getMonth() +"/"+date.getFullYear();
+    date = date.getDate() +"/"+ (date.getMonth()+1) +"/"+date.getFullYear();
     let guestUser = {pseudo : randomName, name : randomName, surname : randomName, email : randomEmail, birthdate : date, password : randomPassword, gameCount : 0};
 
     var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
     var values = [[guestUser.pseudo, guestUser.name, guestUser.surname, guestUser.email, guestUser.birthdate, guestUser.password, guestUser.gameCount]];
 
-    mysql.query(requete, [values],(err, res) => {
-        if(err){
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-        console.log(res);
-        result(guestUser.pseudo, res);
-    })
+
+    let bcrypt = require('bcryptjs');
+    bcrypt.genSalt(10, function(err, salt) {
+        bcrypt.hash(User.password, salt, function(err, hash) {
+            var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
+            var values = [[guestUser.pseudo, guestUser.name, guestUser.surname, guestUser.email, guestUser.birthdate, hash, guestUser.gameCount]];
+            mysql.query(requete, [values],
+                (err, res) => {
+                    if (err) {
+                        console.log("error : ", err);
+                        result(null, err);
+                        return;
+                    }
+                    console.log("guest created");
+                    result(null, res);
+
+          
+                });
+            });
+        });
 }
 
 module.exports = signin;
