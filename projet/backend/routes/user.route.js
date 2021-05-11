@@ -17,7 +17,7 @@ module.exports = (app) => {
     app.post("/lobbyp", game.putPlayerLobby);
     app.post("/lobbyr", game.removePlayerLobby);
     app.post("/toggle", game.togglePlayerLobby);
-
+    
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
@@ -32,6 +32,8 @@ module.exports = (app) => {
     app.get("/pool", game.getPool);
     app.get("/code/:gameId", game.getCode);
     app.get("/ccount/:gameId/:userId", game.getCardsCount);
+    app.get("/game/:code", game.getGameId);
+    
     
     app.delete("/poold", game.deleteFromPool);
 };

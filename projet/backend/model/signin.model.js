@@ -49,8 +49,10 @@ signin.createGuest=(result) => {
                         result(null, err);
                         return;
                     }
-                    console.log("guest created");
-                    result(null, res);
+                    
+                    res.message = guestUser.pseudo;
+                    console.log(res.message);
+                    result(null, res.message);
 
           
                 });

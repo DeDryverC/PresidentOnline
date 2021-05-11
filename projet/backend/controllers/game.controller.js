@@ -44,6 +44,28 @@ exports.createLobby = (req, res) =>{
   });
 }
 
+exports.getGameId = (req, res) =>{
+  game.getGameId(req.params.code, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with that gameCode.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error fetching gameId with that code "
+        });
+      }
+      
+      
+    }
+    else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
 exports.putInPool = (req, res) => {
 
   const gameInfo = {
