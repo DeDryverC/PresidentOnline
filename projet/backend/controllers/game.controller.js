@@ -23,6 +23,27 @@ exports.createTable = (req, res) =>{
     });
 }
 
+exports.createLobby = (req, res) =>{
+    
+  const gameInfo = {
+    gameId: req.body.gameId
+  };
+
+  game.createLobby(gameInfo.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error creating table with gameId "
+        });
+      }
+    }
+  });
+}
+
 exports.putInPool = (req, res) => {
 
   const gameInfo = {
@@ -67,8 +88,8 @@ exports.getPool = (req, res) => {
   });
 }
 
-exports.deletePool = (req, res) => {
-  game.deletePool(gameId, (err, data) => {
+exports.deleteFromPool = (req, res) => {
+  game.deleteFromPool(gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -86,12 +107,12 @@ exports.deletePool = (req, res) => {
   });
 }
 
-exports.incrementPlayers = (req, res) => {
+exports.incrementPlayersPool = (req, res) => {
   const gameInfo = {
     gameId: req.body.gameId,
   };
 
-  game.incrementPlayers(gameInfo.gameId, (err, data) => {
+  game.incrementPlayersPool(gameInfo.gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -109,12 +130,12 @@ exports.incrementPlayers = (req, res) => {
   });
 }
 
-exports.decrementPlayers = (req, res) => {
+exports.decrementPlayersPool = (req, res) => {
   const gameInfo = {
     gameId: req.body.gameId,
   };
 
-  game.decrementPlayers(gameInfo.gameId, (err, data) => {
+  game.decrementPlayersPool(gameInfo.gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -123,6 +144,79 @@ exports.decrementPlayers = (req, res) => {
       } else {
         res.status(500).send({
           message: "Error decrementing players count ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.putPlayerLobby = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+    pseudo: req.body.pseudo,
+    token: req.body.token,
+  };
+
+  game.putPlayerLobby(gameInfo.gameId, gameInfo.pseudo, gameInfo.token, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error putting player in lobby ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+
+exports.removePlayerLobby = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+    pseudo: req.body.pseudo,
+  };
+
+  game.removePlayerLobby(gameInfo.gameId, gameInfo.pseudo, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error removing player from lobby ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+exports.togglePlayerLobby = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+    pseudo: req.body.pseudo,
+  };
+
+  game.togglePlayerLobby(gameInfo.gameId, gameInfo.pseudo, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error removing player from lobby ",
         });
       }
     } else {
@@ -230,7 +324,7 @@ exports.delCard = (req, res) =>{
 };
 
 exports.setDeck = (req, res) => {
-  game.setDeck(req.params.gameId, (err, data) =>{
+  game.setDeck(req.params.gameId, req.params.players, (err, data) =>{
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({

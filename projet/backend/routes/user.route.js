@@ -8,12 +8,16 @@ module.exports = (app) => {
     const game = require("../controllers/game.controller");
 
     app.post("/table", game.createTable);
+    app.post("/lobby", game.createLobby);
     app.post("/spool", game.putInPool);
-    app.post("/icount", game.incrementPlayers);
-    app.post("/dcount", game.decrementPlayers);
+    app.post("/icount", game.incrementPlayersPool);
+    app.post("/dcount", game.decrementPlayersPool);
     app.post("/sign", signin.createUser);
     app.post("/guest", signin.createGuest);
-    
+    app.post("/lobbyp", game.putPlayerLobby);
+    app.post("/lobbyr", game.removePlayerLobby);
+    app.get("/toggle", game.togglePlayerLobby);
+
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
@@ -29,5 +33,5 @@ module.exports = (app) => {
     app.get("/code/:gameId", game.getCode);
     app.get("/ccount/:gameId/:userId", game.getCardsCount);
     
-    app.delete("/poold", game.deletePool);
+    app.delete("/poold", game.deleteFromPool);
 };

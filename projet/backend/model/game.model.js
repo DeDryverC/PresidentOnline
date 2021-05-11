@@ -18,6 +18,21 @@ game.createTable = (gameId, result) => {
     
 }
 
+game.createLobby = (gameId, result) => {
+    console.log("reached model");
+    let lobby = gameId + "Lobby";
+    mysql.query(`CREATE TABLE ${lobby} (user VARCHAR(45) NOT NULL, token BOOLEAN NOT NULL);`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+    
+}
+
 game.putInPool = (gameId, maxPlayers, result) =>{
    
     let code = Math.random().toString(36).substring(7).toUpperCase();
@@ -56,8 +71,59 @@ game.deletePool = (gameId, result) => {
     });
 }
 
-game.decrementPlayers = (gameId, result) => {
+game.incrementPlayersPool = (gameId, result) => {
+    mysql.query(`UPDATE GamePool SET currPlayers = (currPlayers + 1) WHERE gameId = "${gameId}";`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.decrementPlayersPool = (gameId, result) => {
     mysql.query(`UPDATE GamePool SET currPlayers = (currPlayers - 1) WHERE gameId = "${gameId}";`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.putPlayerLobby = (gameId, pseudo, token, result) => {
+    let lobby = gameId + "Lobby";
+    mysql.query(`INSERT INTO ${lobby} (user, token) VALUES ("${pseudo}", "${token}");`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.removePlayerLobby = (gameId, pseudo, result) => {
+    let lobby = gameId + "Lobby";
+    mysql.query(`DELETE FROM ${lobby} where user=${pseudo}`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.togglePlayerLobby = (gameId, pseudo, result) => {
+    let lobby = gameId + "Lobby";
+    mysql.query(`UPDATE ${lobby} SET token = IF (token, 0, 1) WHERE user = ${pseudo}`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
