@@ -67,21 +67,17 @@ class Signin extends React.Component {
                     console.log(err)
                     if(res){
                         console.log(null , {message: "logged"});
+                        
                         }else{
                           console.log(null , {message:'error'});
                           
                         } 
+                       
                 })
 
-                
-                /*if(this.state.password != this.state.passwordtest){
-                    console.log("Password error")
-                }
-                else{
-                    console.log("logged")
-                    this.setState({connected: true})
-                    window.location.href= "http://localhost:3000/"
-                }*/
+                this.state.connected=true
+                console.log(this.state.connected)
+
             }
         }
       }
