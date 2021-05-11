@@ -32,7 +32,7 @@ html, body, #root, .App {
     grid-template-rows: auto;
     box-sizing: border-box;
 }
-#cards{
+#cards, #usercards{
     box-sizing: border-box;
     height:176px;
     width:115px;
