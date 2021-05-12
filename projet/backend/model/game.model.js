@@ -207,26 +207,48 @@ game.delCard = (gameId, user, card, result) => {
 };
 
 
-game.setDeck = (gameId, players, result) => {
+game.setDeck = (gameId, result) => {
     let shuffledDeck = Array.from({length: 52}, (v, k) => k+1);
     shuffledDeck = shuffledDeck.sort((a, b) => 0.5 - Math.random());
 
-    let pDecks = [];
-    for(let x=0; x<players.length; x++){
-        pDecks.push([]);
+    let players = ['p1', 'p2', 'p3', 'p4'];
+
+	// this variable contains a string with card values
+	// that will be given to the player
+	let cardsAsString = '';
+
+    // distribution des decks + creation d'un array de listes (les decks des joueurs)
+    while(shuffledDeck.length){
+        for(let player of players){
+            if(shuffledDeck.length == 0) break;
+			
+			let lastCard = shuffledDeck[shuffledDeck.length-1];
+
+			// add the last card in the deck (the top card) to the current player
+			let lastCardAsString = `("${player}", ${lastCard})`;
+			cardsAsString += `${lastCardAsString}`;
+            if(shuffledDeck.length != 1) cardsAsString += ", ";
+			
+			// remove the last card from the deck
+			shuffledDeck.pop();
+		}
     }
-    
 
+    console.log(cardsAsString);
+	
+    let request = `INSERT INTO ${gameId} VALUES ${cardsAsString}`;
+    console.log(request);
 
-    mysql.query(``, (err,res) => {
-        if(err){
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-        console.log(res);
-        result(null, res);
-    });
+    mysql.query(request, (err,res) => {
+		if(err){
+			console.log("error: ", err);
+			result(null, err);
+			return;
+		}
+		console.log(res);
+		result(null, res);
+	});
+	
 };
 
 
