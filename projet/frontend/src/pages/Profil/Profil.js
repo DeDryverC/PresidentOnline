@@ -12,7 +12,7 @@ class Profil extends React.Component {
         this.state={
             /*name:'',
             surname:'',
-            email:'',*/
+            email:'',
             pseudo:'Neshtai',
             /*password:'',
             winrate:'39 %',
@@ -24,8 +24,8 @@ class Profil extends React.Component {
             donneesprofil:'',
             donneesstats:[],
             gameAmount:'',
-            
-
+            email:localStorage.getItem("Email"),
+            pseudo:localStorage.getItem("Pseudo")
    
         }
       }
@@ -33,8 +33,8 @@ class Profil extends React.Component {
     
 
       componentDidMount(){
-        
-        fetch(`http://localhost:5000/getProfil/${this.state.pseudo}`)
+        console.log(this.state.pseudo)
+        fetch(`http://localhost:5000/profil/${this.state.pseudo}`)
           .then(response => response.json())
           .then(json => {
             this.setState({donneesprofil: json[0]})
@@ -44,7 +44,7 @@ class Profil extends React.Component {
             
           })
 
-        fetch(`http://localhost:5000/getStatistics/${this.state.pseudo}`)
+        fetch(`http://localhost:5000/statistics/${this.state.pseudo}`)
           .then(response => response.json())
           .then(json => {
             this.setState({donneesstats: json})
@@ -82,8 +82,7 @@ class Profil extends React.Component {
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Email} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Pseudo : </h2>
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Pseudo} </h2><br></br>
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white'}}> Password : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesprofil.Password} </h2><br></br>
+
                     </Col>
                     <Col>
                         

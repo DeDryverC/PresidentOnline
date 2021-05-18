@@ -21,13 +21,14 @@ class App extends Component {
     actualPage: 'home'
   };
 
-
+  
   pageStateSwitch = ( page ) => {
         
         this.setState({actualPage: page})
   }
 
   componentDidMount() {
+
       // Call our fetch function below once the component mounts
     this.callBackendAPI()
       .then(res => this.setState({ data: res.express }))

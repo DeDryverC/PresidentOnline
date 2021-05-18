@@ -27,18 +27,18 @@ class Signin extends React.Component {
             birthDate:'',
             password:'',
             confirmPassword:'',
-            gameCount:'0'
+            gameCount:'0',
+            testsign:false
         }
         
 
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
-     
-
+  
 
     handleSubmit(event) {
-
+        
 
         if(this.state.name == '' || this.state.surname == '' || this.state.pseudo == '' || this.state.birthDate == '' || this.state.email == '' || this.state.password == '' || this.state.confirmPassword == '' ){
             alert("You forget to fill a field")

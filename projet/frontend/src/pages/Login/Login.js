@@ -15,7 +15,7 @@ class Signin extends React.Component {
             bdd:'',
             emailsPassbdd:'',
             connected:false,
-            passwordtest:''
+            passwordtest:'',
             
    
         }
@@ -24,8 +24,11 @@ class Signin extends React.Component {
 
       
 
+      
+
       handleSubmit(event) {
         event.preventDefault();
+        
 
         /*let pass=this.state.password
         var bcrypt = require('bcryptjs');
@@ -75,14 +78,18 @@ class Signin extends React.Component {
                        
                 })
 
-                this.state.connected=true
                 console.log(this.state.connected)
-
+                localStorage.setItem('Connect', true)
+                localStorage.setItem('Email', this.state.email)
+                localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
+                localStorage.getItem('Connect')
+                window.location.href= "http://localhost:3000/"
             }
         }
       }
 
       componentDidMount(){
+        localStorage.setItem('Connect',false)
           fetch('http://localhost:5000/loginall')
           .then(response => response.json())
           .then(json => {
