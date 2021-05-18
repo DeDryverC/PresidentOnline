@@ -325,6 +325,24 @@ exports.setOnePot = (req, res) =>{
       });
 };
 
+exports.addCard = (req, res) =>{
+  game.addCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found game with gameId ${req.params.gameId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error inserting card in " + req.params.gameId,
+          });
+        }
+      } else {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send(data);
+      }
+    });
+};
 
 exports.delCard = (req, res) =>{
     game.delCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {

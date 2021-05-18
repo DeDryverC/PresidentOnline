@@ -33,10 +33,6 @@ signin.createGuest=(result) => {
     date = date.getDate() +"/"+ (date.getMonth()+1) +"/"+date.getFullYear();
     let guestUser = {pseudo : randomName, name : randomName, surname : randomName, email : randomEmail, birthdate : date, password : randomPassword, gameCount : 0};
 
-    var requete = "INSERT INTO joueurs(Pseudo, Name, Surname, Email, Birthdate, Password, GameCount) VALUES ? ";
-    var values = [[guestUser.pseudo, guestUser.name, guestUser.surname, guestUser.email, guestUser.birthdate, guestUser.password, guestUser.gameCount]];
-
-
     let bcrypt = require('bcryptjs');
     bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(guestUser.password, salt, function(err, hash) {
@@ -51,8 +47,8 @@ signin.createGuest=(result) => {
                     }
                     
                     res.message = guestUser.pseudo;
-                    console.log(res.message);
-                    result(null, res.message);
+                    console.log(res);
+                    result(null, res);
 
           
                 });
