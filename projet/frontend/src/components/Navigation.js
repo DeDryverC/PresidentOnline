@@ -21,7 +21,6 @@ class Navigation extends Component {
             default :
                 return <Home/>;
         }
-        
       }
 
     render() {
