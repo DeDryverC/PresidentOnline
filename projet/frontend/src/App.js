@@ -18,7 +18,8 @@ import CreateGame from "./pages/CreateGame/CreateGame";
 class App extends Component {
   state = {
     data: null,
-    actualPage: 'home'
+    actualPage: 'home',
+    pseudo: 'testPseudo'
   };
 
   
@@ -28,7 +29,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-
+    
       // Call our fetch function below once the component mounts
     this.callBackendAPI()
       .then(res => this.setState({ data: res.express }))

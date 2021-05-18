@@ -33,6 +33,18 @@ game.createLobby = (gameId, result) => {
     
 }
 
+game.getGameId = (code, result) => {
+    mysql.query(`SELECT gameId from GamePool where code = "${code}"`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("model res: ", res);
+        result(null, res);
+    });
+}
+
 game.putInPool = (gameId, maxPlayers, result) =>{
    
     let code = Math.random().toString(36).substring(7).toUpperCase();
@@ -135,7 +147,7 @@ game.togglePlayerLobby = (gameId, pseudo, result) => {
 }
 
 game.getCode = (gameId, result) => {
-    mysql.query(`select code from GamePool where gameId=${gameId}`, (err, res) =>{
+    mysql.query(`select code from GamePool where gameId="${gameId}"`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
@@ -219,7 +231,7 @@ game.setDeck = (gameId, players, result) => {
 
 
 game.getDeck = (gameId, userId, result) =>{
-    mysql.query(`select * from ${gameId} where user=${userId}`, (err,res) => {
+    mysql.query(`select * from ${gameId} where user='${userId}'`, (err,res) => {
         if(err){
             console.log("error: ", err);
             result(null, err);
@@ -231,7 +243,7 @@ game.getDeck = (gameId, userId, result) =>{
 };
 
 game.getCardsCount = (gameId, userId, result) => {
-    mysql.query(`select user, count(distinct card) as Ncards from ${gameId} where user !=${userId} and user !='pot' group by user`, (err, res) =>{
+    mysql.query(`select user, count(distinct card) as Ncards from ${gameId} where user != '${userId}' and user !='pot' group by user`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);

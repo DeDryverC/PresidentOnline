@@ -14,8 +14,12 @@ class Navigation extends Component {
         super(props);
         this.state={
            connected: localStorage.getItem('Connect'),
+           guestPseudo : '',
+        
+           } 
+        this.handleLogin = this.handleLogin.bind(this);
       }
-    }
+    
 
     pageSwitch= () => {
 
@@ -31,22 +35,37 @@ class Navigation extends Component {
             default :
                 return <Home OnClick = {this.createGame}/>;
         }
-
-        
       }
 
     createGame = (name) => {
         this.props.actionSwitchPage(name);
-    
-        
     }
 
-    /*componentDidMount(){
-        this.setState({connected: localStorage.getItem('Connect')})
-        console.log(this.state.connected)
-    }*/
+
+    disconnect=() => {
+        this.setState({connected: false})
+    }
     
 
+
+    handleLogin(event){
+        event.preventDefault();
+        fetch('http://localhost:5000/guest', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+        }).then(response => response.json())
+            .then(json => {
+                this.setState({guestPseudo: json["message"]});
+            }).catch((error) => {
+
+            });
+        
+            //afficher en tant qu'user connecté
+    }
 
     render() {
         if(this.state.connected==="true"){
@@ -87,9 +106,7 @@ class Navigation extends Component {
                                             <NavLink to="/profile" className="hover" activeClassName='nav-active'>
                                                 <h4 style={{ textAlign: "center", fontSize: 24 }}>Profile</h4>
                                             </NavLink>
-                                            <NavLink to="/" className="hover" activeClassName='nav-active'>
-                                                <h4 style={{ textAlign: "center", fontSize: 24  }}>Disconnect</h4>
-                                            </NavLink>
+                                            
                                         </Col>
                                         <Col />
                                     </Row>
@@ -197,7 +214,9 @@ class Navigation extends Component {
                                         <Col>
                                         <Button
                                             variant="outline-info"
-                                            size="lg">
+                                            size="lg"
+                                            onClick={this.handleLogin}    
+                                        >
                                             Log in as a guest
                                         </Button>
                                         </Col>

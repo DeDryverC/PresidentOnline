@@ -1,4 +1,3 @@
-
 import React from "react";
 import NavigationAutres from "../../components/NavigationAutres";
 import Col from 'react-bootstrap/Col'
@@ -9,6 +8,7 @@ class Signin extends React.Component {
 
     constructor(props) {
         super(props);
+       
         this.state={
             email:'',
             password:'',
@@ -19,6 +19,8 @@ class Signin extends React.Component {
             
    
         }
+        
+
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
