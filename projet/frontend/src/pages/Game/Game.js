@@ -14,12 +14,12 @@ class Game extends Component {
         token: true,
         selectedCard: [],
         switcher: false,
-        errorMessage: {type: null, message: null},
+gi        errorMessage: { type: null, title: null, message: null, variant: null },
 
         /* Test variable */
-        testChgPile: [5,18],
+        testChgPile: [5, 18],
         testChgPile2: [13],
-        
+
         /* RAW DATA */
         playersData: null,
         data: null,
@@ -34,29 +34,29 @@ class Game extends Component {
 
         /* STYLE */
         defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
-        cardStyle: {border: '2px solid red', borderRadius: '10px', },
+        cardStyle: { border: '2px solid red', borderRadius: '10px', },
 
         /* VISIBLE CARDS */
         pile: [],
         playerCard: [],
 
-        /* List of all card, refers to their .png */    
+        /* List of all card, refers to their .png */
         cardList: {
-            ace :   ['1', '14', '27','40'] ,
-            two:    ['2','15','28','41'],
-            three:  ['3','16','29','42'],
-            four:   ['4','17','30','43'],
-            five:   ['5','18','31','44'],
-            six:    ['6','19','32','45'],
-            seven:  ['7','20','33','46'],
-            eight:  ['8','21','34','47'],
-            nine:   ['9','22','35','48'],
-            ten:    ['10','23','36','49'],
-            jack:   ['11','24','37','50'],
-            queen:  ['12','25','38','51'],
-            king:   ['13','26','39','52'],
-            
-            }
+            ace: ['1', '14', '27', '40'],
+            two: ['2', '15', '28', '41'],
+            three: ['3', '16', '29', '42'],
+            four: ['4', '17', '30', '43'],
+            five: ['5', '18', '31', '44'],
+            six: ['6', '19', '32', '45'],
+            seven: ['7', '20', '33', '46'],
+            eight: ['8', '21', '34', '47'],
+            nine: ['9', '22', '35', '48'],
+            ten: ['10', '23', '36', '49'],
+            jack: ['11', '24', '37', '50'],
+            queen: ['12', '25', '38', '51'],
+            king: ['13', '26', '39', '52'],
+
+        }
     }
 
 
@@ -66,102 +66,124 @@ class Game extends Component {
 
     whatCardIs = (num) => {
         // RETURN -1 IF NOT
-        if(this.state.cardList.ace.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.ace.indexOf(String(num))){
-                case 0: return '1:s';
-                case 1: return '1:h';
-                case 2: return '1:c';
-                case 3: return '1:d';
-                default: return 0;}
+        if (this.state.cardList.ace.indexOf(String(num)) !== -1) {
+            switch (this.state.cardList.ace.indexOf(String(num))) {
+                case 0: return '15:s';
+                case 1: return '15:h';
+                case 2: return '15:c';
+                case 3: return '15:d';
+                default: return 0;
+            }
         } else if (this.state.cardList.two.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.two.indexOf(String(num))){
-                case 0: return '2:s';
-                case 1: return '2:h';
-                case 2: return '2:c';
-                case 3: return '2:d';
-                default: return 0;}
+            switch (this.state.cardList.two.indexOf(String(num))) {
+                case 0: return '20:s';
+                case 1: return '20:h';
+                case 2: return '20:c';
+                case 3: return '20:d';
+                default: return 0;
+            }
         } else if (this.state.cardList.three.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.three.indexOf(String(num))){
+            switch (this.state.cardList.three.indexOf(String(num))) {
                 case 0: return '3:s';
                 case 1: return '3:h';
                 case 2: return '3:c';
                 case 3: return '3:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.four.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.four.indexOf(String(num))){
+            switch (this.state.cardList.four.indexOf(String(num))) {
                 case 0: return '4:s';
                 case 1: return '4:h';
                 case 2: return '4:c';
                 case 3: return '4:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.five.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.five.indexOf(String(num))){
+            switch (this.state.cardList.five.indexOf(String(num))) {
                 case 0: return '5:s';
                 case 1: return '5:h';
                 case 2: return '5:c';
                 case 3: return '5:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.six.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.six.indexOf(String(num))){
+            switch (this.state.cardList.six.indexOf(String(num))) {
                 case 0: return '6:s';
                 case 1: return '6:h';
                 case 2: return '6:c';
                 case 3: return '6:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.seven.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.seven.indexOf(String(num))){
+            switch (this.state.cardList.seven.indexOf(String(num))) {
                 case 0: return '7:s';
                 case 1: return '7:h';
                 case 2: return '7:c';
                 case 3: return '7:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.eight.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.eight.indexOf(String(num))){
+            switch (this.state.cardList.eight.indexOf(String(num))) {
                 case 0: return '8:s';
                 case 1: return '8:h';
                 case 2: return '8:c';
                 case 3: return '8:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.nine.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.ninr.indexOf(String(num))){
+            switch (this.state.cardList.ninr.indexOf(String(num))) {
                 case 0: return '9:s';
                 case 1: return '9:h';
                 case 2: return '9:c';
                 case 3: return '9:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.ten.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.ten.indexOf(String(num))){
+            switch (this.state.cardList.ten.indexOf(String(num))) {
                 case 0: return '10:s';
                 case 1: return '10:h';
                 case 2: return '10:c';
                 case 3: return '10:d';
-                default: return 0;}
+                default: return 0;
+            }
         } else if (this.state.cardList.jack.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.jack.indexOf(String(num))){
-                case 0: return 'j:s';
-                case 1: return 'j:h';
-                case 2: return 'j:c';
-                case 3: return 'j:d';
-                default: return 0;}
+            switch (this.state.cardList.jack.indexOf(String(num))) {
+                case 0: return '11:s';
+                case 1: return '11:h';
+                case 2: return '11:c';
+                case 3: return '11:d';
+                default: return 0;
+            }
         } else if (this.state.cardList.queen.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.queen.indexOf(String(num))){
-                case 0: return 'q:s';
-                case 1: return 'q:h';
-                case 2: return 'q:c';
-                case 3: return 'q:d';
-                default: return 0;}
+            switch (this.state.cardList.queen.indexOf(String(num))) {
+                case 0: return '12:s';
+                case 1: return '12:h';
+                case 2: return '12:c';
+                case 3: return '12:d';
+                default: return 0;
+            }
         } else if (this.state.cardList.king.indexOf(String(num)) !== -1) {
-            switch(this.state.cardList.king.indexOf(String(num))){
-                case 0: return 'k:s';
-                case 1: return 'k:h';
-                case 2: return 'k:c';
-                case 3: return 'k:d';
-                default: return 0;}
+            switch (this.state.cardList.king.indexOf(String(num))) {
+                case 0: return '13:s';
+                case 1: return '13:h';
+                case 2: return '13:c';
+                case 3: return '13:d';
+                default: return 0;
+            }
         }
     }
 
+
+    isRoundOver = (cards, cardsNum) =>{
+        if(cards.length === 4){
+            return true
+        } else if (cardsNum === 20){
+            return true
+        }
+        return false
+    }
     showCard = (card) => {
-        if(this.state.selectedCard.indexOf(card) === -1) {
+        if (this.state.selectedCard.indexOf(card) === -1) {
             this.setState(state => {
                 const selectedCard = state.selectedCard.concat(card)
                 return {
@@ -172,7 +194,7 @@ class Game extends Component {
             var selectedCard = [...this.state.selectedCard]
             const index = this.state.selectedCard.indexOf(card);
             selectedCard.splice(index, 1)
-            this.setState({selectedCard: selectedCard})
+            this.setState({ selectedCard: selectedCard })
         }
         return 0;
     }
@@ -231,83 +253,105 @@ class Game extends Component {
 
 
     resetError = () => {
-        const error = {type: null, message: null}
-        this.setState({errorMessage: error})
+        const error = { type: null, title: null, message: null, variant: null }
+        this.setState({ errorMessage: error })
     }
 
     pileTypeCard = () => {
         const pile = this.state.pile
-        if(pile.length === 0){
-            return 0
+        if (pile.length === 0) {
+            return -1
         }
-        else{
+        else {
             const numPile = this.whatCardIs(pile[0]).split(':')
             console.log(numPile[0])
-            if(numPile[0]===0){
+            if (numPile[0] === 0) {
                 return 10
             }
-            else{
-                return numPile[0]
+            else {
+                return Number(numPile[0])
             }
         }
     }
     sameSelectedCard = () => {
-        const selCard = this.state.selectedCard
-        const len = selCard.length
-
-        if(len===1){
-            return true
+        var selCard = this.state.selectedCard
+        var len = selCard.length
+        var prev1 = this.whatCardIs(selCard[0]).split(':')
+        var prev = prev1[0]
+        if (len === 1) {
+            return Number(prev)
         }
-        else if(len===2){
-            if(this.whatCardIs(selCard[0]) === this.whatCardIs(selCard[1])){
-                return true
+        else {
+
+            for (let i = 0; i < len; i++) {
+                console.log(i)
+                console.log(prev)
+                const actual = this.whatCardIs(selCard[i]).split(':')
+                console.log(actual[0])
+                console.log('--------------')
+                if (prev !== actual[0]) {
+                    return -1
+                }
+                prev = actual[0]
             }
-            else{
-                return false
-            }
+            return Number(prev)
         }
     }
 
-    canHePlay= () => {
-        if(this.state.token === true) {
+    canHePlay = () => {
+        if (this.state.token === true) {
             const actualPile = this.state.pile
             const playerCard = this.state.playerCard
             const selCard = this.state.selectedCard
-            if( actualPile.length > selCard.length){
-                const error = {type : 'rules', message: 'You cannot play fewer cards than there are in the pile'}
-                this.setState({errorMessage : error})
-                
+            const ssc = this.sameSelectedCard()
+            const ptc = this.pileTypeCard()
+            console.log(ssc + ' : ' + ptc)
+            if (actualPile.length > selCard.length && ssc !== 20) {
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play fewer cards than there are in the pile', variant: 'danger' }
+                this.setState({ errorMessage: error })
+
             }
-            
-            else{
-                this.resetError()
-                this.changePile(selCard)
-        }
-            
+            else if (ssc === -1 && ssc !== 20) {
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play two cards of different value', variant: 'danger' }
+                this.setState({ errorMessage: error })
+            } else if (ssc < ptc && ssc !== 20) {
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play one or more cards smaller than those in the pile', variant: 'danger' }
+                this.setState({ errorMessage: error })
+            }
+            else if (actualPile.length > selCard.length - 1 && ssc === 20) {
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You need an extra 2 if you want to cut a series of 3 cards', variant: 'danger' }
+            }
+            else {
+
+                const message = { type: 'finish', title: 'You just played', message: 'Wait for your turn.', variant: 'success' }
+                this.setState({ errorMessage: message })
+
+                this.delSelectedCard()
+                this.changePile(selCard, ssc)
+            }
+
         }
         else {
-            const error = {type : 'Not your turn', message: 'Its not your turn, wait for it.'}
-            this.setState({errorMessage : error})
+            const error = { type: 'Not your turn', title: 'You cant play now', message: 'Its not your turn, wait for it.', variant: '' }
+            this.setState({ errorMessage: error })
         }
 
     }
 
-    checkRules = (selected) => {
+    changePile = (newCards, newCardsNum) => {
 
-        //if(selected.compareto(sdssss) === true )
-    }
-
-    changePile = (newCards) => {
-        var sheesh = []
-        fetch('http://localhost:5000/potd/GameTest')
-        newCards.map((value, key) => {
-            const fetchmsg = 'http://localhost:5000/pots/GameTest/'+String(value)
-            sheesh.push(value)
-            fetch(fetchmsg)
-            return 0;
+        if (this.isRoundOver(newCards, newCardsNum) === false) {
+            var sheesh = []
+            fetch('http://localhost:5000/potd/GameTest')
+            newCards.map((value, key) => {
+                const fetchmsg = 'http://localhost:5000/pots/GameTest/' + String(value)
+                sheesh.push(value)
+                fetch(fetchmsg)
+                return 0;
             })
 
-        this.setState({pile : sheesh})
+            this.setState({ pile: sheesh })
+        }
 
     }
     playButton = () => {
@@ -318,11 +362,21 @@ class Game extends Component {
         )
     }
     isThereErrorMessage = () => {
-        if(this.state.errorMessage.type == 'rules') {
+        if (this.state.errorMessage.type === 'rules') {
             return (
                 <Row style={this.state.defStyle}>
-                    <Alert variant="danger">
-                        <Alert.Heading>Rules error</Alert.Heading>
+                    <Alert variant={this.state.errorMessage.variant}>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
+                        {this.state.errorMessage.message}
+                        <br />Check the rules for more informations
+                    </Alert>
+                </Row>
+            )
+        } else if (this.state.errorMessage.type === 'finish') {
+            return (
+                <Row style={this.state.defStyle}>
+                    <Alert variant={this.state.errorMessage.variant} onClose={() => this.resetError()} dismissible>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
                         {this.state.errorMessage.message}
                     </Alert>
                 </Row>
@@ -338,9 +392,9 @@ class Game extends Component {
                         {
                             this.state.player4.cards.map((value, key) => {
                                 return <Carte num={value} index={key} identity='othercards' />
-                        })}
+                            })}
                     </Row>
-                    <br/>
+                    <br />
                     <Row style={this.state.defStyle}>
                         {this.state.player4.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player4.pseudo}</span> : <span></span>}
                     </Row>
@@ -354,7 +408,7 @@ class Game extends Component {
             )
         }
     }
-    
+
     isThere5Players = () => {
         if (this.state.player5.pseudo !== null) {
             return (
@@ -363,9 +417,9 @@ class Game extends Component {
                         {
                             this.state.player5.cards.map((value, key) => {
                                 return <Carte num={value} index={key} identity='othercards' />
-                        })}
+                            })}
                     </Row>
-                    <br/>
+                    <br />
                     <Row style={this.state.defStyle}>
                         {this.state.player5.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player5.pseudo}</span> : <span></span>}
                     </Row>
@@ -426,8 +480,33 @@ class Game extends Component {
             })
 
     }
-    
 
+    delSelectedCard = () => {
+        const selCard = this.state.selectedCard
+        var userCard = this.state.playerCard
+        for (let i = 0; i < selCard.length; i++) {
+            const index = userCard.indexOf(selCard[i])
+            console.log(selCard[i])
+            const fetchmsg = 'http://localhost:5000/dcard/GameTest/user1/' + String(selCard[i])
+            console.log(fetchmsg)
+            fetch('http://localhost:5000/dcard/GameTest/user1/' + String(selCard[i]))
+            userCard.splice(index, 1)
+
+        }
+        this.setState({ playerCard: userCard, selectedCard: [] })
+    }
+    addusercard = () => {
+        const usercard = this.state.playerCard
+        const sheesh = [1, 14, 27, 40, 6, 19, 32, 45]
+        usercard.push(sheesh)
+        for (let i = 0; i < sheesh.length; i++) {
+            fetch('http://localhost:5000/icard/GameTest/user1/' + String(sheesh[i]))
+        }
+        this.setState({ playerCard: usercard })
+    }
+    closeAlert = () => {
+        this.setState({ showAlert: false })
+    }
 
     componentDidUpdate() {
     }
@@ -438,7 +517,7 @@ class Game extends Component {
             <div style={{
                 border: '1px solid black',
                 backgroundColor: '#5DAB51',
-                
+
             }}>
                 <Container fluid>
                     <Row>
@@ -453,7 +532,7 @@ class Game extends Component {
                                             return <Carte num={value} index={key} identity='othercards' />
                                         })}
                                 </Row>
-                                <br/>
+                                <br />
                                 <Row style={this.state.defStyle}>
                                     {this.state.player1.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player1.pseudo}</span> : <span></span>}
                                 </Row>
@@ -463,8 +542,8 @@ class Game extends Component {
                             {/* Rien */}
                         </Col>
                     </Row>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <Row>
                         <Col>
                             <Row style={this.state.defStyle}>
@@ -473,23 +552,24 @@ class Game extends Component {
                                         return <Carte num={value} index={key} identity='othercards' />
                                     })}
                             </Row>
-                            <br/>
+                            <br />
                             <Row style={this.state.defStyle}>
                                 {this.state.player2.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player2.pseudo}</span> : <span></span>}
                             </Row>
 
                         </Col>
-                        <Col style={{ border: '2px solid red', borderRadius: '10px',}}>
+                        <Col style={{ border: '2px solid red', borderRadius: '10px', }}>
                             <Row style={this.state.defStyle}>
-                                {this.state.switcher===true ? <span id={String(this.state.switcher)}>Pile</span> : <span id={String(this.state.switcher)}>Pile</span>}
+                                {this.state.switcher === true ? <span id={String(this.state.switcher)}>Pile</span> : <span id={String(this.state.switcher)}>Pile</span>}
                             </Row>
                             <Row style={this.state.defStyle}>
                                 {
                                     this.state.pile === [] ? <span>VIDE</span> : this.state.pile.map((value, key) => {
-                                        return <Carte num={value} index={key} identity='cards' />})
+                                        return <Carte num={value} index={key} identity='cards' />
+                                    })
                                 }
                             </Row>
-                            <br/>
+                            <br />
                             <Row>
 
                             </Row>
@@ -501,14 +581,14 @@ class Game extends Component {
                                         return <Carte num={value} index={key} identity='othercards' />
                                     })}
                             </Row>
-                            <br/>
+                            <br />
                             <Row style={this.state.defStyle}>
                                 {this.state.player3.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player3.pseudo}</span> : <span></span>}
                             </Row>
                         </Col>
                     </Row>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <Row>
                         <Col>
                             {this.isThere4Players()}
@@ -521,29 +601,29 @@ class Game extends Component {
                         </Col>
                     </Row>
                 </Container>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <Container fluid>
                     <Row>
-                        <Col style={this.state.defStyle}><Button onClick={() => console.log(this.pileTypeCard())} block>pass</Button></Col>
+                        <Col style={this.state.defStyle}><Button onClick={() => console.log(this.addusercard())} block>pass</Button></Col>
                         <Col style={this.state.defStyle}>
-                        {
-                            this.state.playerCard.map((value, index) => {
-                                if(this.state.selectedCard.indexOf(value) !== -1 ){
-                                    return <Carte num={value} index={index} identity='usercards' action={this.showCard} style={this.state.cardStyle} />;
-                                } else  {
-                                    return <Carte num={value} index={index} identity='usercards' action={this.showCard}/>;
-                                }
-                            })
-                        }
+                            {
+                                this.state.playerCard.map((value, index) => {
+                                    if (this.state.selectedCard.indexOf(value) !== -1) {
+                                        return <Carte num={value} index={index} identity='usercards' action={this.showCard} style={this.state.cardStyle} />;
+                                    } else {
+                                        return <Carte num={value} index={index} identity='usercards' action={this.showCard} />;
+                                    }
+                                })
+                            }
                         </Col>
                         {this.state.selectedCard.length > 0 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" onClick={() => console.log(this.state.pile)} block disabled>Play selected cards</Button></Col>}
-                        
+
                     </Row>
                 </Container>
-                <br/>
-                <br/>
-                <br/>
+                <br />
+                <br />
+                <br />
 
                 <div></div>
             </div>
@@ -554,72 +634,6 @@ class Game extends Component {
 export default Game;
 
 
-
-
-
-
-
-
-                /*
-                    <Row>
-                        <Col />
-                        <Col><Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{
-                            this.state.player2.cards.map((value, key) => {
-                                return <Carte num={value} index={key} identity='othercards' />
-                            })}
-                        </Row>
-                            <br />
-                            {this.state.player2.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player2.pseudo}</span> : <span></span>}
-
-
-                        </Col>
-                        <Col />
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col><Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{
-                            this.state.player1.cards.map((value, key) => {
-                                return <Carte num={value} index={key} identity='othercards' />
-                            })}</Row>
-                            {this.state.player1.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player1.pseudo}</span> : <span></span>}
-
-
-                        </Col>
-                        <Col>
-                            <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                <span>Pile</span>
-                            </Row>
-                            <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                {this.state.pile === [] ? <span>VIDE</span> : this.state.pile.map((value, key) => {
-                                    return <Carte num={value} index={key} identity='cards' />
-                            })}
-                            </Row>
-                        </Col>
-
-
-                        <Col><Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{
-                            this.state.player3.cards.map((value, key) => {
-                                return <Carte num={value} index={key} identity='othercards' />
-                            })}</Row>
-                            {this.state.player3.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player3.pseudo}</span> : <span></span>}
-
-
-                        </Col>
-                    </Row><br />
-                    {this.isThereMorePlayers()}
-                </Container>
-                <br></br>
-                <Container>
-                    <Row>
-                        <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Button onClick={() => console.log(this.state.pile)}>pass</Button></Col>
-                        <Col><Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>{
-                            this.state.playerCard.map((value, index) => {
-                                return <Carte num={value} index={index} identity='cards' />
-                            })
-                        }</Row></Col>
-
-                        <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><Button onClick={() => console.log(this.state.player1)}>PICK</Button></Col>
-                    </Row>*/
 
 
 /*{
@@ -636,5 +650,5 @@ export default Game;
             jack:   '11:24:37:50',
             queen:  '12:25:38:51',
             king:   '13:26:39:52',
-            
+
             } */
