@@ -17,6 +17,7 @@ class Navigation extends Component {
            guestPseudo : '',
         
            } 
+        this.handleClick = this.handleClick.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
       }
     
@@ -42,8 +43,9 @@ class Navigation extends Component {
     }
 
 
-    disconnect=() => {
+    handleClick=() => {
         this.setState({connected: false})
+        localStorage.setItem('Connect', false)
     }
     
 
@@ -106,7 +108,7 @@ class Navigation extends Component {
                                             <NavLink to="/profile" className="hover" activeClassName='nav-active'>
                                                 <h4 style={{ textAlign: "center", fontSize: 24 }}>Profile</h4>
                                             </NavLink>
-                                            
+                                            <Button onClick={this.handleClick}>Log out</Button>
                                         </Col>
                                         <Col />
                                     </Row>
