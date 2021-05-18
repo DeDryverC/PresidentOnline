@@ -13,12 +13,13 @@ class Navigation extends Component {
     constructor(props) {
         super(props);
         this.state={
-           connected: localStorage.getItem('Connect'),
-           guestPseudo : '',
-        
+            connected: localStorage.getItem('Connect'),
+            guestPseudo: '',
+            pseudo : localStorage.getItem('guestPseudo'),
+            
            } 
         this.handleClick = this.handleClick.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleLoginGuest = this.handleLoginGuest.bind(this);
       }
     
 
@@ -50,7 +51,7 @@ class Navigation extends Component {
     
 
 
-    handleLogin(event){
+    handleLoginGuest(event){
         event.preventDefault();
         fetch('http://localhost:5000/guest', {
             method: 'POST',
@@ -62,14 +63,16 @@ class Navigation extends Component {
         }).then(response => response.json())
             .then(json => {
                 this.setState({guestPseudo: json["message"]});
+                console.log(json["message"]);
             }).catch((error) => {
 
             });
-        
+        localStorage.setItem('pseudo', this.state.guestPseudo)
             //afficher en tant qu'user connecté
     }
 
     render() {
+        console.log(this.state.pseudo)
         if(this.state.connected==="true"){
             console.log(this.state.connected)
             return (
@@ -217,7 +220,7 @@ class Navigation extends Component {
                                         <Button
                                             variant="outline-info"
                                             size="lg"
-                                            onClick={this.handleLogin}    
+                                            onClick={this.handleLoginGuest}    
                                         >
                                             Log in as a guest
                                         </Button>
