@@ -32,6 +32,7 @@ module.exports = (app) => {
     app.get("/potd/:gameId", game.delPot);
     app.get("/pots/:gameId/:card", game.setOnePot);
     app.get("/deck/:gameId/:userId", game.getDeck);
+    app.get("/ndeck/:gameId", game.setDeck);
     app.get("/dcard/:gameId/:user/:card", game.delCard);
     app.get("/pool", game.getPool);
     app.get("/code/:gameId", game.getCode);
