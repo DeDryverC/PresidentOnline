@@ -1,32 +1,141 @@
 
 import React from "react";
-import NavigationCreate from "../../components/NavigationCreate";
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
+import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
+import Select from 'react-select'
+
+
+const options = [
+    { value: '4', label: '4' },
+    { value: '5', label: '5' },
+    { value: '6', label: '6' },
+
+  ]
+
 
 class CreateGame extends React.Component {
 
-    constructor(props) {
-        super(props);
-       
-        this.state={
-        }
-      }
+    
 
+    // TODO : deplacer les states que ça ne fasse pas de pb de collision
+    constructor(props){
+        super(props);
+        this.state={
+            gameId: undefined,
+            maxPlayers: undefined
+        }
+        this.handleCreate = this.handleCreate.bind(this);
+    }
+    handleCreate(event) {
+        event.preventDefault();
+        //creating table for the game
+        fetch('http://localhost:5000/table', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: this.state.gameId,
+            }),
+
+        }).then(response => response.json())
+            .then(json => {
+
+                console.log(json.message)
+
+            }).catch((error) => {
+                console.log('error');
+
+            });
+        console.log(this.state.maxPlayers.value);
+        //setting the game in the game pool
+        fetch('http://localhost:5000/spool', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: this.state.gameId,
+                maxPlayers: this.state.maxPlayers.value,
+            }),
+
+        }).then(response => response.json())
+            .then(json => {
+
+                console.log(json.message)
+
+            }).catch((error) => {
+                console.log('error');
+
+            });
+        fetch('http://localhost:5000/lobby', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: this.state.gameId,
+            }),
+
+        }).then(response => response.json())
+            .then(json => {
+
+                console.log(json.message)
+
+            }).catch((error) => {
+                console.log('error');
+
+            });
+        console.log(this.state)
+    };
 
 
     render() {
         return (
-            <html>
-                <Row>  
-                    <Col>
-                        <div class="hautpage">
-                            <NavigationCreate />
-                        </div> 
-                    </Col> 
-                </Row>
-                   
-            </html>
+            <Container>
+                <Col style={{
+                    border: '2px solid moccasin',
+                    borderRadius: '10px',
+                    backgroundColor: 'palegoldenrod'
+                }}>
+
+                    <Row>
+                        {/* Ici un composant réactif qui changera selon ce qu'on touche (Genre le home c'est la liste des games, puis lorsque l'on naviguera sur la barre "menu", cela changera ce qu'il y a ici.) 
+                                        En attendant je hardcode le listing des game disponible*/}
+                        <Container>
+                            <Col>
+                                <h2>Create a game</h2>
+                                <br /><br />
+
+
+                                <form onSubmit={this.handleCreate}>
+
+                                    <label>
+                                        <p>Lobby's name :</p>
+                                        <input type="text" value={this.state.gameId} onChange={text => this.setState({ gameId: text.target.value })} />
+                                    </label>
+                                    <br /><br />
+
+                                    <label>
+                                        <p>Amount of player : </p>
+                                        <Select options={options} value ={this.state.maxPlayers} onChange={value => this.setState({maxPlayers: value})} />
+                                    </label>
+                                    <br /><br />
+                                    <input type="submit" value="Create lobby" />
+                                </form>
+
+
+
+                            </Col>
+                        </Container>
+                    </Row>
+                </Col>
+            </Container>
         );
     }
 }

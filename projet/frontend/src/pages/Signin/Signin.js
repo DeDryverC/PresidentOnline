@@ -2,6 +2,8 @@ import React from "react";
 import NavigationAutres from "../../components/NavigationAutres";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import Container from 'react-bootstrap/Container'
+
 
 
 
@@ -11,28 +13,58 @@ class Signin extends React.Component {
         super(props);
        
         this.state={
-            name:'flo',
+            /*name:'flo',
             surname:'zz',
             pseudo:'zz',
             email:'zz',
             birthDate:'zz',
             password:'zz',
             confirmPassword:'zz',
-            gameCount:'0'
+            gameCount:'0'*/
+            name:'',
+            surname:'',
+            pseudo:'',
+            email:'',
+            birthDate:'',
+            password:'',
+            confirmPassword:'',
+            gameCount:'0',
+            testsign:false
         }
         
 
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
+  
 
-        handleSubmit(event) {
+    handleSubmit(event) {
+        
 
+<<<<<<< HEAD
         if(this.state.password !== this.state.confirmPassword){
             alert("Password doesn't match")
+=======
+        if(this.state.name == '' || this.state.surname == '' || this.state.pseudo == '' || this.state.birthDate == '' || this.state.email == '' || this.state.password == '' || this.state.confirmPassword == '' ){
+            alert("You forget to fill a field")
+>>>>>>> main
         }
+        /*
+        if(this.state.email.includes('@') == false || this.state.email.includes('.') == false || this.state.email.length < 8) {
+            alert("insert a valid email address")
+        }
+
+
+        /*if(this.state.password != this.state.confirmPassword){
+            let simpleAlertHandler = () => {
+                alert("Passwords didn't match !");
+              };
+              simpleAlertHandler();
+              return;
+        }*/
+
         else{
-        console.log('Le nom a été soumis : ' + this.state.name);
+        /*console.log('Le nom a été soumis : ' + this.state.name);
         console.log('Le prenom a été soumis : ' + this.state.surname);
         console.log('Le pseudo a été soumis : ' + this.state.pseudo);
         console.log('La date de naissance a été soumis : ' + this.state.birthDate);
@@ -40,10 +72,11 @@ class Signin extends React.Component {
         console.log('Le password a été soumis : ' + this.state.password);
         console.log('Le confirmPassword a été soumis : ' + this.state.confirmPassword);
         console.log('Le gameCount a été soumis : ' + this.state.gameCount);
-        console.log(this.state)
+        console.log(this.state)*/
 
-        fetch('http://localhost:5000/postSign/',{
-            
+        event.preventDefault();
+        fetch('http://localhost:5000/sign',{
+             
               method:'POST',
               headers: {
                 Accept: 'application/json',
@@ -60,22 +93,27 @@ class Signin extends React.Component {
                 gameCount:this.state.gameCount
               }),
               
+              
             }).then(response => response.json())
             .then(json => {
-     
                     console.log(json.message)
                 
         
                 
               }).catch((error) => {
-                console.log(error)
+               
+                
+                
                 alert("Echec d'inscription'. Réessayez.");
                 
           });
-        }
-        event.preventDefault();
-        console.log(this.state.pseudo)
-      }
+          alert("Inscription terminée !")
+          window.location.href= "http://localhost:3000/"
+        };
+    }
+        
+      
+    
 
 
     render() {
@@ -91,39 +129,66 @@ class Signin extends React.Component {
                 <Row>
                     <Col>
                         <form onSubmit={this.handleSubmit}>
-                            <label>
-                                Name :
-                            <input type="text" value={this.state.name}  onChange={text => this.setState({name: text.target.value})} />
-                            </label><br></br>
-                            <label>
-                                Surname :
-                            <input type="text" value={this.state.surname} onChange={text => this.setState({surname: text.target.value})} />
-                            </label><br></br>
-                            <label>
-                                Pseudo :
-                            <input type="text" value={this.state.pseudo} onChange={text => this.setState({pseudo: text.target.value})} />
-                            </label><br></br>
-                            <label>
-                                Email :
-                            <input type="text" value={this.state.email} onChange={text => this.setState({email: text.target.value})} />
-                            </label>
-                            <label>
-                                Birthdate :
-                            <input type="text" value={this.state.birthDate} onChange={text => this.setState({birthDate: text.target.value})} />
-                            </label><br></br>
-                            <label>
-                                Password :
-                            <input type="text" value={this.state.password} style={{}} onChange={text => this.setState({password: text.target.value})} />
-                            </label>
-                            <label>
-                                Confirm your password :
-                            <input type="text" value={this.state.confirmPassword} onChange={text => this.setState({confirmPassword: text.target.value})} />
-                            </label>
-                            <br></br><br></br><br></br>
-                            <input type="submit" value="S'inscrire" />
+                            <Container>
+                            <Row>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                        Name :
+                                        <input type="text" value={this.state.name}  onChange={text => this.setState({name: text.target.value})} />
+                                    </label>
+                                </Col>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                        Surname :
+                                        <input type="text" value={this.state.surname} onChange={text => this.setState({surname: text.target.value})} />
+                                    </label>
+                                </Col>
+                            </Row>
+                            
+                            <Row>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                    Pseudo :
+                                    <input type="text" value={this.state.pseudo} onChange={text => this.setState({pseudo: text.target.value})} />
+                                    </label>
+                                </Col>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                        Email :
+                                        <input type="text" value={this.state.email} onChange={text => this.setState({email: text.target.value})} />
+                                    </label>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                        Birthdate :
+                                        <input type="text" value={this.state.birthDate} onChange={text => this.setState({birthDate: text.target.value})} />
+                                    </label>
+                                </Col>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'85%'}}>
+                                        Password :
+                                        <input type="password" value={this.state.password} secureTextEntry={true} style={{}} onChange={text => this.setState({password: text.target.value})} />
+                                    </label>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'5%',marginLeft:'65%'}}>
+                                        Confirm your password :
+                                        <input type="password" value={this.state.confirmPassword} secureTextEntry={true} onChange={text => this.setState({confirmPassword: text.target.value})} />
+                                    </label>
+                                </Col>
+                            </Row>
+                            
+                            
+                            <input style={{textAlign: "center", fontSize: 35, color:'red',marginTop:'8%', marginLeft:'73%'}} type="submit" value="S'inscrire" />
+                            </Container> 
                         </form>  
                     </Col>
-                </Row>     
+                </Row>   
+                 
             </html>
         );
     }

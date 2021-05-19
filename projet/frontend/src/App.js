@@ -18,17 +18,18 @@ import Game from "./pages/Game/Game"
 class App extends Component {
   state = {
     data: null,
-    actualPage: 'home'
+    actualPage: 'home',
+    pseudo: 'testPseudo'
   };
 
   
-
   pageStateSwitch = ( page ) => {
         
         this.setState({actualPage: page})
   }
 
   componentDidMount() {
+    
       // Call our fetch function below once the component mounts
     this.callBackendAPI()
       .then(res => this.setState({ data: res.express }))
@@ -46,8 +47,7 @@ class App extends Component {
   };
 
   render() {
-    return (
-      
+    return ( 
       <Switch>
         <Route exact path="/">
           <Navigation
