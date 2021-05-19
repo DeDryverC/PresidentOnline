@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container'
 
 
 
+
 class Signin extends React.Component {
 
     constructor(props) {
@@ -40,8 +41,13 @@ class Signin extends React.Component {
     handleSubmit(event) {
         
 
+<<<<<<< HEAD
+        if(this.state.password !== this.state.confirmPassword){
+            alert("Password doesn't match")
+=======
         if(this.state.name == '' || this.state.surname == '' || this.state.pseudo == '' || this.state.birthDate == '' || this.state.email == '' || this.state.password == '' || this.state.confirmPassword == '' ){
             alert("You forget to fill a field")
+>>>>>>> main
         }
         /*
         if(this.state.email.includes('@') == false || this.state.email.includes('.') == false || this.state.email.length < 8) {

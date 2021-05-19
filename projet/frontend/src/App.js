@@ -2,17 +2,17 @@ import React, {Component} from "react";
 /*import Navbar from './Navbar/navbar';
 import background from './Navbar/images/fond.png';*/
 import Navigation from "./components/Navigation";
-import Home from './pages/Home/Home';
 import Login from "./pages/Login/Login";
 import Jeu from "./pages/Jeu/Jeu";
 import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
-
+import './App.css'
 import HowTo from "./pages/Howto/Howto"
 import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
 import CreateGame from "./pages/CreateGame/CreateGame";
+import Game from "./pages/Game/Game"
 
 
 class App extends Component {
@@ -79,6 +79,9 @@ class App extends Component {
         </Route>
         <Route exact path="/creategame">
           <CreateGame/>
+        </Route>
+        <Route exact path='/game'>
+          <Game/>
         </Route>
         <Redirect to="/" />
       </Switch>
