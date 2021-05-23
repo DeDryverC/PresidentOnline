@@ -14,7 +14,7 @@ class Game extends Component {
         token: true,
         selectedCard: [],
         switcher: false,
-gi        errorMessage: { type: null, title: null, message: null, variant: null },
+        errorMessage: { type: null, title: null, message: null, variant: null },
 
         /* Test variable */
         testChgPile: [5, 18],
