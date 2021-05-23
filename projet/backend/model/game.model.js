@@ -72,7 +72,7 @@ game.getPool = (result) => {
 }
 
 game.deletePool = (gameId, result) => {
-    mysql.query(`DELETE from GamePool where gameId=${gameId}`, (err, res) =>{
+    mysql.query(`DELETE from GamePool where gameId='${gameId}'`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
@@ -107,6 +107,19 @@ game.decrementPlayersPool = (gameId, result) => {
     });
 }
 
+game.getLobby = (gameId, result) => {
+    let lobby = gameId+"Lobby";
+    mysql.query(`SELECT * FROM ${lobby}`,(err, res) => {
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    })
+}
+
 game.putPlayerLobby = (gameId, pseudo, token, result) => {
     let lobby = gameId + "Lobby";
     mysql.query(`INSERT INTO ${lobby} (user, token) VALUES ("${pseudo}", "${token}");`, (err, res) =>{
@@ -122,7 +135,20 @@ game.putPlayerLobby = (gameId, pseudo, token, result) => {
 
 game.removePlayerLobby = (gameId, pseudo, result) => {
     let lobby = gameId + "Lobby";
-    mysql.query(`DELETE FROM ${lobby} where user=${pseudo}`, (err, res) =>{
+    mysql.query(`DELETE FROM ${lobby} where user='${pseudo}'`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.getPlayerToken = (gameId, pseudo, result) =>{
+    let lobby = gameId + "Lobby";
+    mysql.query(`SELECT token from ${lobby} where user='${pseudo}'`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
@@ -257,6 +283,19 @@ game.getDeck = (gameId, userId, result) =>{
 
 game.getCardsCount = (gameId, userId, result) => {
     mysql.query(`select user, count(distinct card) as Ncards from ${gameId} where user != '${userId}' and user !='pot' group by user`, (err, res) =>{
+        if(err){
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    })
+}
+
+
+game.deleteGame=(gameId, result)=> {
+    mysql.query(`DROP TABLE ${gameId}`, (err, res) => {
         if(err){
             console.log("error: ", err);
             result(null, err);
