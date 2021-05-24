@@ -43,19 +43,23 @@ class Signin extends React.Component {
         if(this.state.name == '' || this.state.surname == '' || this.state.pseudo == '' || this.state.birthDate == '' || this.state.email == '' || this.state.password == '' || this.state.confirmPassword == '' ){
             alert("You forget to fill a field")
         }
-        /*
-        if(this.state.email.includes('@') == false || this.state.email.includes('.') == false || this.state.email.length < 8) {
+        
+        else if(this.state.email.includes('@') == false || this.state.email.includes('.') == false || this.state.email.length < 10) {
             alert("insert a valid email address")
         }
 
 
-        /*if(this.state.password != this.state.confirmPassword){
+        else if(this.state.password != this.state.confirmPassword){
             let simpleAlertHandler = () => {
                 alert("Passwords didn't match !");
               };
               simpleAlertHandler();
               return;
-        }*/
+        }
+
+        else if(this.state.password.length<8 || this.state.password.match(/\d+/) == null || this.state.password == this.state.password.toLowerCase()){
+            alert("password not hard enough")
+        }
 
         else{
         /*console.log('Le nom a été soumis : ' + this.state.name);

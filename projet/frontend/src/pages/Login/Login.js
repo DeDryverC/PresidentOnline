@@ -51,10 +51,10 @@ class Signin extends React.Component {
         for (let i=0; i<this.state.bdd.length;i++){
             //console.log(this.state.email)
             if (this.state.email != this.state.bdd[i].Email){
-                console.log("unknown mail")
+                //console.log("unknown mail")
             }
             else{
-                alert("Mail in bdd")
+                //alert("Mail in bdd")
                 this.state.passwordtest= this.state.bdd[i].Password
                 /*let pass=this.state.password
                 var bcrypt = require('bcryptjs');
