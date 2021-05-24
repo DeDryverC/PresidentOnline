@@ -129,7 +129,7 @@ class CreateGame extends React.Component {
             body: JSON.stringify({
                 gameId: gameId,
                 pseudo: pseudo,
-                token: true,
+                token: 1,
             })
         })
             .then(response => response.json())
@@ -138,7 +138,7 @@ class CreateGame extends React.Component {
 
             })
 
-        this.setState({ playerToken: true });
+        this.setState({ playerToken: 1 });
 
 
         //fetches the lobby
