@@ -6,10 +6,10 @@ import App from "../../App";
 import Profil from "../Profil/Profil";
 
 class Home extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            gameCode : '',
+        this.state = {
+            gameCode: '',
             gameFromCode: '',
             pseudo: 'testPseudo',
             pool: undefined,
@@ -20,47 +20,47 @@ class Home extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         fetch('http://localhost:5000/pool')
             .then(response => response.json())
             .then(json => {
-                this.setState({pool: json});
+                this.setState({ pool: json });
             })
-        
+
     }
 
 
     //handle joining with a code
-    async handleSubmit(event){
+    async handleSubmit(event) {
         event.preventDefault();
         await fetch(`http://localhost:5000/game/${this.state.gameCode}`)
             .then(response => response.json())
             .then(json => {
                 localStorage.setItem("joinedGame", json[0].gameId);
             })
-        this.setState({gameFromCode: localStorage.getItem("joinedGame")});
+        this.setState({ gameFromCode: localStorage.getItem("joinedGame") });
 
         await fetch(`http://localhost:5000/lobby/${localStorage.getItem("joinedGame")}`)
             .then(response => response.json())
-            .then(json =>{
-                this.setState({lobby: json});
-                
+            .then(json => {
+                this.setState({ lobby: json });
+
             })
 
-        
-        let index=undefined;
-        for(let item in this.state.pool){
-            if(this.state.pool[item].gameId == localStorage.getItem("joinedGame")){
-                index=item
+
+        let index = undefined;
+        for (let item in this.state.pool) {
+            if (this.state.pool[item].gameId == localStorage.getItem("joinedGame")) {
+                index = item
             }
         }
 
-        if(this.state.pool[index].currPlayers >= this.state.pool[index].maxPlayers){
+        if (this.state.pool[index].currPlayers >= this.state.pool[index].maxPlayers) {
             localStorage.removeItem("joinedGame");
-            this.setState({gameFromCode: undefined});
+            this.setState({ gameFromCode: undefined });
             alert('lobby is full');
         }
-        else{
+        else {
             await fetch('http://localhost:5000/lobbyp', {
                 method: 'POST',
                 headers: {
@@ -71,10 +71,10 @@ class Home extends React.Component {
                 body: JSON.stringify({
                     gameId: localStorage.getItem("joinedGame"),
                     pseudo: this.state.pseudo,
-                    token: true,
+                    token: 1,
                 })
             })
-        
+
 
             await fetch('http://localhost:5000/icount', {
                 method: 'POST',
@@ -88,27 +88,27 @@ class Home extends React.Component {
                 })
             })
 
-        
+
             await fetch(`http://localhost:5000/token/${localStorage.getItem("joinedGame")}/${this.state.pseudo}`)
                 .then(response => response.json())
-                .then(json =>{
-                    this.setState({playerToken: json[0].token});
+                .then(json => {
+                    this.setState({ playerToken: json[0].token });
                 })
-        
-            this.setState({joinedGame: localStorage.getItem("joinedGame")});
+
+            this.setState({ joinedGame: localStorage.getItem("joinedGame") });
 
             await fetch(`http://localhost:5000/lobby/${localStorage.getItem("joinedGame")}`)
                 .then(response => response.json())
-                .then(json =>{
-                this.setState({lobby: json});
-                
-            })
+                .then(json => {
+                    this.setState({ lobby: json });
+
+                })
         }
     }
 
     //handle joining a game
-    handleJoin(gameId){
-        fetch('http://localhost:5000/lobbyp', {
+    async handleJoin(gameId) {
+        await fetch('http://localhost:5000/lobbyp', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -118,7 +118,7 @@ class Home extends React.Component {
             body: JSON.stringify({
                 gameId: gameId,
                 pseudo: this.state.pseudo,
-                token: false,
+                token: 0,
             })
         });
         fetch('http://localhost:5000/icount', {
@@ -134,24 +134,21 @@ class Home extends React.Component {
         });
         fetch(`http://localhost:5000/lobby/${gameId}`)
             .then(response => response.json())
-            .then(json =>{
-                this.setState({lobby: json});
-            })
-        
-        fetch(`http://localhost:5000/token/${gameId}/${this.state.pseudo}`)
-            .then(response => response.json())
-            .then(json =>{
-                this.setState({playerToken: json[0].token});
+            .then(json => {
+                this.setState({ lobby: json });
+                console.log(json);
             })
 
-        
-        this.setState({joinedGame: gameId});
 
-        
+
+        this.setState({ token: 1 });
+        this.setState({ joinedGame: gameId });
+
+
     }
 
     //handle leaving a lobby
-    handleLeave(gameId){
+    handleLeave(gameId) {
         fetch('http://localhost:5000/lobbyr', {
             method: 'DELETE',
             headers: {
@@ -177,51 +174,51 @@ class Home extends React.Component {
             })
         });
 
-        this.setState({joinedGame: undefined});
+        this.setState({ joinedGame: undefined });
     }
 
-    renderGameChoices(){
+    renderGameChoices() {
         let itemsToPush = []
-        for (let item in this.state.pool){
+        for (let item in this.state.pool) {
             let gameId = this.state.pool[item].gameId;
-            if(this.state.pool[item].currPlayers >= this.state.pool[item].maxPlayers){
+            if (this.state.pool[item].currPlayers >= this.state.pool[item].maxPlayers) {
                 itemsToPush.push(<Row><Button variant="danger">Full [{this.state.pool[item].currPlayers}/{this.state.pool[item].maxPlayers}]</Button><p>{gameId}</p></Row>)
             }
-            else{
+            else {
                 itemsToPush.push(<Row><Button variant="success" onClick={() => this.handleJoin(gameId)}>Join [{this.state.pool[item].currPlayers}/{this.state.pool[item].maxPlayers}]</Button><p>{gameId}</p></Row>)
             }
-            
+
         }
-        return(itemsToPush);
+        return (itemsToPush);
     }
 
-    renderLobby(){
+    renderLobby() {
         let itemsToPush = []
-        for(let item in this.state.lobby){
+        for (let item in this.state.lobby) {
             console.log(this.state.lobby[item]);
-            if(this.state.lobby[item].token == 1){
+            if (this.state.lobby[item].token == 1) {
                 itemsToPush.push(<Row><p>{this.state.lobby[item].user}</p><p>___</p><p>Owner</p></Row>)
             }
-            else{
+            else {
                 itemsToPush.push(<Row><p>{this.state.lobby[item].user}</p><p>___</p><p>Player</p></Row>)
             }
-            
+
         }
         itemsToPush.push(<Row><Button variant="outline-info" size="lg" onClick={() => this.handleLeave(this.state.joinedGame)}> Leave lobby </Button></Row>)
-        return(itemsToPush)
+        return (itemsToPush)
     }
 
-    renderLobbyOwner(){
-        if(this.state.playerToken == 1){
-            return(<Row><Button variant="outline-info" size="lg"> Start Game </Button></Row>);
+    renderLobbyOwner() {
+        if (this.state.playerToken == 1) {
+            return (<Row><Button variant="outline-info" size="lg"> Start Game </Button></Row>);
         }
-        
+
     }
 
     render() {
-        
-        if(this.state.joinedGame){
-            return(
+
+        if (this.state.joinedGame) {
+            return (
                 <Container fluid>
                     <Col style={{
                         border: '2px solid moccasin',
@@ -230,24 +227,24 @@ class Home extends React.Component {
                     }}>
                         <Row>
                             <h4>Lobby: {this.state.joinedGame}</h4>
-                            <br/>
+                            <br />
                         </Row>
                         <Row>
-                        
+
                         </Row>
-                        
+
                         <Row>
                             <h5>Players:</h5>
                         </Row>
-                            
-                            {this.renderLobby()}
-                            {this.renderLobbyOwner()}
-                        
+
+                        {this.renderLobby()}
+                        {this.renderLobbyOwner()}
+
                     </Col>
                 </Container>
             )
         }
-        else{
+        else {
             return (
                 <Container fluid>
                     <Col style={{
@@ -261,42 +258,42 @@ class Home extends React.Component {
                                 size="lg"
                                 onClick={() => this.props.OnClick("crgame")}
                             >
-                            Create Game
+                                Create Game
                             </Button>
                             <br />
                         </Row>
                         <Col>
                             <Row>
                                 <form onSubmit={this.handleSubmit}>
-                                
+
                                     <Row>
                                         <h4>Join with a code</h4>
-                                        <br/>
+                                        <br />
                                     </Row>
-                                
+
                                     <input type="text" value={this.state.gameCode} onChange={text => this.setState({ gameCode: text.target.value })} />
-                                
+
                                     <input type="submit" value="Enter Game" />
                                 </form>
                             </Row>
                         </Col>
                         <Row>
-                            
-                                <Col>
-                                    <Row>
-                                        <h4>Find games</h4>
-                                        <br />
-                                    </Row>
-                                        {this.renderGameChoices()}
-                                        
-                                </Col>
-                            
+
+                            <Col>
+                                <Row>
+                                    <h4>Find games</h4>
+                                    <br />
+                                </Row>
+                                {this.renderGameChoices()}
+
+                            </Col>
+
                         </Row>
                     </Col>
                 </Container>
             )
         }
-        
+
 
     }
 }
