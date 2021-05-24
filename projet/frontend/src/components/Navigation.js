@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
-import { useState } from 'react';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import CreateGame from '../pages/CreateGame/CreateGame';
@@ -90,6 +89,7 @@ class Navigation extends Component {
     }
 
     render() {
+        console.log(this.state.pseudo)
         if(this.state.connected==="true"){
             console.log(this.state.connected)
             return (
@@ -332,7 +332,7 @@ class Navigation extends Component {
                                         <Button
                                             variant="outline-info"
                                             size="lg"
-                                            onClick={this.handleLogin}    
+                                            onClick={this.handleLoginGuest}    
                                         >
                                             Log in as a guest
                                         </Button>

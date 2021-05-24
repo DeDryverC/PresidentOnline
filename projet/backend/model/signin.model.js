@@ -33,8 +33,6 @@ signin.createGuest=(result) => {
     date = date.getDate() +"/"+ (date.getMonth()+1) +"/"+date.getFullYear();
     let guestUser = {pseudo : randomName, name : randomName, surname : randomName, email : randomEmail, birthdate : date, password : randomPassword, gameCount : 0};
 
-
-
     let bcrypt = require('bcryptjs');
     bcrypt.genSalt(10, function(err, salt) {
         bcrypt.hash(guestUser.password, salt, function(err, hash) {
@@ -50,6 +48,7 @@ signin.createGuest=(result) => {
                     
                     res.message = guestUser.pseudo;
                     console.log(res.message);
+                    console.log(res);
                     result(null, res);
 
           

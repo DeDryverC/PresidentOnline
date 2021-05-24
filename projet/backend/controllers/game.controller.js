@@ -110,8 +110,8 @@ exports.getPool = (req, res) => {
   });
 }
 
-exports.deleteFromPool = (req, res) => {
-  game.deleteFromPool(gameId, (err, data) => {
+exports.deletePool = (req, res) => {
+  game.deletePool(req.body.gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -175,6 +175,26 @@ exports.decrementPlayersPool = (req, res) => {
   });
 }
 
+
+exports.getLobby = (req, res) => {
+  game.getLobby(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error getting lobby",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
 exports.putPlayerLobby = (req, res) => {
   const gameInfo = {
     gameId: req.body.gameId,
@@ -224,6 +244,31 @@ exports.removePlayerLobby = (req, res) => {
     }
   });
 }
+
+
+
+exports.getPlayerToken = (req, res) => {
+  game.getPlayerToken(req.params.gameId, req.params.pseudo, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error getting token",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+
+
+
 exports.togglePlayerLobby = (req, res) => {
   const gameInfo = {
     gameId: req.body.gameId,
@@ -325,6 +370,24 @@ exports.setOnePot = (req, res) =>{
       });
 };
 
+exports.addCard = (req, res) =>{
+  game.addCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          res.status(404).send({
+            message: `Not found game with gameId ${req.params.gameId}.`,
+          });
+        } else {
+          res.status(500).send({
+            message: "Error inserting card in " + req.params.gameId,
+          });
+        }
+      } else {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.send(data);
+      }
+    });
+};
 
 exports.delCard = (req, res) =>{
     game.delCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
@@ -402,3 +465,22 @@ exports.getCardsCount = (req, res) => {
     }
   });
 };
+
+exports.deleteGame = (req, res) => {
+  game.deleteGame(req.body.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error deleting game"
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}

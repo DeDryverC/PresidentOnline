@@ -16,15 +16,17 @@ module.exports = (app) => {
     app.post("/sign", signin.createUser);
     app.post("/guest", signin.createGuest);
     app.post("/lobbyp", game.putPlayerLobby);
-    app.post("/lobbyr", game.removePlayerLobby);
+    app.delete("/lobbyr", game.removePlayerLobby);
     app.post("/toggle", game.togglePlayerLobby);
-    
+    app.delete("/delete", game.deleteGame);
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
     app.get("/profil/:pseudo", profil.getProfil);
     app.get("/login/:mail", login.login)
     app.get("/loginall", login.findAllUsers)
+    app.get("/token/:gameId/:pseudo", game.getPlayerToken);
+    app.get("/lobby/:gameId", game.getLobby);
     //app.get("/loginOne/:mail", login.findPasswordUser)
 
     
@@ -32,6 +34,7 @@ module.exports = (app) => {
     app.get("/potd/:gameId", game.delPot);
     app.get("/pots/:gameId/:card", game.setOnePot);
     app.get("/deck/:gameId/:userId", game.getDeck);
+    app.get("/icard/:gameId/:user/:card", game.addCard);
     app.get("/dcard/:gameId/:user/:card", game.delCard);
     app.get("/pool", game.getPool);
     app.get("/code/:gameId", game.getCode);
@@ -39,5 +42,5 @@ module.exports = (app) => {
     app.get("/game/:code", game.getGameId);
     
     
-    app.delete("/poold", game.deleteFromPool);
+    app.delete("/poold", game.deletePool);
 };

@@ -1,3 +1,63 @@
 #maincomponent{
     height:100%
 }
+html, body, #root, .App {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+  }
+
+#game {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+#gameBody {
+    display: grid;
+    width: 540px;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: auto;
+    box-sizing: border-box;
+    align-items: start;
+    justify-content: space-evenly;
+    justify-items: center;
+    align-content: space-evenly;
+    align-items: center;
+}
+
+#divcards{
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    box-sizing: border-box;
+}
+#cards, #usercards{
+    box-sizing: border-box;
+    height:176px;
+    width:115px;
+    justify-items: center;
+}
+#othercards{
+    box-sizing: border-box;
+    height:81px;
+    width:53px;
+    justify-items: center;
+}
+
+#empty{
+
+}
+
+#joueur{
+
+}
+
+#deck {
+    grid-row: 1;
+    grid-column: 2;
+}
+
+#board {
+    float: right;
+}
