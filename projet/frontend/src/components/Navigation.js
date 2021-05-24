@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
 import Home from '../pages/Home/Home';
-import Howto from '../pages/Howto/Howto'; 
+import Howto from '../pages/howto/howto'; 
 import CreateGame from '../pages/CreateGame/CreateGame';
 import Rules from '../pages/Rules/Rules';
 import Login from '../pages/Login/Login'
+import Chatbox from './ChatSocket/Chatbox'
 
 class Navigation extends Component {
 
@@ -22,7 +23,7 @@ class Navigation extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         
-      }
+    }
     
 
     pageSwitch= () => {
@@ -186,6 +187,13 @@ class Navigation extends Component {
                         </Row>
     
                     </Container>
+                    <Container>
+                        <Row>
+                            <Col>
+                                <Chatbox />
+                            </Col>
+                        </Row>
+                    </Container>
                 </main>
             );
                                         
@@ -285,7 +293,6 @@ class Navigation extends Component {
                                         
         } 
 
-    
         else{
             return (
                 <main id="maincomponent">

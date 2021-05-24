@@ -8,7 +8,7 @@ import Signin from "./pages/Signin/Signin";
 import Rules from "./pages/Rules/Rules";
 import {Redirect, Route, Switch} from 'react-router-dom';
 import './App.css'
-import HowTo from "./pages/Howto/Howto"
+import HowTo from "./pages/howto/howto"
 import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
 import CreateGame from "./pages/CreateGame/CreateGame";
