@@ -2,6 +2,7 @@ import React, {Component, useState, useEffect} from 'react'
 import queryString from 'query-string'
 import io from 'socket.io-client'
 import './Chat.css'
+import {NavLink} from 'react-router-dom'
 
 import InfoBar from '../InfoBar/InfoBar'
 import Input from '../Input/Input'
@@ -16,7 +17,8 @@ let connectionConfig = {
     "transports" : ["websocket"]
 }
 
-const Chat = ({location}) => {
+/* 
+    const Chat = ({location}) => {
     //const [loggedIn, setLoggedIn] = useState(false)  
     const [roomName, setRoomName] = useState("")
     const [chatName, setChatName] = useState('')
@@ -68,6 +70,38 @@ const Chat = ({location}) => {
             </div>
         </div>
     )
+}
+*/
+
+class Chat extends Component{
+    constructor(props) {
+        super(props);
+        this.state={
+           connected: localStorage.getItem('Connect'),
+           connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
+           guestPseudo : 'testPseudo',
+           roomName : localStorage.getItem('roomName'),
+           chatName : localStorage.getItem('chatName')
+        }
+        this.leaveRoom = this.leaveRoom.bind(this)
+    }
+
+    leaveRoom = () =>{
+        localStorage.removeItem('roomName')
+        localStorage.removeItem('chatName')
+        window.location.reload()
+    }
+
+    render(){
+        return (
+            <div className="outerContainer">
+                <div className="container">
+                   <h1>Test ROom</h1>
+                   <button onClick={this.leaveRoom}>Leave Room</button>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default Chat

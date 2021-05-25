@@ -16,7 +16,8 @@ class Navigation extends Component {
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : '',
-           
+           roomName : localStorage.getItem('roomName'),
+           chatName : localStorage.getItem('chatName')
         
         
            } 

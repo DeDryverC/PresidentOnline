@@ -10,8 +10,8 @@ class ChatBox extends Component {
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : '',
-           roomName : localStorage.getItem('room'),
-           chatName : localStorage.getItem('chatname')
+           roomName : localStorage.getItem('roomName'),
+           chatName : localStorage.getItem('chatName')
         } 
     }
 

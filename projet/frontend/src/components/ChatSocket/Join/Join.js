@@ -1,6 +1,6 @@
 import e from 'cors'
 import React, {useState, useEffect, Component} from 'react'
-import {Link, Redirect} from 'react-router-dom'
+import {NavLink, Redirect} from 'react-router-dom'
 import './Join.css'
 
 class Join extends Component{
@@ -11,8 +11,15 @@ class Join extends Component{
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
            roomName : '',
-           chatName: ''
+           chatName : ''
         }
+        this.enterRoom = this.enterRoom.bind(this)
+    }
+
+    enterRoom = () => {
+        localStorage.setItem('roomName', this.state.roomName)
+        localStorage.setItem('chatName', this.state.chatName)
+        window.location.reload()
     }
 
     
@@ -41,7 +48,8 @@ class Join extends Component{
                                 roomName : e.target.value
                             })}/>
                     </div>
-                   
+                    
+                    {/*
                     <Link onClick={
                         e => (!this.state.chatName || !this.state.roomName) 
                         ? e.preventDefault() : null} 
@@ -51,18 +59,14 @@ class Join extends Component{
                             type="submit"> Enter Room
                         </button>
                     </Link>
-
-                   {/* 
+                    */}
                    
-                    <button onClick={
-                        e => (!userName || !room) 
-                        ? e.preventDefault() : null 
-                    }>
+                    <button type="submit" 
+                        onClick={this.enterRoom}
+                    >
                         Enter Room
                     </button>
                     
-                   */}
-
                 </div>
             </div>
         )

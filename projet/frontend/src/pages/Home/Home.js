@@ -1,11 +1,10 @@
-import React from "react";
-import { Component } from "react";
+import React, { Component } from "react";
 
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
 import App from "../../App";
 import Profil from "../Profil/Profil";
 
-class Home extends React.Component {
+class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
