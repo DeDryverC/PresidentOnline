@@ -55,7 +55,7 @@ class Signin extends React.Component {
             }
             else{
                 //alert("Mail in bdd")
-                this.state.passwordtest= this.state.bdd[i].Password
+                this.setState({passwordtest: this.state.bdd[i].Password})
                 /*let pass=this.state.password
                 var bcrypt = require('bcryptjs');
                 bcrypt.genSalt(10,function(err,salt){
@@ -85,7 +85,7 @@ class Signin extends React.Component {
                 localStorage.setItem('Email', this.state.email)
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
                 localStorage.getItem('Connect')
-                window.location.href= "http://localhost:3000/"
+                window.location.href= "https://president-online.netlify.app/"
             }
         }
       }
