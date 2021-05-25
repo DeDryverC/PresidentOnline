@@ -21,33 +21,32 @@ export default function Howto(){
                                     <ul>
                                     <li> Play as guest : </li><br></br>
                                         <ul>
-                                            <li> blabla </li>
-                                            <li> blabla2 </li>
+                                            <li> first click on the right top button, log as guest </li>
+                                            <li> You can now play President Online by clicking on create a game or join a game ! </li>
                                         </ul>  <br></br>                                          
                                     <li> Play logged : </li><br></br>
                                         <ul>
-                                            <li> blabla </li>
+                                            <li> Click on the right top button, Sign in, to create an account and fill the fields with your information </li>
+                                            <li> If you already have an account, click on the right top button, Log in, insert your information, and then click on the log button   </li>
                                         </ul><br></br>
                                     <li> Create a game : </li><br></br>
                                         <ul>
-                                            <li> blabla </li>
+                                            <li> Click on the create a game button, insert the name of the lobby and select the amount of players that you want to play with </li>
                                         </ul><br></br>
                                     <li> Join a game : </li><br></br>
                                         <ul>
-                                            <li> blabla </li>
+                                            <li> Check that the lobby is not full </li>
+                                            <li> If it's not, just click on the button " join " and you will be redirect to the lobby </li>
                                         </ul><br></br>
                                     <li> Join a game with friends : </li>
                                         <ul><br></br>
-                                        <li> blabla </li>
+                                        <li> Every game has a code, just give this code to your friends, they insert this code and then, click on "enter the game"</li>
                                     </ul><br></br>
                                     <li> Use a card : </li>
                                         <ul><br></br>
-                                            <li> blabla </li>
+                                            <li> Select the card(s) that you want to play with, then click on play </li>
                                         </ul><br></br>
-                                    <li> Change cards : </li>
-                                        <ul><br></br>
-                                            <li> blabla </li>
-                                        </ul><br></br>
+                                    
                                     </ul>
                                 </Row>
                             </Col>
