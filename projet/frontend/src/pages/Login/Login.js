@@ -85,7 +85,7 @@ class Signin extends React.Component {
                 localStorage.setItem('Email', this.state.email)
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
                 localStorage.getItem('Connect')
-                window.location.href= "http://localhost:3000/"
+                window.location.href= "https://president-online.netlify.app/"
             }
         }
       }
