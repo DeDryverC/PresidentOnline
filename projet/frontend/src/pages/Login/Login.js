@@ -74,8 +74,8 @@ class Signin extends React.Component {
                         console.log(null , {message: "logged"});
                         
                         localStorage.setItem('Connect', true)
-                        window.location.href= "https://president-online.netlify.app/"
-                        //window.location.href= "http://localhost:3000/"
+                        //window.location.href= "https://president-online.netlify.app/"
+                        window.location.href= "http://localhost:3000/"
                         }
                     else{
                           console.log(null , {message:'error'});
@@ -132,12 +132,12 @@ class Signin extends React.Component {
                                     </label>
                                 </Col>
                                 <Col className="mt-5">
-                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'33%',marginRight:'67%'}}>
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'4%',marginLeft:'33%',marginRight:'67%'}}>
                                         Password :
                                         <input type="password" value={this.state.password} onChange={text => this.setState({password: text.target.value})} />
                                     </label>
                                     <br></br><br></br><br></br>
-                                    <input style={{textAlign: "center", fontSize: 45, color:'red',marginTop:'8%', marginLeft:'39%'}} type="submit" value="Connexion" />
+                                    <input style={{textAlign: "center", fontSize: 45, color:'red',marginTop:'5%', marginLeft:'39%'}} type="submit" value="Connexion" />
                                 </Col>
                             </Container>
                         </form>  
