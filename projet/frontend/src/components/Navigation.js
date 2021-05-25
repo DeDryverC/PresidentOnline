@@ -20,7 +20,7 @@ class Navigation extends Component {
         
            } 
         this.handleClick = this.handleClick.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleLoginGuest = this.handleLoginGuest.bind(this);
         
       }
     
@@ -55,7 +55,7 @@ class Navigation extends Component {
     }
     
 
-    handleLogin(event){
+    handleLoginGuest(event){
         event.preventDefault();
         localStorage.setItem('ConnectedAsGuest', true)
        
