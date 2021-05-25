@@ -74,8 +74,8 @@ class Signin extends React.Component {
                         console.log(null , {message: "logged"});
                         
                         localStorage.setItem('Connect', true)
-                        //window.location.href= "https://president-online.netlify.app/"
-                        window.location.href= "http://localhost:3000/"
+                        window.location.href= "https://president-online.netlify.app/"
+                        //window.location.href= "http://localhost:3000/"
                         }
                     else{
                           console.log(null , {message:'error'});
