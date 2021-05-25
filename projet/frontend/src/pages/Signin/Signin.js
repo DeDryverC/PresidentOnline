@@ -108,6 +108,7 @@ class Signin extends React.Component {
           });
           alert("Inscription terminée !")
           window.location.href= "https://president-online.netlify.app/"
+          //window.location.href= "http://localhost:3000/"
         };
     }
         
@@ -130,13 +131,13 @@ class Signin extends React.Component {
                         <form onSubmit={this.handleSubmit}>
                             <Container>
                             <Row>
-                                <Col>
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'15%',marginLeft:'15%'}}>
                                         Name :
                                         <input type="text" value={this.state.name}  onChange={text => this.setState({name: text.target.value})} />
                                     </label>
-                                </Col>
-                                <Col>
+                                </Col >
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'15%',marginLeft:'10%'}}>
                                         Surname :
                                         <input type="text" value={this.state.surname} onChange={text => this.setState({surname: text.target.value})} />
@@ -145,13 +146,13 @@ class Signin extends React.Component {
                             </Row>
                             
                             <Row>
-                                <Col>
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'15%',marginLeft:'15%'}}>
                                     Pseudo :
                                     <input type="text" value={this.state.pseudo} onChange={text => this.setState({pseudo: text.target.value})} />
                                     </label>
                                 </Col>
-                                <Col>
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'15%',marginLeft:'15%',marginRight:'5%'}}>
                                         Email :
                                         <input type="text" value={this.state.email} onChange={text => this.setState({email: text.target.value})} />
@@ -159,7 +160,7 @@ class Signin extends React.Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col>
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'15%',marginLeft:'15%'}}>
                                         Birthdate :
                                         <input type="text" value={this.state.birthDate} onChange={text => this.setState({birthDate: text.target.value})} />
@@ -173,7 +174,7 @@ class Signin extends React.Component {
                                 </Col>
                             </Row>
                             <Row>
-                                <Col>
+                                <Col className="mt-5">
                                     <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'8%',marginLeft:'36%',marginRight:'40%'}}>
                                         Confirm your password :
                                         <input type="password" value={this.state.confirmPassword} secureTextEntry={true} onChange={text => this.setState({confirmPassword: text.target.value})} />

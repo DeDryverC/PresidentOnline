@@ -1,5 +1,5 @@
 import React from "react";
-import NavigationProfil from "../../components/NavigationProfil";
+import NavigationHisto from "../../components/NavigationHisto";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 //import Container from 'react-bootstrap/Container'
@@ -11,7 +11,7 @@ class Historique extends React.Component {
         super(props);
        
         this.state={
-            id:'2',
+            id:localStorage.getItem('Pseudo'),
             donnees:[],
 
 
@@ -20,7 +20,7 @@ class Historique extends React.Component {
       }
       componentDidMount(){
         
-        fetch(`http://localhost:5000/getHistory/${this.state.id}`)
+        fetch(`http://localhost:5000/history/${this.state.id}`)
           .then(response => response.json())
           .then(json => {
             this.setState({donnees: json})
@@ -39,7 +39,7 @@ class Historique extends React.Component {
                 <Row>  
                     <Col>
                         <div class="hautpage">
-                            <NavigationProfil />
+                            <NavigationHisto />
                         </div> 
                     </Col> 
                 </Row>
@@ -50,7 +50,7 @@ class Historique extends React.Component {
                             this.state.donnees.map((l, i) => (
                                 
                                     <Col>
-                                        <h2 className="mt-5" style={{color:'white',textAlign: "center"}}> Game {l.GameId} : Position {l.Position} </h2>
+                                        <h2 className="mt-5" style={{color:'white',textAlign: "center"}}> Game of the {l.Date} : Position {l.Position} </h2>
                                     </Col> 
                                 
                                 
