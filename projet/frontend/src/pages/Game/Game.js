@@ -301,7 +301,7 @@ class Game extends Component {
     canHePlay = () => {
         if (this.state.token === true) {
             const actualPile = this.state.pile
-            const playerCard = this.state.playerCard
+            //const playerCard = this.state.playerCard
             const selCard = this.state.selectedCard
             const ssc = this.sameSelectedCard()
             const ptc = this.pileTypeCard()
@@ -320,6 +320,7 @@ class Game extends Component {
             }
             else if (actualPile.length > selCard.length - 1 && ssc === 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You need an extra 2 if you want to cut a series of 3 cards', variant: 'danger' }
+                this.setState({errorMessage : error })
             }
             else {
 
