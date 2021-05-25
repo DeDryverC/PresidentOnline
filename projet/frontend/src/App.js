@@ -13,6 +13,7 @@ import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
 import CreateGame from "./pages/CreateGame/CreateGame";
 import Game from "./pages/Game/Game"
+import Chat from "./components/ChatSocket/Chat/Chat"
 
 
 class App extends Component {
@@ -82,6 +83,9 @@ class App extends Component {
         </Route>
         <Route exact path='/game'>
           <Game/>
+        </Route>
+        <Route path='/chat'>
+          <Chat/>
         </Route>
         <Redirect to="/" />
       </Switch>

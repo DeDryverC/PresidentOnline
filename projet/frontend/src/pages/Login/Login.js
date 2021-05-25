@@ -16,8 +16,6 @@ class Signin extends React.Component {
             emailsPassbdd:'',
             connected:false,
             passwordtest:'',
-            
-   
         }
         
 

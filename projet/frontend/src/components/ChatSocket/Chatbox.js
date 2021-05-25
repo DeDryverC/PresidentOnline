@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import JoinRoom from './Join/Join'
 import ChatRoom from './Chat/Chat'
+import {Redirect} from 'react-router-dom'
 
 class ChatBox extends Component {
     constructor(props) {
@@ -9,16 +10,13 @@ class ChatBox extends Component {
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : '',
-           roomName : localStorage.getItem('room')
-
-           
-        
-        
+           roomName : localStorage.getItem('room'),
+           chatName : localStorage.getItem('chatname')
         } 
     }
 
     render(){
-        if(this.state.roomName){
+        if(this.state.roomName !== null && this.state.chatName !== null){
             return(
                 <ChatRoom />
             )

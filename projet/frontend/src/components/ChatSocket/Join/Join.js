@@ -1,6 +1,6 @@
 import e from 'cors'
 import React, {useState, useEffect, Component} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import './Join.css'
 
 class Join extends Component{
@@ -10,10 +10,11 @@ class Join extends Component{
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
-           roomName : ''
-        } 
+           roomName : '',
+           chatName: ''
+        }
     }
-    
+
     
     render(){
         return(
@@ -23,26 +24,43 @@ class Join extends Component{
 
                     <div>
                         <input 
+                            placeholder="Name" 
+                            className="joinInput mt-20" 
+                            type="text" 
+                            onChange={(e) => this.setState({
+                                chatName : e.target.value
+                            })}/>
+                    </div>
+
+                    <div>
+                        <input 
                             placeholder="Room" 
                             className="joinInput mt-20" 
                             type="text" 
-                            onChange={(e) => {
-                                this.state.roomName = e.target.value
-                            }}/>
+                            onChange={(e) => this.setState({
+                                roomName : e.target.value
+                            })}/>
                     </div>
                    
-                   {/* 
-                   
-                     <Link onClick={
-                        e => (!userName || !this.state.roomName) 
+                    <Link onClick={
+                        e => (!this.state.chatName || !this.state.roomName) 
                         ? e.preventDefault() : null} 
-                        to = {`/chat?userName=${userName}&room=${room}`}>
+                        to = {`/chat?chatName=${this.state.chatName}&roomName=${this.state.roomName}`}>
                         <button 
                             className="button mt-20" 
-                            type="submit">Sign In
+                            type="submit"> Enter Room
                         </button>
                     </Link>
 
+                   {/* 
+                   
+                    <button onClick={
+                        e => (!userName || !room) 
+                        ? e.preventDefault() : null 
+                    }>
+                        Enter Room
+                    </button>
+                    
                    */}
 
                 </div>

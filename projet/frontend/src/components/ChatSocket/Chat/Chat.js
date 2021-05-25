@@ -18,23 +18,23 @@ let connectionConfig = {
 
 const Chat = ({location}) => {
     //const [loggedIn, setLoggedIn] = useState(false)  
-    const [room, setRoom] = useState("")
-    const [userName, setUserName] = useState('')
+    const [roomName, setRoomName] = useState("")
+    const [chatName, setChatName] = useState('')
 
-    const ENDPOINT = 'localhost:5000'
+    const ENDPOINT = 'localhost:3000'
     
     const [message, setMessage] = useState("")
     const [messages, setMessages] = useState([])  
     
     useEffect(() => {
-        const {userName, room} = queryString.parse(location.search)
+        const {chatName, roomName} = queryString.parse(location.search)
         
         socket = io.connect(ENDPOINT, connectionConfig)
 
-        setUserName(userName)
-        setRoom(room)
+        setChatName(chatName)
+        setRoomName(roomName)
 
-        socket.emit('join_room', {userName, room}, () => {
+        socket.emit('join_room', {chatName, roomName}, () => {
             
         })
 
@@ -42,7 +42,7 @@ const Chat = ({location}) => {
             socket.emit('disconnect')
             socket.off()
         }
-        
+
     }, [ENDPOINT, location.search])
 
     useEffect(() => {
@@ -62,8 +62,8 @@ const Chat = ({location}) => {
     return (
         <div className="outerContainer">
             <div className="container">
-                <InfoBar room={room} />
-                <Messages messages={messages} userName={userName}/>
+                <InfoBar roomName={roomName} />
+                <Messages messages={messages} chatName={chatName}/>
                 <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
         </div>
