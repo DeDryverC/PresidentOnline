@@ -11,7 +11,8 @@ class Join extends Component{
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
            roomName : '',
-           chatName : ''
+           chatName : '',
+           hasRoom : false
         }
         this.enterRoom = this.enterRoom.bind(this)
     }
@@ -19,7 +20,7 @@ class Join extends Component{
     enterRoom = () => {
         localStorage.setItem('roomName', this.state.roomName)
         localStorage.setItem('chatName', this.state.chatName)
-        window.location.reload()
+        localStorage.setItem('hasRoom', true)
     }
 
     
@@ -60,12 +61,6 @@ class Join extends Component{
                         </button>
                     </Link>
                     */}
-                   
-                    <button type="submit" 
-                        onClick={this.enterRoom}
-                    >
-                        Enter Room
-                    </button>
                     
                 </div>
             </div>

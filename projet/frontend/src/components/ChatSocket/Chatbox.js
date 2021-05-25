@@ -10,21 +10,31 @@ class ChatBox extends Component {
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : '',
-           roomName : localStorage.getItem('roomName'),
-           chatName : localStorage.getItem('chatName')
-        } 
+           roomName : localStorage.getItem('roomName') || null,
+           chatName : localStorage.getItem('chatName') || null,
+        }
+        this.enterOrExitRoom = this.enterOrExitRoom.bind(this)
+    }
+
+    enterOrExitRoom = () => {
+        let hasRoom = this.state.hasRoom !== null ? true : false
+        
+        switch(hasRoom){
+            case "true":
+                return <ChatRoom/>
+            default: return <JoinRoom/>
+       }
     }
 
     render(){
-        if(this.state.roomName !== null && this.state.chatName !== null){
-            return(
-                <ChatRoom />
-            )
-        } else {
-            return(
-                <JoinRoom />
-            )
-        }
+        return(
+            <>
+                {this.enterOrExitRoom()}
+                <button onClick={
+                    this.enterOrExitRoom()
+                }>Toggle Chat</button>
+            </>
+        )
     }
 }
 

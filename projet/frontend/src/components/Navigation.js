@@ -41,7 +41,7 @@ class Navigation extends Component {
             default :
                 return <Home OnClick = {this.createGame}/>;
         }
-      }
+    }
 
     createGame = (name) => {
         this.props.actionSwitchPage(name);

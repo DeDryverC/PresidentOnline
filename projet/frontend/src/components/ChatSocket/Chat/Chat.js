@@ -17,19 +17,19 @@ let connectionConfig = {
     "transports" : ["websocket"]
 }
 
-/* 
-    const Chat = ({location}) => {
+
+const Chat = ({location}) => {
     //const [loggedIn, setLoggedIn] = useState(false)  
     const [roomName, setRoomName] = useState("")
     const [chatName, setChatName] = useState('')
 
-    const ENDPOINT = 'localhost:3000'
+    const ENDPOINT = 'localhost:5001'
     
     const [message, setMessage] = useState("")
     const [messages, setMessages] = useState([])  
     
     useEffect(() => {
-        const {chatName, roomName} = queryString.parse(location.search)
+        //const {chatName, roomName} = queryString.parse(location.search)
         
         socket = io.connect(ENDPOINT, connectionConfig)
 
@@ -45,7 +45,7 @@ let connectionConfig = {
             socket.off()
         }
 
-    }, [ENDPOINT, location.search])
+    }, [ENDPOINT])
 
     useEffect(() => {
         socket.on('message', (message) => {
@@ -71,8 +71,9 @@ let connectionConfig = {
         </div>
     )
 }
-*/
 
+
+/* 
 class Chat extends Component{
     constructor(props) {
         super(props);
@@ -80,15 +81,32 @@ class Chat extends Component{
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
+           
            roomName : localStorage.getItem('roomName'),
-           chatName : localStorage.getItem('chatName')
+           chatName : localStorage.getItem('chatName'),
+           hasRoom : true,
+
+           message: "",
+           messages: []
+
         }
         this.leaveRoom = this.leaveRoom.bind(this)
+    }
+
+    componentDidMount(){
+        socket = io.connect(`localhost:5001`, connectionConfig)
+        console.log('User entered room')
+        socket.emit('join_room', {this.state.chatName})
+    }
+
+    componentWillUnmount(){
+        console.log('User left room')
     }
 
     leaveRoom = () =>{
         localStorage.removeItem('roomName')
         localStorage.removeItem('chatName')
+        localStorage.setItem('hasRoom', false)
         window.location.reload()
     }
 
@@ -96,12 +114,13 @@ class Chat extends Component{
         return (
             <div className="outerContainer">
                 <div className="container">
-                   <h1>Test ROom</h1>
+                   <h1>Test Room</h1>
                    <button onClick={this.leaveRoom}>Leave Room</button>
                 </div>
             </div>
         )
     }
 }
+*/
 
 export default Chat

@@ -34,14 +34,14 @@ io.on('connection', (socket) => {
   console.log(`new client ${socket.id} connected`)
   socket.emit('connection', null)
 
-  socket.on('join_room', ({userName, room}, callback) => {
-      const {error, user} = addUser({id: socket.id, userName, room})
+  socket.on('join_room', ({chatName, roomName}, callback) => {
+      const {error, user} = addUser({id: socket.id, chatName, roomName})
       if(error) return callback(error)
 
-      socket.emit('message', {user: 'admin', text: `Hi, ${user.userName}!`})
-      socket.broadcast.to(user.room).emit('message', {user: 'admin', text: `${user.userName} has entered the chat!`})
+      socket.emit('message', {user: 'admin', text: `Hi, ${user.chatName}!`})
+      socket.broadcast.to(user.roomName).emit('message', {user: 'admin', text: `${user.chatName} has entered the chat!`})
 
-      socket.join(user.room)
+      socket.join(user.roomName)
 
       callback()
   })
@@ -49,12 +49,22 @@ io.on('connection', (socket) => {
   socket.on('send_message', (message, callback) => {
       const user = getUser(socket.id)
 
-      io.to(user.room).emit('message', {user: user.userName, text: message})
+      io.to(user.roomName).emit('message', {user: user.chatName, text: message})
+  })
+
+  socket.on('reconnect', () => {
+    console.log(`client ${socket.id} reconnected`)
+
   })
 
   socket.on('disconnect', () => {
-      console.log(`client ${socket.id} disconnected`)
+    console.log(`client ${socket.id} disconnected`)
   })
+
+  socket.on('reconnect_error', () => {
+    console.log('cannot reconnect')
+  })
+
 })
 
 server.listen(CHAT_PORT, () => {
