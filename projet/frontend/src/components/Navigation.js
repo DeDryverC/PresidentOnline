@@ -5,7 +5,7 @@ import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import CreateGame from '../pages/CreateGame/CreateGame';
 import Rules from '../pages/Rules/Rules';
-import Login from '../pages/Login/Login'
+//import Login from '../pages/Login/Login'
 
 class Navigation extends Component {
 
@@ -20,7 +20,7 @@ class Navigation extends Component {
         
            } 
         this.handleClick = this.handleClick.bind(this);
-        this.handleLogin = this.handleLogin.bind(this);
+        this.handleLoginGuest = this.handleLoginGuest.bind(this);
         
       }
     
@@ -55,7 +55,7 @@ class Navigation extends Component {
     }
     
 
-    handleLogin(event){
+    handleLoginGuest(event){
         event.preventDefault();
         localStorage.setItem('ConnectedAsGuest', true)
        
@@ -78,10 +78,10 @@ class Navigation extends Component {
             
             
             
-            //console.log(this.state.connectedAsGuest)
+            console.log(this.state.connectedAsGuest)
             
             //afficher en tant qu'user connecté
-            //console.log(this.state.guestPseudo)
+            console.log(this.state.guestPseudo)
             
             //window.location.href= "http://localhost:3000/"
             

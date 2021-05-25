@@ -1,9 +1,9 @@
 import React from "react";
-import { Component } from "react";
+//import { Component } from "react";
 
-import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap'
-import App from "../../App";
-import Profil from "../Profil/Profil";
+import {Button, Row, Col, Container } from 'react-bootstrap'
+//import App from "../../App";
+//import Profil from "../Profil/Profil";
 
 class Home extends React.Component {
     constructor(props){
@@ -50,7 +50,7 @@ class Home extends React.Component {
         
         let index=undefined;
         for(let item in this.state.pool){
-            if(this.state.pool[item].gameId == localStorage.getItem("joinedGame")){
+            if(this.state.pool[item].gameId === localStorage.getItem("joinedGame")){
                 index=item
             }
         }
@@ -199,7 +199,7 @@ class Home extends React.Component {
         let itemsToPush = []
         for(let item in this.state.lobby){
             console.log(this.state.lobby[item]);
-            if(this.state.lobby[item].token == 1){
+            if(this.state.lobby[item].token === 1){
                 itemsToPush.push(<Row><p>{this.state.lobby[item].user}</p><p>___</p><p>Owner</p></Row>)
             }
             else{
@@ -212,7 +212,7 @@ class Home extends React.Component {
     }
 
     renderLobbyOwner(){
-        if(this.state.playerToken == 1){
+        if(this.state.playerToken === 1){
             return(<Row><Button variant="outline-info" size="lg"> Start Game </Button></Row>);
         }
         

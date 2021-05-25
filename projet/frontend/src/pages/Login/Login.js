@@ -50,7 +50,7 @@ class Signin extends React.Component {
 
         for (let i=0; i<this.state.bdd.length;i++){
             //console.log(this.state.email)
-            if (this.state.email != this.state.bdd[i].Email){
+            if (this.state.email !== this.state.bdd[i].Email){
                 //console.log("unknown mail")
             }
             else{

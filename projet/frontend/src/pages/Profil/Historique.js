@@ -2,8 +2,8 @@ import React from "react";
 import NavigationProfil from "../../components/NavigationProfil";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
-import Container from 'react-bootstrap/Container'
-import ListItem from '@material-ui/core/ListItem';
+//import Container from 'react-bootstrap/Container'
+//import ListItem from '@material-ui/core/ListItem';
 
 class Historique extends React.Component {
 
