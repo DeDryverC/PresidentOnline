@@ -20,10 +20,11 @@ module.exports = (app) => {
     app.post("/toggle", game.togglePlayerLobby);
     app.post("/history/set", history.setGameInHistory);
     app.delete("/delete", game.deleteGame);
+    app.post("/deck", game.distribDeck);
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
-    app.get("/profil/:pseudo", profil.getProfil);
+    app.get("/profil/:pseudo", profil.getProfil); 
     app.get("/login/:mail", login.login)
     app.get("/loginall", login.findAllUsers)
     app.get("/token/:gameId/:pseudo", game.getPlayerToken);
