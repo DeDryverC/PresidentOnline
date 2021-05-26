@@ -18,6 +18,7 @@ module.exports = (app) => {
     app.post("/lobbyp", game.putPlayerLobby);
     app.delete("/lobbyr", game.removePlayerLobby);
     app.post("/toggle", game.togglePlayerLobby);
+    app.post("/history/set", history.setGameInHistory);
     app.delete("/delete", game.deleteGame);
 
     app.get("/history/:userId", history.getHistory);

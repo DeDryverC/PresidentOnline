@@ -32,34 +32,27 @@ class Profil extends React.Component {
 
     
 
-      componentDidMount(){
-        console.log(this.state.pseudo)
-        fetch(`http://localhost:5000/profil/${this.state.pseudo}`)
+      async componentDidMount(){
+        await fetch(`http://localhost:5000/profil/${this.state.pseudo}`)
           .then(response => response.json())
           .then(json => {
             this.setState({donneesprofil: json[0]})
-            
-            console.log(this.state.donneesprofil)
-            
-            
           })
 
-        fetch(`http://localhost:5000/statistics/${this.state.pseudo}`)
+        await fetch(`http://localhost:5000/statistics/${this.state.pseudo}`)
           .then(response => response.json())
           .then(json => {
             this.setState({donneesstats: json})
-            this.setState({gameAmount:this.state.donneesstats.length})
-            console.log(this.state.donneesstats.length)
-            
-            
           })
-
         
-        
-       
-        
-    }
-
+        let wins=0;
+        for(let item of this.state.donneesstats){
+            if(item.Position === 1){
+                wins++;
+            }
+        }
+        this.setState({playerWins: wins});
+    };
 
 
     render() {
@@ -86,8 +79,12 @@ class Profil extends React.Component {
                     </Col>
                     <Col>
                         
-                        <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Game amount : </h2>
-                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.gameAmount} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Games played : </h2>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.donneesstats.length} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Wins : </h2>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.playerWins} </h2><br></br>
+                        <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Ratio : </h2>
+                        <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {(this.state.playerWins/this.state.donneesstats.length).toFixed(2)} Win(s) per lose </h2><br></br>
                     </Col>
                     
                 </Row>     
