@@ -2,29 +2,29 @@ const game = require('../model/game.model');
 const mysql = require('../model/db');
 
 
-exports.createTable = (req, res) =>{
-    
-    const gameInfo = {
-      gameId: req.body.gameId
-    };
+exports.createTable = (req, res) => {
 
-    game.createTable(gameInfo.gameId, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found game with gameId.`,
-          });
-        } else {
-          res.status(500).send({
-            message: "Error creating table with gameId "
-          });
-        }
+  const gameInfo = {
+    gameId: req.body.gameId
+  };
+
+  game.createTable(gameInfo.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error creating table with gameId "
+        });
       }
-    });
+    }
+  });
 }
 
-exports.createLobby = (req, res) =>{
-    
+exports.createLobby = (req, res) => {
+
   const gameInfo = {
     gameId: req.body.gameId
   };
@@ -44,7 +44,7 @@ exports.createLobby = (req, res) =>{
   });
 }
 
-exports.getGameId = (req, res) =>{
+exports.getGameId = (req, res) => {
   game.getGameId(req.params.code, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
@@ -56,8 +56,8 @@ exports.getGameId = (req, res) =>{
           message: "Error fetching gameId with that code "
         });
       }
-      
-      
+
+
     }
     else {
       res.header("Access-Control-Allow-Origin", "*");
@@ -314,102 +314,102 @@ exports.getCode = (req, res) => {
 
 
 exports.getPot = (req, res) => {
-    game.getPot(req.params.gameId, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found pot in ${req.params.gameId}.`,
-            });
-          } else {
-            res.status(500).send({
-              message: "Error retrieving pot with gameId " + req.params.gameId,
-            });
-          }
-        } else {
-          res.header("Access-Control-Allow-Origin", "*");
-          res.send(data);
-        }
-      });
+  game.getPot(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pot in ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving pot with gameId " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
 }
 
-exports.delPot = (req, res) =>{
-    game.delPot(req.params.gameId, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found game with gameId ${req.params.gameId}.`,
-            });
-          } else {
-            res.status(500).send({
-              message: "Error deleting pot in" + req.params.gameId,
-            });
-          }
-        } else {
-          res.header("Access-Control-Allow-Origin", "*");
-          res.send(data);
-        }
-      });
-};
-
-exports.setOnePot = (req, res) =>{
-    game.setOnePot(req.params.gameId, req.params.card, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found game with gameId ${req.params.gameId}.`,
-            });
-          } else {
-            res.status(500).send({
-              message: "Error setting in pot in " + req.params.gameId,
-            });
-          }
-        } else {
-          res.header("Access-Control-Allow-Origin", "*");
-          res.send(data);
-        }
-      });
-};
-
-exports.addCard = (req, res) =>{
-  game.addCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found game with gameId ${req.params.gameId}.`,
-          });
-        } else {
-          res.status(500).send({
-            message: "Error inserting card in " + req.params.gameId,
-          });
-        }
+exports.delPot = (req, res) => {
+  game.delPot(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
       } else {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.send(data);
+        res.status(500).send({
+          message: "Error deleting pot in" + req.params.gameId,
+        });
       }
-    });
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
 };
 
-exports.delCard = (req, res) =>{
-    game.delCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
-        if (err) {
-          if (err.kind === "not_found") {
-            res.status(404).send({
-              message: `Not found game with gameId ${req.params.gameId}.`,
-            });
-          } else {
-            res.status(500).send({
-              message: "Error deleting card in " + req.params.gameId,
-            });
-          }
-        } else {
-          res.header("Access-Control-Allow-Origin", "*");
-          res.send(data);
-        }
-      });
+exports.setOnePot = (req, res) => {
+  game.setOnePot(req.params.gameId, req.params.card, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error setting in pot in " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+};
+
+exports.addCard = (req, res) => {
+  game.addCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error inserting card in " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+};
+
+exports.delCard = (req, res) => {
+  game.delCard(req.params.gameId, req.params.user, req.params.card, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error deleting card in " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
 };
 
 exports.setDeck = (req, res) => {
-  game.setDeck(req.params.gameId, req.params.players, (err, data) =>{
+  game.setDeck(req.params.gameId, req.params.players, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -427,8 +427,8 @@ exports.setDeck = (req, res) => {
   })
 }
 
-exports.getDeck = (req, res) => { 
-  game.getDeck(req.params.gameId, req.params.userId, (err, data) =>{
+exports.getDeck = (req, res) => {
+  game.getDeck(req.params.gameId, req.params.userId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -476,6 +476,31 @@ exports.deleteGame = (req, res) => {
       } else {
         res.status(500).send({
           message: "Error deleting game"
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+
+exports.distribDeck = (req, res) => {
+
+  const gameInfo = {
+    gameId: req.body.gameId,
+    lobby: req.body.lobby,
+  };
+  game.distribDeck(gameInfo.gameId, gameInfo.lobby, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Can't distribute cards for the game : ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error distributing game"
         });
       }
     } else {
