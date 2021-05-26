@@ -1,8 +1,10 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import JoinRoom from './Join/Join'
 import ChatRoom from './Chat/Chat'
+import CompSwitch from './SwitchComponents'
 import {Redirect} from 'react-router-dom'
 
+/*
 class ChatBox extends Component {
     constructor(props) {
         super(props);
@@ -12,30 +14,34 @@ class ChatBox extends Component {
            guestPseudo : '',
            roomName : localStorage.getItem('roomName') || null,
            chatName : localStorage.getItem('chatName') || null,
+           activeComponent : 'chatlobby'
         }
-        this.enterOrExitRoom = this.enterOrExitRoom.bind(this)
-    }
-
-    enterOrExitRoom = () => {
-        let hasRoom = this.state.hasRoom !== null ? true : false
-        
-        switch(hasRoom){
-            case "true":
-                return <ChatRoom/>
-            default: return <JoinRoom/>
-       }
     }
 
     render(){
         return(
-            <>
-                {this.enterOrExitRoom()}
-                <button onClick={
-                    this.enterOrExitRoom()
-                }>Toggle Chat</button>
-            </>
+            <CompSwitch active={this.state.activeComponent}>
+                <JoinRoom name="chatlobby"/>
+                <ChatRoom name="chatroom" />
+            </CompSwitch>
         )
     }
+}
+*/
+
+const ChatBox = () => {
+    const [connected, setConnected] = useState(`${localStorage.getItem('Connect')}`)
+    const [connectedAsGuest, setConnectedAsGuest] = useState(`${localStorage.getItem('ConnectedAsGuest')}`)
+    const [guestPseudo, setGuestPseudo] = useState('')
+    const [activeComponent, setActiveComponent] = useState(`${localStorage.getItem('activeComponent') || 'chatlobby'}`)
+
+    
+    return(
+        <CompSwitch active={activeComponent}>
+            <JoinRoom name="chatlobby"/>
+            <ChatRoom name="chatroom" />
+        </CompSwitch>
+    )
 }
 
 export default ChatBox

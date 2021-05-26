@@ -1,8 +1,9 @@
 import e from 'cors'
 import React, {useState, useEffect, Component} from 'react'
-import {NavLink, Redirect} from 'react-router-dom'
+import {NavLink, Link, Redirect} from 'react-router-dom'
 import './Join.css'
 
+/* 
 class Join extends Component{
     constructor(props) {
         super(props);
@@ -12,7 +13,7 @@ class Join extends Component{
            guestPseudo : 'testPseudo',
            roomName : '',
            chatName : '',
-           hasRoom : false
+           activeComponent : 'chatlobby'
         }
         this.enterRoom = this.enterRoom.bind(this)
     }
@@ -20,7 +21,7 @@ class Join extends Component{
     enterRoom = () => {
         localStorage.setItem('roomName', this.state.roomName)
         localStorage.setItem('chatName', this.state.chatName)
-        localStorage.setItem('hasRoom', true)
+        localStorage.setItem('activeComponent', 'chatroom')
     }
 
     
@@ -49,8 +50,12 @@ class Join extends Component{
                                 roomName : e.target.value
                             })}/>
                     </div>
+
+                    <button onClick={this.enterRoom()}>
+                        Enter Room
+                    </button>
                     
-                    {/*
+                    {
                     <Link onClick={
                         e => (!this.state.chatName || !this.state.roomName) 
                         ? e.preventDefault() : null} 
@@ -60,12 +65,54 @@ class Join extends Component{
                             type="submit"> Enter Room
                         </button>
                     </Link>
-                    */}
+                    }
                     
+                    </div>
+                    </div>
+                )
+            }
+        }
+*/
+
+const Join = () => {
+    const [chatName, setChatName] = useState('')
+    const [roomName, setRoomName] = useState('')
+    const [activeComponent, setActiveComponent] = useState('chatlobby')
+
+    return(
+        <div className="joinOuterContainer">
+            <div className="joinInnerContainer">
+                <h1 className="heading">Chatroom List</h1>
+                <div>
+                    <input 
+                        placeholder="Name" 
+                        className="joinInput" 
+                        type="text" 
+                        onChange={(e) => {
+                            setChatName(e.target.value)
+                        }}
+                    />
                 </div>
-            </div>
-        )
-    }
+                <div>
+                    <input 
+                        placeholder="Room" 
+                        className="joinInput mt-20" 
+                        type="text" 
+                        onChange={(e) => {
+                            setRoomName(e.target.value)
+                        }}/>
+                </div>
+               
+                    <button onClick={
+                        e => (!chatName || !roomName) 
+                        ? e.preventDefault() : setActiveComponent('chatroom')}
+                        className="button mt-20" 
+                        type="submit">Enter Room
+                    </button>
+
+                </div>
+        </div>
+    )
 }
 
 export default Join

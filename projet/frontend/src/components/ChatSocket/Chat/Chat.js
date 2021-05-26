@@ -18,8 +18,7 @@ let connectionConfig = {
 }
 
 
-const Chat = ({location}) => {
-    //const [loggedIn, setLoggedIn] = useState(false)  
+const Chat = () => {
     const [roomName, setRoomName] = useState("")
     const [chatName, setChatName] = useState('')
 
@@ -29,8 +28,6 @@ const Chat = ({location}) => {
     const [messages, setMessages] = useState([])  
     
     useEffect(() => {
-        //const {chatName, roomName} = queryString.parse(location.search)
-        
         socket = io.connect(ENDPOINT, connectionConfig)
 
         setChatName(chatName)
@@ -73,7 +70,7 @@ const Chat = ({location}) => {
 }
 
 
-/* 
+/*
 class Chat extends Component{
     constructor(props) {
         super(props);
@@ -81,42 +78,52 @@ class Chat extends Component{
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
+           activeComponent : 'chatRoom',
            
            roomName : localStorage.getItem('roomName'),
            chatName : localStorage.getItem('chatName'),
-           hasRoom : true,
 
            message: "",
            messages: []
 
         }
         this.leaveRoom = this.leaveRoom.bind(this)
+        this.sendMessage = this.sendMessage.bind(this)
     }
 
     componentDidMount(){
         socket = io.connect(`localhost:5001`, connectionConfig)
         console.log('User entered room')
-        socket.emit('join_room', {this.state.chatName})
+        socket.emit('join_room', this.state.chatName)
     }
 
     componentWillUnmount(){
         console.log('User left room')
     }
 
+    sendMessage = (e) => {
+        e.preventDefault()
+
+        if(message){
+            socket.emit('send_message', message, () => setMessage(''))
+        }
+    }
+
     leaveRoom = () =>{
         localStorage.removeItem('roomName')
         localStorage.removeItem('chatName')
-        localStorage.setItem('hasRoom', false)
-        window.location.reload()
+        localStorage.setItem('activeComponent', 'chatlobby')
     }
 
     render(){
         return (
             <div className="outerContainer">
                 <div className="container">
-                   <h1>Test Room</h1>
-                   <button onClick={this.leaveRoom}>Leave Room</button>
+                    <InfoBar roomName={this.state.roomName} />
+                    <Messages messages={this.state.messages} chatName={this.state.chatName}/>
+                    <Input  setMessage={setMessage} sendMessage={sendMessage} />
                 </div>
+                <button onClick={this.leaveRoom}>Leave Room</button>
             </div>
         )
     }
