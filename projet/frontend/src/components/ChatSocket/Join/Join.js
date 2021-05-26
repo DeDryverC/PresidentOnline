@@ -52,7 +52,7 @@ class Join extends Component{
                             })}/>
                     </div>
 
-                    <button onClick={this.enterRoom()}>
+                    <button onClick={this.enterRoom}>
                         Enter Room
                     </button>
                     
