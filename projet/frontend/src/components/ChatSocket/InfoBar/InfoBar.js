@@ -9,7 +9,6 @@ const InfoBar = ({roomName}) => {
             <h3>{roomName}</h3>
         </div>
         <div className='rightInnerContainer'>
-            <a href="/">close</a>
         </div>
         </div>
     )

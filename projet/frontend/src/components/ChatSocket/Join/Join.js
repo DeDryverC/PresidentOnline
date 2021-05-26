@@ -3,7 +3,7 @@ import React, {useState, useEffect, Component} from 'react'
 import {NavLink, Link, Redirect} from 'react-router-dom'
 import './Join.css'
 
-/* 
+
 class Join extends Component{
     constructor(props) {
         super(props);
@@ -22,6 +22,7 @@ class Join extends Component{
         localStorage.setItem('roomName', this.state.roomName)
         localStorage.setItem('chatName', this.state.chatName)
         localStorage.setItem('activeComponent', 'chatroom')
+        window.location.reload()
     }
 
     
@@ -55,7 +56,7 @@ class Join extends Component{
                         Enter Room
                     </button>
                     
-                    {
+                    {/*
                     <Link onClick={
                         e => (!this.state.chatName || !this.state.roomName) 
                         ? e.preventDefault() : null} 
@@ -65,15 +66,15 @@ class Join extends Component{
                             type="submit"> Enter Room
                         </button>
                     </Link>
-                    }
+                    */ }
                     
                     </div>
                     </div>
                 )
             }
         }
-*/
 
+ /*
 const Join = () => {
     const [chatName, setChatName] = useState('')
     const [roomName, setRoomName] = useState('')
@@ -114,5 +115,6 @@ const Join = () => {
         </div>
     )
 }
+*/
 
 export default Join

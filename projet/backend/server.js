@@ -43,7 +43,6 @@ io.on('connection', (socket) => {
 
       socket.join(user.roomName)
 
-      callback()
   })
 
   socket.on('send_message', (message, callback) => {

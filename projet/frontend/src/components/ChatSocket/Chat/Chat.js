@@ -17,7 +17,7 @@ let connectionConfig = {
     "transports" : ["websocket"]
 }
 
-
+/*
 const Chat = () => {
     const [roomName, setRoomName] = useState("")
     const [chatName, setChatName] = useState('')
@@ -65,12 +65,13 @@ const Chat = () => {
                 <Messages messages={messages} chatName={chatName}/>
                 <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
+            <button onClick={this.leaveRoom}>Leave Room</button>
         </div>
     )
 }
+*/
 
 
-/*
 class Chat extends Component{
     constructor(props) {
         super(props);
@@ -78,10 +79,10 @@ class Chat extends Component{
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : 'testPseudo',
-           activeComponent : 'chatRoom',
+           activeComponent : 'chatroom',
            
-           roomName : localStorage.getItem('roomName'),
-           chatName : localStorage.getItem('chatName'),
+           roomName : localStorage.getItem('roomName') || 'test',
+           chatName : localStorage.getItem('chatName') || 'tester',
 
            message: "",
            messages: []
@@ -94,7 +95,9 @@ class Chat extends Component{
     componentDidMount(){
         socket = io.connect(`localhost:5001`, connectionConfig)
         console.log('User entered room')
-        socket.emit('join_room', this.state.chatName)
+        let chatName = this.state.chatName
+        let roomName = this.state.roomName
+        socket.emit('join_room', {chatName, roomName})
     }
 
     componentWillUnmount(){
@@ -102,17 +105,19 @@ class Chat extends Component{
     }
 
     sendMessage = (e) => {
+        let message = this.state.message
         e.preventDefault()
 
         if(message){
-            socket.emit('send_message', message, () => setMessage(''))
+            socket.emit('send_message', message, () => this.setState({message : ''}))
         }
     }
 
     leaveRoom = () =>{
         localStorage.removeItem('roomName')
         localStorage.removeItem('chatName')
-        localStorage.setItem('activeComponent', 'chatlobby')
+        localStorage.removeItem('activeComponent')
+        window.location.reload()
     }
 
     render(){
@@ -121,13 +126,13 @@ class Chat extends Component{
                 <div className="container">
                     <InfoBar roomName={this.state.roomName} />
                     <Messages messages={this.state.messages} chatName={this.state.chatName}/>
-                    <Input  setMessage={setMessage} sendMessage={sendMessage} />
+                    {/*<Input message={this.state.message} setMessage={this.setState({message : this.message})} sendMessage={this.sendMessage} /> */}
                 </div>
                 <button onClick={this.leaveRoom}>Leave Room</button>
             </div>
         )
     }
 }
-*/
+
 
 export default Chat

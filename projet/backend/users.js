@@ -1,17 +1,17 @@
 const users = []
 
-const addUser = ({id, userName, room}) => {
-    userName = userName.trim().toLowerCase()
-    room = room.trim().toLowerCase()
+const addUser = ({id, chatName, roomName}) => {
+    chatName = chatName.trim().toLowerCase()
+    roomName = roomName.trim().toLowerCase()
 
-    const existingUser = users.find((user) => user.room === room 
-    && user.userName === userName )
+    const existingUser = users.find((user) => user.roomName === roomName 
+    && user.chatName === chatName )
 
     if(existingUser){
-        return { error : 'Username is taken'}
+        return { error : 'chatName is taken'}
     }
 
-    const user = {id, userName, room}
+    const user = {id, chatName, roomName}
     users.push(user)
 
     return {user}
@@ -27,6 +27,6 @@ const removeUser = (id) => {
 
 const getUser = (id) => users.find((user) => user.id === id)
 
-const getRoomUsers = (room) => users.filter((user) => user.room === room)
+const getroomNameUsers = (roomName) => users.filter((user) => user.roomName === roomName)
 
-module.exports = {addUser, removeUser, getUser, getRoomUsers}
+module.exports = {addUser, removeUser, getUser, getroomNameUsers}
