@@ -83,7 +83,7 @@ class Navigation extends Component {
             //afficher en tant qu'user connecté
             console.log(this.state.guestPseudo)
             
-            //window.location.href= "http://localhost:3000/"
+            window.location.href= "https://president-online.netlify.app/"
             
             
     }
