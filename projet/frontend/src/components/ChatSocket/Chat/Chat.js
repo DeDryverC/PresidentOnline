@@ -17,10 +17,10 @@ let connectionConfig = {
     "transports" : ["websocket"]
 }
 
-/*
+
 const Chat = () => {
-    const [roomName, setRoomName] = useState("")
-    const [chatName, setChatName] = useState('')
+    const [roomName, setRoomName] = useState(`${localStorage.getItem('roomName')}`)
+    const [chatName, setChatName] = useState(`${localStorage.getItem('chatName')}`)
 
     const ENDPOINT = 'localhost:5001'
     
@@ -50,6 +50,13 @@ const Chat = () => {
         }, [messages])
     })
 
+    const leaveRoom = () => {
+        localStorage.removeItem('roomName')
+        localStorage.removeItem('chatName')
+        localStorage.removeItem('activeComponent')
+        window.location.reload()
+    }
+
     const sendMessage = (e) => {
         e.preventDefault()
 
@@ -65,13 +72,13 @@ const Chat = () => {
                 <Messages messages={messages} chatName={chatName}/>
                 <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
             </div>
-            <button onClick={this.leaveRoom}>Leave Room</button>
+            <button onClick={leaveRoom}>Leave Room</button>
         </div>
     )
 }
-*/
 
 
+/*
 class Chat extends Component{
     constructor(props) {
         super(props);
@@ -94,15 +101,17 @@ class Chat extends Component{
 
     componentDidMount(){
         socket = io.connect(`localhost:5001`, connectionConfig)
-        console.log('User entered room')
         let chatName = this.state.chatName
         let roomName = this.state.roomName
         socket.emit('join_room', {chatName, roomName})
     }
 
     componentWillUnmount(){
-        console.log('User left room')
+        let chatName = this.state.chatName
+        let roomName = this.state.roomName
+        socket.emit('leave_room', {chatName, roomName})
     }
+
 
     sendMessage = (e) => {
         let message = this.state.message
@@ -126,13 +135,17 @@ class Chat extends Component{
                 <div className="container">
                     <InfoBar roomName={this.state.roomName} />
                     <Messages messages={this.state.messages} chatName={this.state.chatName}/>
-                    {/*<Input message={this.state.message} setMessage={this.setState({message : this.message})} sendMessage={this.sendMessage} /> */}
+                    <Input message={this.state.message} 
+                    setMessage={onChange = (e)=>{
+                        this.setState({message : e.target.value})
+                    }} 
+                    sendMessage={this.sendMessage} />
                 </div>
                 <button onClick={this.leaveRoom}>Leave Room</button>
             </div>
         )
     }
 }
-
+*/
 
 export default Chat

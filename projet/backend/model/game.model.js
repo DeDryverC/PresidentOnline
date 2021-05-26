@@ -255,9 +255,9 @@ game.setDeck = (gameId, players, result) => {
         pDecks.push([]);
     }
     
+    let deckAsString = '(user, card), ...'
 
-
-    mysql.query(``, (err,res) => {
+    mysql.query(`insert into ${gameId} values ${deckAsString}`, (err,res) => {
         if(err){
             console.log("error: ", err);
             result(null, err);
