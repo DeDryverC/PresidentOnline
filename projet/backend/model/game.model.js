@@ -307,7 +307,7 @@ game.deleteGame = (gameId, result) => {
 }
 
 game.distribDeck = (gameId, lobby, result) => {
-
+    //let lobby=[{"user":"dédélacastagne","token":1},{"user":"RoulBe","token":0},{"user":"Seldric","token":0},{"user":"poulna","token":0}]
     let shuffledDeck = Array.from({ length: 52 }, (v, k) => k + 1);
     shuffledDeck = shuffledDeck.sort((a, b) => 0.5 - Math.random());
     let arrayJoueurs = []
