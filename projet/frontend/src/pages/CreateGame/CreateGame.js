@@ -1,6 +1,6 @@
 
 import React from "react";
-import {Button, Row, Col, Container } from 'react-bootstrap'
+import { Button, Row, Col, Container } from 'react-bootstrap'
 import Select from 'react-select'
 
 
@@ -47,8 +47,8 @@ class CreateGame extends React.Component {
         for (let item of this.state.pool) {
             if (this.state.gameId === item.gameId) { isIn = true }
         }
-        
-        
+
+
         if (!isIn) {
 
             //creating table for the game
@@ -108,12 +108,12 @@ class CreateGame extends React.Component {
             });
 
             this.putPlayerInLobby(this.state.gameId, this.state.pseudo);
+            localStorage.setItem("gameId", this.state.joinedGame);
+            localStorage.setItem("pseudo", this.state.pseudo);
         }
-        else{
+        else {
             alert("This name is already used");
         }
-
-        
 
     };
 
@@ -152,6 +152,14 @@ class CreateGame extends React.Component {
         this.setState({ joinedGame: gameId });
     }
 
+
+    async handleRefresh(gameId) {
+        await fetch(`http://localhost:5000/lobby/${gameId}`)
+            .then(response => response.json())
+            .then(json => {
+                this.setState({ lobby: json });
+            })
+    }
 
     handleLeave(gameId) {
         fetch('http://localhost:5000/delete', {
@@ -206,7 +214,12 @@ class CreateGame extends React.Component {
             }
 
         }
-        itemsToPush.push(<Row><Button variant="outline-info" size="lg" onClick={() => this.handleLeave(this.state.joinedGame)}> Leave lobby </Button></Row>)
+        itemsToPush.push(
+            <Row>
+                <Button variant="outline-info" size="lg" onClick={() => this.handleLeave(this.state.joinedGame)}> Leave lobby </Button>
+                <Button variant="outline-info" size="lg" onClick={() => this.handleRefresh(this.state.joinedGame)}> Refresh </Button>
+            </Row>
+        )
         return (itemsToPush)
     };
 
