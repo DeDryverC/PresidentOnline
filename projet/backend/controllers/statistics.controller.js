@@ -7,11 +7,11 @@ exports.getStatistics = (req, res) => {
       if (err) {
         if (err.kind === "not_found") {
           res.status(404).send({
-            message: `Not found demande with pseudo ${req.params.pseudo}.`,
+            message: `Not found profil with pseudo ${req.params.pseudo}.`,
           });
         } else {
           res.status(500).send({
-            message: "Error retrieving demande with pseudo " + req.params.pseudo,
+            message: "Error retrieving statistics with pseudo " + req.params.pseudo,
           });
         }
       } else {

@@ -10,7 +10,7 @@ exports.getHistory = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving player with pseudo " + req.params.userId,
+          message: "Error retrieving history with pseudo " + req.params.userId,
         });
       }
     } else {
@@ -30,7 +30,7 @@ exports.setGameInHistory = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving player with pseudo " + req.params.userId,
+          message: "Error setting game in history",
         });
       }
     } else {

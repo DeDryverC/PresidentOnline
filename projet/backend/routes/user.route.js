@@ -29,8 +29,9 @@ module.exports = (app) => {
     app.get("/loginall", login.findAllUsers)
     app.get("/token/:gameId/:pseudo", game.getPlayerToken);
     app.get("/lobby/:gameId", game.getLobby);
+    app.get("/exist/:gameId", game.exist);
     //app.get("/loginOne/:mail", login.findPasswordUser)
-
+    
     
     app.get("/pot/:gameId", game.getPot);
     app.get("/potd/:gameId", game.delPot);
