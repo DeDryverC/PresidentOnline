@@ -23,7 +23,7 @@ exports.createUser = (req, res) => {
      signin.createUser(donneesUser, (err, data) => {
         if (err) {
               res.status(500).send({
-                message: "Error while sign in "
+                message: "Error while signing in "
               });
             }
           else {
@@ -37,7 +37,7 @@ exports.createGuest = (req, res) => {
   signin.createGuest( (err, data) => {
     if (err) {
       res.status(500).send({
-        message: "Error while sign in "
+        message: "Error while creating guest"
       });
     }
     else {

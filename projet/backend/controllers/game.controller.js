@@ -11,12 +11,12 @@ exports.createTable = (req, res) => {
   game.createTable(gameInfo.gameId, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).send({
-          message: `Not found game with gameId.`,
+        res.status(400).send({
+          message: `invalid input, object invalid.`,
         });
       } else {
-        res.status(500).send({
-          message: "Error creating table with gameId "
+        res.status(409).send({
+          message: "an existing item already exists "
         });
       }
     }
@@ -37,7 +37,7 @@ exports.createLobby = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error creating table with gameId "
+          message: "Error creating lobby with gameId"
         });
       }
     }
@@ -283,7 +283,7 @@ exports.togglePlayerLobby = (req, res) => {
         });
       } else {
         res.status(500).send({
-          message: "Error removing player from lobby ",
+          message: "Error toggling token in lobby ",
         });
       }
     } else {
@@ -471,7 +471,7 @@ exports.deleteGame = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found game with gameId ${req.params.gameId}.`,
+          message: `Not found pool`,
         });
       } else {
         res.status(500).send({
@@ -501,6 +501,26 @@ exports.distribDeck = (req, res) => {
       } else {
         res.status(500).send({
           message: "Error distributing game"
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+
+exports.exist = (req, res) => {
+  game.exist(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error fetching game existence"
         });
       }
     } else {
