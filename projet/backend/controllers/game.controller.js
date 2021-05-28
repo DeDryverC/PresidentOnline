@@ -23,15 +23,8 @@ exports.createTable = (req, res) => {
   });
 }
 
-<<<<<<< HEAD
-
-
-exports.createLobby = (req, res) =>{
-    
-=======
 exports.createLobby = (req, res) => {
 
->>>>>>> 0c67efb2a2154471ba682e8bcbc1c387aa0ff99a
   const gameInfo = {
     gameId: req.body.gameId
   };
@@ -492,10 +485,6 @@ exports.deleteGame = (req, res) => {
   })
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 0c67efb2a2154471ba682e8bcbc1c387aa0ff99a
 exports.distribDeck = (req, res) => {
 
   const gameInfo = {
@@ -518,8 +507,6 @@ exports.distribDeck = (req, res) => {
       res.send(data);
     }
   })
-<<<<<<< HEAD
-=======
 }
 
 
@@ -540,5 +527,4 @@ exports.exist = (req, res) => {
       res.send(data);
     }
   })
->>>>>>> 0c67efb2a2154471ba682e8bcbc1c387aa0ff99a
 }

@@ -3,6 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const hostname='0.0.0.0';
 
 
 app.get("/", (req, res) => {
