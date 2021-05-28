@@ -32,26 +32,12 @@ class Signin extends React.Component {
         event.preventDefault();
         
 
-        /*let pass=this.state.password
-        var bcrypt = require('bcryptjs');
-        bcrypt.genSalt(10,function(err,salt){
-                bcrypt.hash(pass, salt, function(err, hash){
-                    console.log(hash)
-                })
-            })*/
 
         
-        //console.log(this.state.email)
-        //console.log(typeof(this.state.email))
-        //console.log(this.state.emailsbdd)
-        //console.log(this.state.password)
-        //console.log(this.state.bdd)
        
 
         for (let i=0; i<this.state.bdd.length;i++){
-            //console.log(this.state.email)
             if (this.state.email !== this.state.bdd[i].Email){
-                //console.log("unknown mail")
             }
             else{
                 //alert("Mail in bdd")
@@ -60,27 +46,17 @@ class Signin extends React.Component {
                 var bcrypt = require('bcryptjs');
                 bcrypt.genSalt(10,function(err,salt){
                     bcrypt.hash(pass, salt, function(err, hash){
-                        console.log(hash)
                     })
                 })*/
                 
-                //console.log(this.state.password)
-                //console.log(this.state.bdd[i].Password)
                 var bcrypt = require('bcryptjs');
                 bcrypt.compare( this.state.password,this.state.bdd[i].Password, function(err,res){
-                    console.log(res)
-                    console.log(err)
                     if(res){
-                        console.log(null , {message: "logged"});
                         
                         localStorage.setItem('Connect', true)
                         window.location.href= "https://president-online.netlify.app/"
                         //window.location.href= "http://localhost:3000/"
                         }
-                    else{
-                          console.log(null , {message:'error'});
-                          
-                        } 
                        
                 })
                 
@@ -88,7 +64,6 @@ class Signin extends React.Component {
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
                 localStorage.getItem('Connect')
                 /*
-                console.log(this.state.connected)
                 localStorage.setItem('Connect', true)
                 localStorage.setItem('Email', this.state.email)
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)

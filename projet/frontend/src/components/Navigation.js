@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
-import CreateGame from '../pages/CreateGame/CreateGame';
 import Rules from '../pages/Rules/Rules';
 //import Login from '../pages/Login/Login'
 
@@ -34,8 +33,6 @@ class Navigation extends Component {
                 return <Howto/>;
             case 'rules':
                 return <Rules/>;
-            case 'crgame':
-                return <CreateGame/>;
             default :
                 return <Home OnClick = {this.createGame}/>;
         }
@@ -53,7 +50,6 @@ class Navigation extends Component {
         localStorage.setItem('ConnectedAsGuest', false)
         
     }
-    
 
     handleLoginGuest(event){
         event.preventDefault();
@@ -68,7 +64,6 @@ class Navigation extends Component {
             },
         }).then(response => response.json())
             .then(json => {
-                console.log(json["message"]);
                 this.setState({guestPseudo: json["message"]})
                 localStorage.setItem('guestPseudo',this.state.guestPseudo)
                 
@@ -78,10 +73,9 @@ class Navigation extends Component {
             
             
             
-            console.log(this.state.connectedAsGuest)
             
             //afficher en tant qu'user connecté
-            console.log(this.state.guestPseudo)
+
             
             window.location.href= "https://president-online.netlify.app/"
             
@@ -89,9 +83,7 @@ class Navigation extends Component {
     }
 
     render() {
-        console.log(this.state.pseudo)
         if(this.state.connected==="true"){
-            console.log(this.state.connected)
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">
@@ -180,7 +172,7 @@ class Navigation extends Component {
                                     </Col>
                                 </Container>
                             </Col>
-                            <Col fluid sm='auto'>
+                            <Col fluid>
                                 {this.pageSwitch()}
                             </Col>
                         </Row>
@@ -192,7 +184,6 @@ class Navigation extends Component {
         }
 
         if(this.state.connectedAsGuest==="true"){
-            console.log(this.state.connectedAsGuest)
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">
@@ -274,7 +265,7 @@ class Navigation extends Component {
                                     </Col>
                                 </Container>
                             </Col>
-                            <Col fluid sm='auto'>
+                            <Col fluid>
                                 {this.pageSwitch()}
                             </Col>
                         </Row>
@@ -343,8 +334,8 @@ class Navigation extends Component {
                         </Row>
                     </Container>
                     <br/>
-                    <Container fluid="lg">
-                        <Row>
+                    <Container fluid>
+                        <Row fluid="xl"> 
                             <Col fluid="md" lg={2}>
                                 <Container style={{
                                     height: 'auto',
@@ -386,7 +377,7 @@ class Navigation extends Component {
                                     </Col>
                                 </Container>
                             </Col>
-                            <Col fluid sm='auto'>
+                            <Col className="justify-content-xl-center">
                                 {this.pageSwitch()}
                             </Col>
                         </Row>

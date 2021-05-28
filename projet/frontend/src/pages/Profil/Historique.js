@@ -25,7 +25,6 @@ class Historique extends React.Component {
           .then(json => {
             this.setState({donnees: json})
             
-            console.log(this.state.donnees)
             
             
           })

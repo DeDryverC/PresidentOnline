@@ -1,64 +1,94 @@
 import React, { Component } from "react";
 import { Button, Row, Col, Container, Alert } from 'react-bootstrap';
 import Carte from '../../components/Carte'
-// TODO : Faire une actualisation du pile
+import io from "socket.io-client";
 
+/* TODO :   connexion a la game
+            token
+
+            Reconnection si deco
+            fin de round
+            fin de game
+            envoi stats
+            page de fin 
+
+*/
+let gameSocket
 
 class Game extends Component {
 
+    constructor() {
+        super();
 
-    /*********** Global Variables ***********/
+        /*********** Global Variables ***********/
 
-    state = {
-        /* Usefull variables*/
-        token: true,
-        selectedCard: [],
-        switcher: false,
-        errorMessage: { type: null, title: null, message: null, variant: null },
+        this.state = {
+            /* Usefull variables*/
+            playerToken: 0,
+            selectedCard: [],
+            switcher: false,
+            errorMessage: { type: null, title: null, message: null, variant: null },
+            game_id : localStorage.getItem('gameId'),
+            currentUser: localStorage.getItem('pseudo'),
+            orderTurn: localStorage.getItem('turn').split(','),
+            countTurn: 0,
+            countRound: 0,
 
-        /* Test variable */
-        testChgPile: [5, 18],
-        testChgPile2: [13],
+            /* Test variable */
+            testChgPile: [5, 18],
+            testChgPile2: [13],
 
-        /* RAW DATA */
-        playersData: null,
-        data: null,
+            /* socket io */
+            connectionConfig: {
+                "force new connection": true,
+                "reconnectionAttemps": "Infinity",
+                "timeout": 10000,
+                "transports": ["websocket"]
+            },
+            endpoint: 'localhost:5002',
 
-        /* PLAYERS */
-        players: [],
-        player1: { pseudo: null, cards: [], set: false },
-        player2: { pseudo: null, cards: [], set: false },
-        player3: { pseudo: null, cards: [], set: false },
-        player4: { pseudo: null, cards: [], set: false },
-        player5: { pseudo: null, cards: [], set: false },
+            /* RAW DATA */
+            playersData: null,
+            data: null,
 
-        /* STYLE */
-        defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
-        cardStyle: { border: '2px solid red', borderRadius: '10px', },
+            /* PLAYERS */
+            players: [],
+            player1: { pseudo: null, cards: [], set: false, connected : false },
+            player2: { pseudo: null, cards: [], set: false, connected : false },
+            player3: { pseudo: null, cards: [], set: false, connected : false },
+            player4: { pseudo: null, cards: [], set: false, connected : false },
+            player5: { pseudo: null, cards: [], set: false, connected : false },
 
-        /* VISIBLE CARDS */
-        pile: [],
-        playerCard: [],
+            /* STYLE */
+            defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
+            cardStyle: { border: '2px solid red', borderRadius: '10px', },
 
-        /* List of all card, refers to their .png */
-        cardList: {
-            ace: ['1', '14', '27', '40'],
-            two: ['2', '15', '28', '41'],
-            three: ['3', '16', '29', '42'],
-            four: ['4', '17', '30', '43'],
-            five: ['5', '18', '31', '44'],
-            six: ['6', '19', '32', '45'],
-            seven: ['7', '20', '33', '46'],
-            eight: ['8', '21', '34', '47'],
-            nine: ['9', '22', '35', '48'],
-            ten: ['10', '23', '36', '49'],
-            jack: ['11', '24', '37', '50'],
-            queen: ['12', '25', '38', '51'],
-            king: ['13', '26', '39', '52'],
+            /* VISIBLE CARDS */
+            pile: [],
+            playerCard: [],
+
+            /* List of all card, refers to their .png */
+            cardList: {
+                ace: ['1', '14', '27', '40'],
+                two: ['2', '15', '28', '41'],
+                three: ['3', '16', '29', '42'],
+                four: ['4', '17', '30', '43'],
+                five: ['5', '18', '31', '44'],
+                six: ['6', '19', '32', '45'],
+                seven: ['7', '20', '33', '46'],
+                eight: ['8', '21', '34', '47'],
+                nine: ['9', '22', '35', '48'],
+                ten: ['10', '23', '36', '49'],
+                jack: ['11', '24', '37', '50'],
+                queen: ['12', '25', '38', '51'],
+                king: ['13', '26', '39', '52'],
+
+            }
 
         }
+        gameSocket = io(this.state.endpoint, this.state.connectionConfig)
+        
     }
-
 
     /********************** Game Function **********************/
 
@@ -131,7 +161,7 @@ class Game extends Component {
                 default: return 0;
             }
         } else if (this.state.cardList.nine.indexOf(String(num)) !== -1) {
-            switch (this.state.cardList.ninr.indexOf(String(num))) {
+            switch (this.state.cardList.nine.indexOf(String(num))) {
                 case 0: return '9:s';
                 case 1: return '9:h';
                 case 2: return '9:c';
@@ -176,10 +206,10 @@ class Game extends Component {
     
 
 
-    isRoundOver = (cards, cardsNum) =>{
-        if(cards.length === 4){
+    isRoundOver = (cards, cardsNum) => {
+        if (cards.length === 4) {
             return true
-        } else if (cardsNum === 20){
+        } else if (cardsNum === 20) {
             return true
         }
         return false
@@ -253,6 +283,7 @@ class Game extends Component {
             }
         )
         this.setState({ player1: p1, player2: p2, player3: p3, player4: p4, player5: p5 })
+        
     }
 
 
@@ -268,7 +299,6 @@ class Game extends Component {
         }
         else {
             const numPile = this.whatCardIs(pile[0]).split(':')
-            console.log(numPile[0])
             if (numPile[0] === 0) {
                 return 10
             }
@@ -288,11 +318,7 @@ class Game extends Component {
         else {
 
             for (let i = 0; i < len; i++) {
-                console.log(i)
-                console.log(prev)
                 const actual = this.whatCardIs(selCard[i]).split(':')
-                console.log(actual[0])
-                console.log('--------------')
                 if (prev !== actual[0]) {
                     return -1
                 }
@@ -301,15 +327,25 @@ class Game extends Component {
             return Number(prev)
         }
     }
+    canHeStart(){
+        if(this.state.countRound < 1)
+        {
+            const currUser = this.state.currentUser
+            if (this.state.playerCard.indexOf('25') !== -1) {
+                this.setState({ playerToken: 1 })
+                gameSocket.emit('startPlaying', { user: currUser })
+            } else {
 
+            }
+        }
+    }
     canHePlay = () => {
-        if (this.state.token === true) {
+        if (this.state.playerToken === 1) {
             const actualPile = this.state.pile
             //const playerCard = this.state.playerCard
             const selCard = this.state.selectedCard
             const ssc = this.sameSelectedCard()
             const ptc = this.pileTypeCard()
-            console.log(ssc + ' : ' + ptc)
             if (actualPile.length > selCard.length && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play fewer cards than there are in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
@@ -322,14 +358,22 @@ class Game extends Component {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play one or more cards smaller than those in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
             }
-            else if (actualPile.length > selCard.length - 1 && ssc === 20) {
+            else if (actualPile.length - 1 > selCard.length && ssc === 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You need an extra 2 if you want to cut a series of 3 cards', variant: 'danger' }
-                this.setState({errorMessage : error })
+                this.setState({ errorMessage: error })
             }
             else {
 
                 const message = { type: 'finish', title: 'You just played', message: 'Wait for your turn.', variant: 'success' }
-                this.setState({ errorMessage: message })
+                
+                
+                const user = this.state.currentUser
+                let counter = this.state.countTurn
+                counter++;
+                const copyTable = this.state.orderTurn.slice()
+                const nextUser= copyTable[counter]
+                this.setState({ errorMessage: message, playerToken: 0,countTurn: counter})
+                gameSocket.emit('finishTurn', nextUser)
 
                 this.delSelectedCard()
                 this.changePile(selCard, ssc)
@@ -346,16 +390,13 @@ class Game extends Component {
     changePile = (newCards, newCardsNum) => {
 
         if (this.isRoundOver(newCards, newCardsNum) === false) {
-            var sheesh = []
-            fetch('http://localhost:5000/potd/GameTest')
-            newCards.map((value, key) => {
-                const fetchmsg = 'http://localhost:5000/pots/GameTest/' + String(value)
-                sheesh.push(value)
-                fetch(fetchmsg)
-                return 0;
-            })
-
-            this.setState({ pile: sheesh })
+            const game_id= this.state.game_id
+            gameSocket.emit('chgpile', {newcds :newCards, gid : game_id})
+        }
+        else{
+            //switch socket.
+            const game_id= this.state.game_id
+            gameSocket.emit('chgpile', {newcds :newCards, gid : game_id})
         }
 
     }
@@ -386,6 +427,15 @@ class Game extends Component {
                     </Alert>
                 </Row>
             )
+        } else if(this.state.errorMessage.type ==='token'){
+            return (
+                <Row style={this.state.defStyle}>
+                    <Alert variant={this.state.errorMessage.variant} onClose={() => this.resetError()} dismissible>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
+                        {this.state.errorMessage.message}
+                    </Alert>
+                </Row>
+            )
         }
 
     }
@@ -408,7 +458,7 @@ class Game extends Component {
         } else {
             return (
                 <div>
-                    <span>Empty</span>
+                    <span></span>
                 </div>
             )
         }
@@ -433,33 +483,34 @@ class Game extends Component {
         } else {
             return (
                 <div>
-                    <span>Empty</span>
+                    <span></span>
                 </div>
             )
         }
     }
-
     componentDidMount() {
+        const currUser = this.state.currentUser;
+        const gameId = this.state.gameId
+        gameSocket.on('connection', function (data) {
+
+        })
         // Requete backend pour savoir les cartes de l'utilisateur local
-        fetch(`http://localhost:5000/deck/GameTest/user1`)
-            .then(response => response.json())
-            .then(json => {
-                this.setState({ data: json })
-                json.forEach(({ user, card }) => {
-                    this.setState(state => {
-                        const playerCard = state.playerCard.concat(card)
-                        return {
-                            playerCard,
-                        };
-                    })
-                })
-            }
-            )
+        gameSocket.emit('join_game', {gid: this.state.game_id, user: this.state.currentUser})
+        gameSocket.on('userCard',(sdata) => {
+            const json = sdata
+            json.forEach(({ user, card }) => {
+                this.setState(state => {
+                    const playerCard = state.playerCard.concat(card)
+                    return {
+                        playerCard,
+                    };
+                }, this.canHeStart)
+            })
+        })
         // Requete backend pour avoir le nombre de carte des joueurs
-        fetch('http://localhost:5000/ccount/GameTest/user1')
-            .then(response => response.json())
-            .then(json => {
-                this.setState({ playersData: json })
+        gameSocket.on('othersCount',(sdata) =>{
+            const json = sdata
+            this.setState({ playersData: json })
                 json.forEach(({ user, Ncards }) => {
                     const passerelle = user + '|' + Ncards
                     this.setState(state => {
@@ -467,47 +518,56 @@ class Game extends Component {
                         return {
                             players,
                         };
-                    }, this.generatePlayersData)
+                }, this.generatePlayersData)
+            })
+        })
+        
+        gameSocket.on('cardsPot', (sdata) => {
+            const json = sdata
+            json.forEach(({ user, card }) => {
+                this.setState(state => {
+                    const pile = state.pile.concat(card)
+                    return {
+                        pile,
+                    };
                 })
             })
-        // Requete backend pour la pile de carte au milieu
-        fetch('http://localhost:5000/pot/GameTest')
-            .then(response => response.json())
-            .then(json => {
-                json.forEach(({ user, card }) => {
-                    this.setState(state => {
-                        const pile = state.pile.concat(card)
-                        return {
-                            pile,
-                        };
-                    })
-                })
-            })
+        })
+        
+        gameSocket.on('newpile', (sdata) =>{
+            const newpile = sdata
+            this.setState({ pile: newpile })
+        })
+
+        gameSocket.on('playerdeconnexion', (sdata) =>{
+            const player = sdata.user;
+        })
+        gameSocket.on('userPlayed', (sdata)=>{
+            let counter = this.state.countTurn
+            counter++;
+            if(sdata===currUser){
+                const msg={ type: 'turn', title: 'La partie a commencé', message: `C'est a toi de jouer chef`, variant: 'success' }
+                this.setState({playerToken: 1, errorMessage : msg})
+            }
+            this.setState({countTurn: counter})
+        })
+        gameSocket.on('gameStarted', (sdata)=>{
+            const msg = { type: 'start', title: 'La partie a commencé', message: `${sdata} dispose de la dame de coeur, il commence la partie`, variant: 'info' }
+            this.setState({errorMessage: msg})
+        })
+        const playerCard=this.state.playerCard
+
 
     }
 
     delSelectedCard = () => {
         const selCard = this.state.selectedCard
         var userCard = this.state.playerCard
-        for (let i = 0; i < selCard.length; i++) {
-            const index = userCard.indexOf(selCard[i])
-            console.log(selCard[i])
-            const fetchmsg = 'http://localhost:5000/dcard/GameTest/user1/' + String(selCard[i])
-            console.log(fetchmsg)
-            fetch('http://localhost:5000/dcard/GameTest/user1/' + String(selCard[i]))
-            userCard.splice(index, 1)
-
-        }
-        this.setState({ playerCard: userCard, selectedCard: [] })
-    }
-    addusercard = () => {
-        const usercard = this.state.playerCard
-        const sheesh = [1, 14, 27, 40, 6, 19, 32, 45]
-        usercard.push(sheesh)
-        for (let i = 0; i < sheesh.length; i++) {
-            fetch('http://localhost:5000/icard/GameTest/user1/' + String(sheesh[i]))
-        }
-        this.setState({ playerCard: usercard })
+        gameSocket.emit('delcard',{gid: this.state.game_id, us:this.state.currentUser, sc : this.state.selectedCard, usc : this.state.playerCard})
+        gameSocket.on('delcardReturn', (sdata)=>{
+            const userCard = sdata;
+            this.setState({ playerCard: userCard, selectedCard: [] })
+        })
     }
     closeAlert = () => {
         this.setState({ showAlert: false })
@@ -610,7 +670,7 @@ class Game extends Component {
                 <br />
                 <Container fluid>
                     <Row>
-                        <Col style={this.state.defStyle}><Button onClick={() => console.log(this.addusercard())} block>pass</Button></Col>
+                        {this.state.playerToken ===1 ? <Col style={this.state.defStyle}><Button variant='secondary' block disable>pass</Button></Col> : <Col style={this.state.defStyle}><Button block >pass</Button></Col>}
                         <Col style={this.state.defStyle}>
                             {
                                 this.state.playerCard.map((value, index) => {
@@ -622,7 +682,7 @@ class Game extends Component {
                                 })
                             }
                         </Col>
-                        {this.state.selectedCard.length > 0 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" onClick={() => console.log(this.state.pile)} block disabled>Play selected cards</Button></Col>}
+                        {this.state.selectedCard.length > 0 ? this.state.playerToken === 1 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> :<Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col>}
 
                     </Row>
                 </Container>
