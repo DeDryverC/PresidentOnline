@@ -5,7 +5,7 @@ const statistics = function(user){
 }
 
 statistics.getStatistics = (pseudo, result) => {
-    mysql.query(`select userHistory.GameId, joueurs.Pseudo, userHistory.Position from userHistory, joueurs where userHistory.UserId = joueurs.Id and joueurs.pseudo="${pseudo}";`, (err, res) =>{
+    mysql.query(`select * from userHistory where UserId="${pseudo}";`, (err, res) =>{
         if(err){
             console.log("error: ", err);
             result(null, err);
@@ -15,6 +15,7 @@ statistics.getStatistics = (pseudo, result) => {
         result(null,res);
     });
 };
+
 
 
 module.exports = statistics;

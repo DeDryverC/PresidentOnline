@@ -203,6 +203,8 @@ class Game extends Component {
         }
     }
 
+    
+
 
     isRoundOver = (cards, cardsNum) => {
         if (cards.length === 4) {
@@ -228,6 +230,8 @@ class Game extends Component {
         }
         return 0;
     }
+
+   
 
 
     generatePlayersData = () => {

@@ -55,7 +55,7 @@ class Signin extends React.Component {
             }
             else{
                 //alert("Mail in bdd")
-                this.setState({passwordtest: this.state.bdd[i].Password})
+                this.state.passwordtest = this.state.bdd[i].Password
                 /*let pass=this.state.password
                 var bcrypt = require('bcryptjs');
                 bcrypt.genSalt(10,function(err,salt){
@@ -73,19 +73,27 @@ class Signin extends React.Component {
                     if(res){
                         console.log(null , {message: "logged"});
                         
-                        }else{
+                        localStorage.setItem('Connect', true)
+                        window.location.href= "https://president-online.netlify.app/"
+                        //window.location.href= "http://localhost:3000/"
+                        }
+                    else{
                           console.log(null , {message:'error'});
                           
                         } 
                        
                 })
-
+                
+                localStorage.setItem('Email', this.state.email)
+                localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
+                localStorage.getItem('Connect')
+                /*
                 console.log(this.state.connected)
                 localStorage.setItem('Connect', true)
                 localStorage.setItem('Email', this.state.email)
                 localStorage.setItem('Pseudo', this.state.bdd[i].Pseudo)
                 localStorage.getItem('Connect')
-                window.location.href= "https://president-online.netlify.app/"
+                window.location.href= "http://localhost:3000/" */
             }
         }
       }
@@ -117,20 +125,20 @@ class Signin extends React.Component {
                     <Col>
                         <form onSubmit={this.handleSubmit}>
                             <Container>
-                                <Col>
-                            <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'67%'}}>
-                                Email :
-                            <input type="text" value={this.state.email} onChange={text => this.setState({email: text.target.value})} />
-                            </label>
-                            </Col>
-                            <Col>
-                            <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'67%'}}>
-                                Password :
-                            <input type="password" value={this.state.password} onChange={text => this.setState({password: text.target.value})} />
-                            </label>
-                            <br></br><br></br><br></br>
-                            <input style={{textAlign: "center", fontSize: 45, color:'red',marginTop:'8%', marginLeft:'73%'}} type="submit" value="Connexion" />
-                            </Col>
+                                <Col className="mt-5">
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'10%',marginLeft:'33%',marginRight:'67%'}}>
+                                        Email :
+                                        <input type="text" value={this.state.email} onChange={text => this.setState({email: text.target.value})} />
+                                    </label>
+                                </Col>
+                                <Col className="mt-5">
+                                    <label style={{textAlign: "center", fontSize: 30, color:'white',marginTop:'4%',marginLeft:'33%',marginRight:'67%'}}>
+                                        Password :
+                                        <input type="password" value={this.state.password} onChange={text => this.setState({password: text.target.value})} />
+                                    </label>
+                                    <br></br><br></br><br></br>
+                                    <input style={{textAlign: "center", fontSize: 45, color:'red',marginTop:'5%', marginLeft:'39%'}} type="submit" value="Connexion" />
+                                </Col>
                             </Container>
                         </form>  
                     </Col>

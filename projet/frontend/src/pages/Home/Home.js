@@ -1,5 +1,6 @@
 import React from "react";
 //import { Component } from "react";
+
 import { Link } from 'react-router-dom';
 import { Button, Row, Col, Container, Alert } from 'react-bootstrap'
 import Lobby from './components/Lobby'
@@ -204,11 +205,18 @@ class Home extends React.Component {
             lobbySocket.emit('playerJoin', { gid: gameId, user: this.state.pseudo, token: 0 })
             this.setState({ gameId: gameId })
 
+
         }
 
     }
 
+
+
+    }
+    
+    
     //handle leaving a lobby
+
     handleLeave(event) {
         event.preventDefault();
         const gameId = this.state.joinedGame;
@@ -221,6 +229,7 @@ class Home extends React.Component {
             this.setState({ joinedGame: undefined, playerToken: 0, gameId: undefined });
         }
     }
+
 
     async handleRefresh(gameId) {
         await fetch(`http://localhost:5000/lobby/${gameId}`)
@@ -240,6 +249,7 @@ class Home extends React.Component {
 
     /*********** Rendering **********/
 
+
     renderGameChoices() {
         let itemsToPush = []
         for (let item in this.state.pool) {
@@ -252,11 +262,13 @@ class Home extends React.Component {
             }
 
         }
+
         itemsToPush.push(<Row><Button variant="outline-info" size="lg" onClick={() => console.log(this.state.joinedGame)}> Refresh </Button></Row>)
         return (itemsToPush);
     }
 
     /*renderLobby() {
+
         let itemsToPush = []
         for (let item in this.state.lobby) {
             if (this.state.lobby[item].token === 1) {
@@ -270,6 +282,7 @@ class Home extends React.Component {
         itemsToPush.push(
             <Row>
                 <Button variant="outline-info" size="lg" onClick={() => this.handleLeave(this.state.joinedGame)}> Leave lobby </Button>
+
             </Row>
 
         )
@@ -644,6 +657,7 @@ class Home extends React.Component {
                             <h5>Players:</h5>
                         </Row>
 
+
                         <Lobby
                             userLobby={Object.values(this.state.lobby)}
                             actionLaunchGame={this.launchGame}
@@ -664,10 +678,12 @@ class Home extends React.Component {
 
 
 
+
                     </Col>
                 </Container>
             )
         }
+
         else if (this.state.createGame) {
             return (
                 <Container>
@@ -710,6 +726,7 @@ class Home extends React.Component {
                 </Container>
             );
         }
+
         else {
             return (
                 <Container fluid>
@@ -726,6 +743,8 @@ class Home extends React.Component {
                             >
                                 Create Game
                             </Button>
+                           
+                            
                             <br />
                         </Row>
                         <Col>
@@ -750,12 +769,14 @@ class Home extends React.Component {
                                     <h4>Find games</h4>
                                     <br />
                                 </Row>
+
                                 {this.state.pool === undefined ? <br /> : <Pool
                                     pool={this.state.pool}
                                     actionJoin={this.handleJoin}
                                 />}
 
                             </Col>
+
                         </Row>
                     </Col>
                 </Container>
