@@ -5,7 +5,7 @@ const history = function (user) {
 }
 
 history.getHistory = (userId, result) => {
-    mysql.query(`select GameId, UserId, Position from userHistory where UserId="${userId}";`, (err, res) => {
+    mysql.query(`select GameId, UserId, Position, Date from userHistory where UserId="${userId}";`, (err, res) => {
         if (err) {
 
             console.log("error: ", err);
