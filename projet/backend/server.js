@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const hostname='0.0.0.0';
+
 
 
 app.get("/", (req, res) => {
@@ -12,7 +12,12 @@ app.get("/", (req, res) => {
 
 app.use(cors());
 app.use(require("body-parser").json())
+app.use(express.static(path.join(__dirname, 'build')));
 
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 const routes = require("./routes/user.route")(app);
 
 // console.log that your server is up and running
