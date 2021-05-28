@@ -305,4 +305,46 @@ game.deleteGame=(gameId, result)=> {
         result(null, res);
     })
 }
+
+game.distribDeck = (gameId, lobby, result) => {
+    //let lobby=[{"user":"dédélacastagne","token":1},{"user":"RoulBe","token":0},{"user":"Seldric","token":0},{"user":"poulna","token":0}]
+    let shuffledDeck = Array.from({ length: 52 }, (v, k) => k + 1);
+    shuffledDeck = shuffledDeck.sort((a, b) => 0.5 - Math.random());
+    let arrayJoueurs = []
+    for (let i = 0; i < lobby.length; i++) {
+        arrayJoueurs.push([])
+    }
+    for (let i = 0; i < parseInt(52 / lobby.length); i++) {
+        for (let y = 0; y < arrayJoueurs.length; y++) {
+            arrayJoueurs[y].push(shuffledDeck[shuffledDeck.length - 1]);
+            shuffledDeck.pop();
+        }
+
+    }
+    let requete = `INSERT INTO ${gameId} (user, card) VALUES `
+    for (let i = 0; i < arrayJoueurs.length; i++) {
+        for (let y in arrayJoueurs[i]) {
+            if (arrayJoueurs[i][y] == arrayJoueurs[arrayJoueurs.length - 1][arrayJoueurs[i].length - 1]) {
+                requete = requete + "('" + lobby[i].user + "'," + arrayJoueurs[i][y] + ");";
+            }
+            else {
+                requete = requete + "('" + lobby[i].user + "'," + arrayJoueurs[i][y] + "),";
+            }
+        }
+
+    }
+    console.log(requete)
+    mysql.query(requete, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("pot :", res);
+        result(null, res);
+    });
+
+}
+
+
 module.exports = game;

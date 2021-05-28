@@ -144,7 +144,8 @@ class Home extends React.Component {
 
 
     }
-
+    
+    
     //handle leaving a lobby
     handleLeave(gameId) {
         fetch('http://localhost:5000/lobbyr', {
@@ -282,6 +283,8 @@ class Home extends React.Component {
                             >
                                 Create Game
                             </Button>
+                           
+                            
                             <br />
                         </Row>
                         <Col>

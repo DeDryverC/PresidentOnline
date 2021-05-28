@@ -40,6 +40,37 @@ class CreateGame extends React.Component {
 
     }
 
+    /* sendCards = () =>{
+        fetch('http://localhost:5000/deck',{
+             
+              method:'POST',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin":"true"
+              },
+              body: JSON.stringify({
+                gameId:this.state.gameId,
+                lobby:this.state.lobby               
+              }),
+              
+              
+            }).then(response => response.json())
+            .then(json => {
+                    console.log(json.message)
+                
+        
+                
+              }).catch((error) => {
+               
+                
+                
+                alert("Echec sending cards");
+                
+          });
+          alert("cards send")
+          
+    };*/
 
     handleCreate(event) {
         event.preventDefault();

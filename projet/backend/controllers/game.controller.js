@@ -23,6 +23,8 @@ exports.createTable = (req, res) =>{
     });
 }
 
+
+
 exports.createLobby = (req, res) =>{
     
   const gameInfo = {
@@ -476,6 +478,30 @@ exports.deleteGame = (req, res) => {
       } else {
         res.status(500).send({
           message: "Error deleting game"
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+exports.distribDeck = (req, res) => {
+
+  const gameInfo = {
+    gameId: req.body.gameId,
+    lobby: req.body.lobby,
+  };
+  game.distribDeck(gameInfo.gameId, gameInfo.lobby, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Can't distribute cards for the game : ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error distributing game"
         });
       }
     } else {

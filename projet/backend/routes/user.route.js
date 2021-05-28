@@ -7,6 +7,7 @@ module.exports = (app) => {
     const profil = require("../controllers/profil.controller");
     const game = require("../controllers/game.controller");
     const login = require("../controllers/login.controller")
+    
 
     app.post("/table", game.createTable);
     app.post("/lobby", game.createLobby);
@@ -41,6 +42,7 @@ module.exports = (app) => {
     app.get("/code/:gameId", game.getCode);
     app.get("/ccount/:gameId/:userId", game.getCardsCount);
     app.get("/game/:code", game.getGameId);
+    app.post("/deck", game.distribDeck);
     
     
     app.delete("/poold", game.deletePool);
