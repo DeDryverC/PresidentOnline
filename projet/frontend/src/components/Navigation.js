@@ -64,7 +64,6 @@ class Navigation extends Component {
             },
         }).then(response => response.json())
             .then(json => {
-                console.log(json["message"]);
                 this.setState({guestPseudo: json["message"]})
                 localStorage.setItem('guestPseudo',this.state.guestPseudo)
                 
@@ -74,10 +73,9 @@ class Navigation extends Component {
             
             
             
-            console.log(this.state.connectedAsGuest)
             
             //afficher en tant qu'user connecté
-            console.log(this.state.guestPseudo)
+
             
             window.location.href= "https://president-online.netlify.app/"
             
@@ -85,9 +83,7 @@ class Navigation extends Component {
     }
 
     render() {
-        console.log(this.state.pseudo)
         if(this.state.connected==="true"){
-            console.log(this.state.connected)
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">
@@ -188,7 +184,6 @@ class Navigation extends Component {
         }
 
         if(this.state.connectedAsGuest==="true"){
-            console.log(this.state.connectedAsGuest)
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">

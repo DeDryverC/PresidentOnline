@@ -5,10 +5,6 @@ class Lobby extends Component{
     render(){
         return(
         <Container fluid>
-            {console.log('userLobby + + + + +')}
-            {console.log(this.props.userLobby)}
-            {console.log(typeof(userLobby))}
-            {console.log('userLobby - - - - -')}
             {this.props.userLobby.map((data, key)=>{
                 const user =' : '+ String(data.user);
                 

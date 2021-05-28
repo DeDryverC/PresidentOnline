@@ -5,11 +5,6 @@ import React, { Component } from 'react';
 
 class Carte extends Component {
 
-
-    imageClick = () => {
-        console.log('clickclickboom')
-    }
-
     render(){
         return(
             <div id='divcards' key={this.props.index} style={this.props.style}>

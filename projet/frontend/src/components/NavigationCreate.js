@@ -42,21 +42,14 @@ class NavigationCreate extends Component{
         
         }).then(response => response.json())
         .then(json => {
- 
-                console.log(json.message)
-            
           }).catch((error) => {
             alert("Echec de creation'. Réessayez.");
             
       });
     
-    console.log(this.state)
   };
   
 
-  componentDidMount() {
-      console.log("freeee")
-  }
 
     render(){
         return (

@@ -174,13 +174,9 @@ class Home extends React.Component {
 
     //handle joining a game
     handleJoin = async (gameId) => {
-        console.log('eoh ?')
         await fetch(`http://localhost:5000/exist/${gameId}`)
             .then(response => response.json())
             .then(json => {
-                console.log('bool + + + + ')
-                console.log(json[0].bool)
-                console.log('bool - - - - ')
                 if (json[0].bool === 0) {
                     const msg = { type: 'pool', title: "Lobby not found", txt: "The lobby you want to join no longer exists, if the lobby is still displayed, please contact an administrator", variant: 'danger' }
                     this.setState({ message: msg });
@@ -201,7 +197,6 @@ class Home extends React.Component {
             }
         }
         if (this.state.message.txt === undefined) {
-            console.log('here ?')
             lobbySocket.emit('playerJoin', { gid: gameId, user: this.state.pseudo, token: 0 })
             this.setState({ gameId: gameId })
 
@@ -212,13 +207,12 @@ class Home extends React.Component {
 
 
 
-    }
+    
     
     
     //handle leaving a lobby
 
-    handleLeave(event) {
-        event.preventDefault();
+    handleLeave() {
         const gameId = this.state.joinedGame;
         if (this.state.playerToken === 0) {
             lobbySocket.emit('playerLeaving', { gid: gameId, user: this.state.pseudo })
@@ -247,58 +241,10 @@ class Home extends React.Component {
             })
     }
 
-    /*********** Rendering **********/
-
-
-    renderGameChoices() {
-        let itemsToPush = []
-        for (let item in this.state.pool) {
-            let gameId = this.state.pool[item].gameId;
-            if (this.state.pool[item].currPlayers >= this.state.pool[item].maxPlayers) {
-                itemsToPush.push(<Row><Button variant="danger">Full [{this.state.pool[item].currPlayers}/{this.state.pool[item].maxPlayers}]</Button><p>{gameId}</p></Row>)
-            }
-            else {
-                itemsToPush.push(<Row><Button variant="success" onClick={() => this.handleJoin(gameId)}>Join [{this.state.pool[item].currPlayers}/{this.state.pool[item].maxPlayers}]</Button><p>{gameId}</p></Row>)
-            }
-
-        }
-
-        itemsToPush.push(<Row><Button variant="outline-info" size="lg" onClick={() => console.log(this.state.joinedGame)}> Refresh </Button></Row>)
-        return (itemsToPush);
-    }
-
-    /*renderLobby() {
-
-        let itemsToPush = []
-        for (let item in this.state.lobby) {
-            if (this.state.lobby[item].token === 1) {
-                itemsToPush.push(<Row><p>{this.state.lobby[item].user}</p><p>___</p><p>Owner</p></Row>)
-            }
-            else {
-                itemsToPush.push(<Row><p>{this.state.lobby[item].user}</p><p>___</p><p>Player</p></Row>)
-            }
-
-        }
-        itemsToPush.push(
-            <Row>
-                <Button variant="outline-info" size="lg" onClick={() => this.handleLeave(this.state.joinedGame)}> Leave lobby </Button>
-
-            </Row>
-
-        )
-        return (itemsToPush)*/
-
-
     launchGame = () => {
 
         const lobby = this.state.lobby
         const gameId = this.state.gameId
-        console.log('======== LOBBY ==========')
-        console.log('======== +LOBBY+ ==========')
-        console.log(lobby)
-        console.log('======== -LOBBY- ==========')
-        console.log('======== LOBBY ==========')
-
         fetch('http://localhost:5000/deck', {
             method: 'POST',
             headers: {
@@ -430,7 +376,6 @@ class Home extends React.Component {
     }
     showMessage = () => {
         if (this.state.message.type === 'pool') {
-            console.log('eeeeee')
             lobbySocket.emit('refreshPool',)
         }
         return (
@@ -488,10 +433,6 @@ class Home extends React.Component {
         })
         lobbySocket.on('ownerInfoLobby', (data) => {
             const gameId = this.state.gameId
-            console.log('Owner join + + + +')
-            console.log(data)
-            console.log(gameId)
-            console.log('Owner join - - - -')
             this.setState({ joinedGame: gameId, lobby: data });
         })
         lobbySocket.on('playerJoinLobby', (data) => {
@@ -501,7 +442,6 @@ class Home extends React.Component {
 
         })
         lobbySocket.on('repPlayerJoin', (data) => {
-            console.log(data)
             this.setState({ joinedGame: gameId, lobby: data, playerToken: 0 })
         })
         lobbySocket.on('chanPlayerLeaving', (data) => {
@@ -516,7 +456,6 @@ class Home extends React.Component {
             this.setState({ pool: Object.values(sdata) })
         })
         lobbySocket.on('refreshedPool', (sdata) => {
-            console.log(sdata)
             this.setState({ pool: Object.values(sdata) })
         })
         lobbySocket.on('joinGame', (sdata) => {
@@ -622,9 +561,6 @@ class Home extends React.Component {
                 default:
                     break;
             }
-            console.log('==========')
-            console.log(orderedLobby)
-            console.log('==========')
             localStorage.setItem('turn', orderedLobby)
             localStorage.setItem('user', user)
             localStorage.setItem('gameId', gameId)
@@ -670,7 +606,7 @@ class Home extends React.Component {
                                         <Button variant="outline-info" onClick={this.handleLeave} block>Leave</Button>
                                     </Col>
                                     <Col fluid>
-                                        {this.state.playerToken === 1 ? this.state.lobby.length >= 4 ? <Button variant="outline-info" onClick={() => this.launchGame()}> Start Game </Button> : <Button variant="outline-secondary" onClick={() => console.log(this.state.lobby)} block > Start Game </Button> : <p></p>}
+                                        {this.state.playerToken === 1 ? this.state.lobby.length >= 4 ? <Button variant="outline-info" onClick={() => this.launchGame()} block> Start Game </Button> : <Button variant="outline-secondary" block disabled> Start Game </Button> : <p></p>}
                                     </Col>
                                 </Row>
                             </Container>

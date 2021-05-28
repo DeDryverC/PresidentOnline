@@ -30,7 +30,7 @@ class Game extends Component {
             errorMessage: { type: null, title: null, message: null, variant: null },
             game_id : localStorage.getItem('gameId'),
             currentUser: localStorage.getItem('pseudo'),
-            orderTurn: localStorage.getItem('turn'),
+            orderTurn: localStorage.getItem('turn').split(','),
             countTurn: 0,
             countRound: 0,
 
@@ -161,7 +161,7 @@ class Game extends Component {
                 default: return 0;
             }
         } else if (this.state.cardList.nine.indexOf(String(num)) !== -1) {
-            switch (this.state.cardList.ninr.indexOf(String(num))) {
+            switch (this.state.cardList.nine.indexOf(String(num))) {
                 case 0: return '9:s';
                 case 1: return '9:h';
                 case 2: return '9:c';
@@ -299,7 +299,6 @@ class Game extends Component {
         }
         else {
             const numPile = this.whatCardIs(pile[0]).split(':')
-            console.log(numPile[0])
             if (numPile[0] === 0) {
                 return 10
             }
@@ -319,11 +318,7 @@ class Game extends Component {
         else {
 
             for (let i = 0; i < len; i++) {
-                console.log(i)
-                console.log(prev)
                 const actual = this.whatCardIs(selCard[i]).split(':')
-                console.log(actual[0])
-                console.log('--------------')
                 if (prev !== actual[0]) {
                     return -1
                 }
@@ -337,11 +332,10 @@ class Game extends Component {
         {
             const currUser = this.state.currentUser
             if (this.state.playerCard.indexOf('25') !== -1) {
-                console.log('heee')
                 this.setState({ playerToken: 1 })
                 gameSocket.emit('startPlaying', { user: currUser })
             } else {
-                console.log('no')
+
             }
         }
     }
@@ -352,7 +346,6 @@ class Game extends Component {
             const selCard = this.state.selectedCard
             const ssc = this.sameSelectedCard()
             const ptc = this.pileTypeCard()
-            console.log(ssc + ' : ' + ptc)
             if (actualPile.length > selCard.length && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play fewer cards than there are in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
@@ -379,12 +372,6 @@ class Game extends Component {
                 counter++;
                 const copyTable = this.state.orderTurn.slice()
                 const nextUser= copyTable[counter]
-                console.log('==========')
-                console.log('==========')
-                console.log(copyTable)
-                console.log(nextUser)
-                console.log('==========')
-                console.log('==========')
                 this.setState({ errorMessage: message, playerToken: 0,countTurn: counter})
                 gameSocket.emit('finishTurn', nextUser)
 
@@ -505,7 +492,6 @@ class Game extends Component {
         const currUser = this.state.currentUser;
         const gameId = this.state.gameId
         gameSocket.on('connection', function (data) {
-            console.log('User connected ' + String(data) + ".")
 
         })
         // Requete backend pour savoir les cartes de l'utilisateur local
@@ -558,11 +544,6 @@ class Game extends Component {
         })
         gameSocket.on('userPlayed', (sdata)=>{
             let counter = this.state.countTurn
-            console.log('==================')
-            console.log('===MESSAGE RECU===')
-            console.log('==================')
-            console.log(sdata)
-            console.log('==================')
             counter++;
             if(sdata===currUser){
                 const msg={ type: 'turn', title: 'La partie a commencé', message: `C'est a toi de jouer chef`, variant: 'success' }
@@ -573,11 +554,7 @@ class Game extends Component {
         gameSocket.on('gameStarted', (sdata)=>{
             const msg = { type: 'start', title: 'La partie a commencé', message: `${sdata} dispose de la dame de coeur, il commence la partie`, variant: 'info' }
             this.setState({errorMessage: msg})
-            console.log('????')
         })
-        console.log('hereee?')
-        console.log(this.state.playerCard.indexOf('25')!==-1)
-        console.log(this.state.playerCard)
         const playerCard=this.state.playerCard
 
 
@@ -693,8 +670,7 @@ class Game extends Component {
                 <br />
                 <Container fluid>
                     <Row>
-                        <Col style={this.state.defStyle}><Button onClick={() => console.log(this.state.playerCard.indexOf('25')!==-1)} block>pass</Button></Col>
-                        <Col style={this.state.defStyle}><Button onClick={() => console.log(this.state.playerToken)} block>pass2</Button></Col>
+                        {this.state.playerToken ===1 ? <Col style={this.state.defStyle}><Button variant='secondary' block disable>pass</Button></Col> : <Col style={this.state.defStyle}><Button block >pass</Button></Col>}
                         <Col style={this.state.defStyle}>
                             {
                                 this.state.playerCard.map((value, index) => {
@@ -706,7 +682,7 @@ class Game extends Component {
                                 })
                             }
                         </Col>
-                        {this.state.selectedCard.length > 0 ? this.state.playerToken === 1 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> :<Col style={this.state.defStyle}><Button variant="secondary" onClick={() => console.log(this.state.pile)} block disabled>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" onClick={() => console.log(this.state.pile)} block disabled>Play selected cards</Button></Col>}
+                        {this.state.selectedCard.length > 0 ? this.state.playerToken === 1 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> :<Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col>}
 
                     </Row>
                 </Container>

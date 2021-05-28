@@ -14,7 +14,6 @@ function test(){
 
     else if(carte2==2){
         pot=[]
-        console.log(pot)
     }
     else{
         
@@ -24,5 +23,4 @@ function test(){
         }
     }
     
-    console.log(pot)
 }
