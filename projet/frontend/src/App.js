@@ -11,7 +11,6 @@ import './App.css'
 import HowTo from "./pages/Howto/Howto"
 import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
-import CreateGame from "./pages/CreateGame/CreateGame";
 import Game from "./pages/Game/Game"
 
 
@@ -76,9 +75,6 @@ class App extends Component {
         </Route>
         <Route exact path="/howto">
           <HowTo/>
-        </Route>
-        <Route exact path="/creategame">
-          <CreateGame/>
         </Route>
         <Route exact path='/game'>
           <Game/>
