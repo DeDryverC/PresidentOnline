@@ -516,7 +516,7 @@ exports.exist = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found game with gameId ${req.params.gameId}.`,
+          message: `Not found game `,
         });
       } else {
         res.status(500).send({
