@@ -3,26 +3,37 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
+const path = require('path');
 
-const DB_PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 5000;
 const CHAT_PORT = process.env.PORT || 5001
 const GAME_PORT = process.env.PORT || 5002
 const LOBBY_PORT = process.env.PORT || 5003
 
-
-app.get("/", (req, res) => {
-  res.json({ message: "welcome to our api" })
-});
 
 app.use(cors());
 app.use(require("body-parser").json())
 
 const routes = require("./routes/user.route")(app);
 
+//HEROKU
+// Have Node serve the files for our built React app
+app.use(express.static(path.resolve(__dirname, '../client/build')));
+
+// Handle GET requests to /api route
+app.get("/api", (req, res) => {
+  res.json({ message: "Hello from server!" });
+});
+
+// All other GET requests not handled before will return our React app
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
+
 // console.log that your server is up and running
-app.listen(process.env.PORT || '5000', () => {
-  console.log(`the server is running on ${DB_PORT}`);
+app.listen(PORT, () => {
+  console.log(`the server is running on ${PORT}`);
 });
 
 
@@ -90,13 +101,13 @@ io.on('connection', (socket) => {
     }
     socket.emit('delcardReturn', userCard)
   })
-  socket.on('finishTurn', (data)=>{
+  socket.on('finishTurn', (data) => {
     console.log('==========')
     console.log(`${data}`)
     console.log('==========')
     socket.to(socket.channel).emit('userPlayed', data)
   })
-  socket.on('startPlaying', (data)=>{
+  socket.on('startPlaying', (data) => {
     socket.to(socket.channel).emit('gameStarted', data.id)
   })
   socket.on('disconnect', () => {
