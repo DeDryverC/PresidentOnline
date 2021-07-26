@@ -13,6 +13,14 @@ import Historique from "./pages/Profil/Historique";
 import Profil from "./pages/Profil/Profil";
 import Game from "./pages/Game/Game"
 
+const [data, setData] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch("/api")
+      .then((res) => res.json())
+      .then((data) => setData(data.message));
+  }, []);
+
 
 class App extends Component {
   state = {
