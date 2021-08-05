@@ -1,17 +1,17 @@
 import React, { Component } from "react";
-import { Button, Row, Col, Container, Alert } from 'react-bootstrap';
+import { Button, Row, Col, Container, Alert, Image, Table } from 'react-bootstrap';
 import Carte from '../../components/Carte'
-import io from "socket.io-client";
+import io, { Socket } from "socket.io-client";
 
-/* TODO :   connexion a la game
-            token
 
-            Reconnection si deco
-            fin de round
-            fin de game
-            envoi stats
-            page de fin 
 
+/* TODO :   IF RANG !=== 0 => PLAYER FINISHED
+            FIXER CE P*$@# DE CLASSEMENT
+            QUAND JOUEUR A PLU DE CARTE => PLAYER[INDEX+1@ EN MSG POUR LE PROCHAIN TOUR
+            SUPPRIMER CARTE QUAND JOUEUR FINI
+            ENVOYER STAT
+            FONCTION RELANCER GAME AVEC TT LE MONDE QUI DOIT ACCEPTER LA RELANCE DU JEU SINON C MORT
+            
 */
 let gameSocket
 
@@ -30,9 +30,23 @@ class Game extends Component {
             errorMessage: { type: null, title: null, message: null, variant: null },
             game_id : localStorage.getItem('gameId'),
             currentUser: localStorage.getItem('pseudo'),
-            orderTurn: localStorage.getItem('turn').split(','),
             countTurn: 0,
+            countPass: 0,
             countRound: 0,
+            ownRank: 0,
+            potHistory: [],
+            winnerList: [],
+            finalList: [{user : ''}],
+            readyList: [],
+            currentPlayerFinished: false,
+            previousPlayerBeforePass: undefined,
+            everyoneFinished: false,
+            isReady: false,
+            cardExchange: false,
+            playerTraded: false,
+            readyExList: [],
+            exNum: 4,
+            titleList: ['President', 'Vice-President','','Vice-Beggar','Beggar'],
 
             /* Test variable */
             testChgPile: [5, 18],
@@ -52,12 +66,18 @@ class Game extends Component {
             data: null,
 
             /* PLAYERS */
+            nextStarter: '',
+            unordList: [],
+            ordList: [],
+            plList: [],
+            tokenList: [],
             players: [],
-            player1: { pseudo: null, cards: [], set: false, connected : false },
-            player2: { pseudo: null, cards: [], set: false, connected : false },
-            player3: { pseudo: null, cards: [], set: false, connected : false },
-            player4: { pseudo: null, cards: [], set: false, connected : false },
-            player5: { pseudo: null, cards: [], set: false, connected : false },
+            player1: { pseudo: null, cards: [], finish: false, connected : false },
+            player2: { pseudo: null, cards: [], finish: false, connected : false },
+            player3: { pseudo: null, cards: [], finish: false, connected : false },
+            player4: { pseudo: null, cards: [], finish: false, connected : false },
+            player5: { pseudo: null, cards: [], finish: false, connected : false },
+            checkDuplicateRequest: false,
 
             /* STYLE */
             defStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' },
@@ -93,7 +113,6 @@ class Game extends Component {
     /********************** Game Function **********************/
 
     /***********  ***********/
-
     whatCardIs = (num) => {
         // RETURN -1 IF NOT
         if (this.state.cardList.ace.indexOf(String(num)) !== -1) {
@@ -200,16 +219,59 @@ class Game extends Component {
                 case 3: return '13:d';
                 default: return 0;
             }
+        } else if (String(num)=== "000:000"){
+            return '000:000'
         }
     }
 
-    
+    startAnothrGame = () =>{
+        let p1 = this.state.player1
+        let p2 = this.state.player2
+        let p3 = this.state.player3
+        let p4 = this.state.player4
+        let p5 = this.state.player5
 
+        p1.finish = false
+        p2.finish = false
+        p3.finish = false
+        p4.finish = false
+        p5.finish = false
+        this.setState({ player1: p1, player2: p2, player3: p3, player4: p4, player5: p5, cardExchange: true, currentPlayerFinished: false})
+        gameSocket.emit('sendDataHistory', this.state.finalList)
+    }
+    rdyForAnthrGame = () =>{
+        if(this.state.isReady === false){
+            gameSocket.emit('readyAnother', this.state.currentUser)
+            this.setState({isReady : true})
+        }else{
+            gameSocket.emit('notReadyAnother', this.state.currentUser)
+            this.setState({isReady: false})
+        }   
+    }
 
-    isRoundOver = (cards, cardsNum) => {
-        if (cards.length === 4) {
+    isRoundOver = () => {
+        const cardsPile = this.state.pile
+        const selCard = this.state.selectedCard
+        const cardsNum = this.pileTypeCard(selCard)
+        const historyPile = this.state.potHistory
+        const numHistPile = []
+        for(let i =0 ;i < selCard.length ; i++){
+            historyPile.push(selCard[i])
+        }
+        for(let i = 0; i < historyPile.length; i++){
+            numHistPile.push(this.pileTypeCard(historyPile[i]))
+        }
+        const reversedHistPile = numHistPile.reverse()
+        if(reversedHistPile[0] === reversedHistPile[1] && reversedHistPile[1] === reversedHistPile[2] && reversedHistPile[2] === reversedHistPile[3]){
             return true
-        } else if (cardsNum === 20) {
+        }
+        if (selCard.length === 4) {
+            return true
+        }
+        if (cardsNum === 20) {
+            console.log('============cardnum=========')
+            console.log(cardsNum)
+            console.log('============cardnum=========')
             return true
         }
         return false
@@ -231,69 +293,275 @@ class Game extends Component {
         return 0;
     }
 
-   
+   orderList = (list, index) => {
+        let copyList = list.slice()
+        let slicedList = []
+       for(let i=0; i < index; i++){
+            slicedList = copyList.slice(1)
+            slicedList.push(copyList[0])
+            copyList = slicedList.slice()
+       }
+       return copyList;
+   }
 
 
     generatePlayersData = () => {
+        
+        const unList = this.state.unordList;
+        const user = this.state.currentUser;
+        const winList = this.state.winnerList
+        let orderedList = this.orderList(unList, unList.indexOf(user))
+        let placementList = orderedList.slice(1)
+        let indexList = []
+        this.setState({ordList : orderedList, plList : placementList})
+        
+
+
+        
         const players = this.state.players
+        /*EG
+        (3) [Array(2), Array(2), Array(2)]
+        0: (2) ["andrelacastagne", 13]
+        1: (2) ["poulna", 13]
+        2: (2) ["RoulBe", 13]
+        length: 3
+        __proto__: Array(0)*/
         const p1 = this.state.player1
         const p2 = this.state.player2
         const p3 = this.state.player3
         const p4 = this.state.player4
         const p5 = this.state.player5
-        players.map(
-            (data, key) => {
-                if (key === 0) {
-                    if (p1.set === false) {
-                        const dataf = data.split('|')
-                        p1.pseudo = dataf[0]
-                        for (let i = 0; i < dataf[1]; i++) { p1.cards.push(0) }
-                        p1.set = true;
-                    }
-                } if (key === 1) {
-                    if (p2.set === false) {
-                        const dataf = data.split('|')
-                        p2.pseudo = dataf[0];
-                        for (let i = 0; i < dataf[1]; i++) { p2.cards.push(0) }
-                        p2.set = true;
-                    }
-                } if (key === 2) {
-                    if (p3.set === false) {
-                        const dataf = data.split('|')
-                        p3.pseudo = dataf[0];
-                        for (let i = 0; i < dataf[1]; i++) { p3.cards.push(0) }
-                        p3.set = true;
-                    }
-                } if (key === 3) {
-                    if (p4.set === false) {
-                        const dataf = data.split('|')
-                        p4.pseudo = dataf[0]
-                        for (let i = 0; i < dataf[1]; i++) { p4.cards.push(0) }
-                        p4.set = true;
-                    }
-                } if (key === 4) {
-                    if (p5.set === false) {
-                        const dataf = data.split('|')
-                        p5.pseudo = dataf[0]
-                        for (let i = 0; i < dataf[1]; i++) { p5.cards.push(0) }
-                        p5.set = true;
+        if(placementList.length === players.length){
+            for(let j=0; j<placementList.length; j++){   
+                for(let i=0; i<players.length;i++){
+                    if (players[i][0]===placementList[j]){
+                        indexList.push(i)
                     }
                 }
-                return 0;
             }
-        )
-        this.setState({ player1: p1, player2: p2, player3: p3, player4: p4, player5: p5 })
-        
+        }
+        else{
+            console.log('ERREUR')
+        }
+        // Player1 devient player2 selon l'ordre d'affichage
+        // ( ordre de base )
+        //       [ 1 ]                                   [ 2 ]                           [ 3 ]                           [ 3 ]  
+        //  [ 2 ]     [ 3 ]   => si 4 joueurs =>    [ 1 ]     [ 3 ] => 5joueurs =>  [ 2 ]     [ 4 ] => 6joueurs =>  [ 2 ]     [ 4 ]
+        //  [ 4 ]     [ 5 ]                         [ / ]     [ / ]                 [ 1 ]     [ / ]                 [ 1 ]     [ 5 ]
+        console.log('-----------PLAYERS----------')
+        console.log('-----------PLAYERS----------')
+        console.log('-----------PLAYERS----------')
+        console.log(orderedList)
+        console.log(winList)
+        console.log('-----------PLAYERS----------')
+        console.log('-----------PLAYERS----------')
+        console.log('-----------PLAYERS----------')
+        if(placementList.length === 3){
+            if(p2.finish === true ){
+                p2.cards.push(0)
+            }
+            else{
+                p2.pseudo = players[indexList[0]][0]
+                if(winList.includes(p2.pseudo)){
+                    p2.finish = true;
+                    p2.cards.push(0)
+                }
+                else{
+                    for(let i =0; i< players[indexList[0]][1];i++) { p2.cards.push(0) }
+                }
+            }   
+            if(p1.finish === true){
+                p1.cards.push(0)
+            }
+            else{
+                p1.pseudo = players[indexList[1]][0]
+                if(winList.includes(p1.pseudo)){
+                    p1.finish = true;
+                    p1.cards.push(0)
+                }
+                else {
+                    for(let i =0; i< players[indexList[1]][1];i++) { p1.cards.push(0) }
+                }
+            }
+            if(p3.finish === true){
+                p3.cards.push(0)
+            }
+            else{
+                p3.pseudo = players[indexList[2]][0]
+                if(winList.includes(p3.pseudo)){
+                    p3.finish = true;
+                    p3.cards.push(0)
+                }
+                else{
+                    for(let i =0; i< players[indexList[2]][1];i++) { p3.cards.push(0) }
+                }
+            }
+        }
+        else if(placementList.length >= 4){
+            if(p4.finish === true){
+                p4.cards.push(0)
+            }
+            else{
+                p4.pseudo = players[indexList[0]][0]
+                if(winList.includes(p4.pseudo)){
+                    p4.finish = true;
+                    p4.cards.push(0)
+                }
+                else {
+                    for(let i =0; i< players[indexList[0]][1];i++) { p4.cards.push(0) }
+                
+                }
+            }
+            if(p2.finish === true){
+                p2.cards.push(0)
+            }
+            else{
+                p2.pseudo = players[indexList[1]][0]
+                if(winList.includes(p2.pseudo)){
+                    p2.finish = true;
+                    p2.cards.push(0)
+                }
+                else{
+                    for(let i =0; i< players[indexList[1]][1];i++) { p2.cards.push(0) }
+                }
+            }
+            if(p1.finish === true){
+                p1.cards.push(0)
+            }
+            else{
+                p1.pseudo = players[indexList[2]][0]
+                if(winList.includes(p1.pseudo)){
+                    p1.finish = true;
+                    p1.cards.push(0)
+                } else {
+                    for(let i =0; i< players[indexList[2]][1];i++) { p1.cards.push(0) }
+                }
+            }
+            if(p3.finish === true){
+                p3.newCardsNum.push(0)
+            }
+            
+            else{
+                p3.pseudo = players[indexList[3]][0]
+                if(winList.includes(p3.pseudo)){
+                    p3.finish = true;
+                    p3.cards.push(0)
+                }
+                else{
+                    for(let i =0; i< players[indexList[3]][1];i++) { p3.cards.push(0) }
+                }
+            }
+        }
+        if(placementList.length === 5){
+            if(p5.finish === true){
+                p5.cards.push(0)
+            }
+            else{
+                p5.pseudo = players[indexList[4]][0]
+                if(winList.includes(p5.pseudo)){
+                    p5.finish = true;
+                    p5.cards.push(0)
+                }
+                else{
+                    for(let i =0; i< players[indexList[4]][1];i++) { p5.cards.push(0) }
+                }
+            }
+        }
+         let evFinished
+        if(winList.length === orderedList.length){
+            evFinished = true
+            const tokList = this.state.tokenList
+            let isRdy = this.state.isReady
+            console.log('======TOKENLIST =========')
+            console.log('======TOKENLIST =========')
+            console.log(tokList)
+            console.log('======TOKENLIST =========')
+            console.log('======TOKENLIST =========')
+            let wtList = []
+            for(let i=0; i< tokList.length; i++){
+                if(tokList[i].token === 1){
+                    if(tokList[i].user === this.state.currentUser){
+                        isRdy = true
+                    }
+                    wtList.push(tokList[i].user)
+                }
+            }
+            this.setState({readyList: wtList, isReady : isRdy})
+            gameSocket.emit('refreshEOG', this.state.game_id)
+            
+        }
+        else {
+            evFinished = false
+        }
+
+        console.log(evFinished)
+        console.log('PLAYERSs')
+        console.log(p1)
+        console.log(p2)
+        console.log(p3)
+        console.log(p4)
+        console.log(p5)
+        console.log('PLAYERS')
+        this.setState({ player1: p1, player2: p2, player3: p3, player4: p4, player5: p5, ordList : orderedList, plList : placementList, indList : indexList, everyoneFinished: evFinished })
     }
 
+    updatePlayersData = (players) =>{
+        const p1 = this.state.player1
+        const p2 = this.state.player2
+        const p3 = this.state.player3
+        const p4 = this.state.player4
+        const p5 = this.state.player5
+        const placementList = this.state.plList
+        const indexList = []
+
+        p1.cards = []
+        p2.cards = []
+        p3.cards = []
+        p4.cards = []
+        p5.cards = []
+
+        if(placementList.length === players.length){
+            for(let j=0; j<placementList.length; j++){   
+                for(let i=0; i<players.length;i++){
+                    if (players[i][0]===placementList[j]){
+                        indexList.push(i)
+                    }
+                }
+            }
+        }
+        else{
+            console.log('ERREUR')
+        }
+        if(placementList.length === 3){
+            for(let i =0; i< players[indexList[0]][1];i++) { p2.cards.push(0) }
+            for(let i =0; i< players[indexList[1]][1];i++) { p1.cards.push(0) }
+            for(let i =0; i< players[indexList[2]][1];i++) { p3.cards.push(0) }
+        }
+        else if(placementList.length >= 4){
+            for(let i =0; i< players[indexList[0]][1];i++) { p4.cards.push(0) }
+            for(let i =0; i< players[indexList[1]][1];i++) { p2.cards.push(0) }
+            for(let i =0; i< players[indexList[2]][1];i++) { p1.cards.push(0) }
+            for(let i =0; i< players[indexList[3]][1];i++) { p3.cards.push(0) }
+        }
+        if(placementList.length === 5){
+            for(let i =0; i< players[indexList[4]][1];i++) { p5.cards.push(0) }
+        }
+        this.setState({players: players, player1: p1, player2: p2, player3: p3, player4: p4, player5: p5 })
+    }
+
+    didSomeoneFinished = () =>{
+        if(this.state.currentUser === "obama"){
+            console.log("brrr")
+        }
+    }
 
     resetError = () => {
         const error = { type: null, title: null, message: null, variant: null }
         this.setState({ errorMessage: error })
     }
 
-    pileTypeCard = () => {
-        const pile = this.state.pile
+    pileTypeCard = (rawpile) => {
+        const pile = rawpile
         if (pile.length === 0) {
             return -1
         }
@@ -327,25 +595,23 @@ class Game extends Component {
             return Number(prev)
         }
     }
-    canHeStart(){
+    canHeStart() {
         if(this.state.countRound < 1)
         {
-            const currUser = this.state.currentUser
-            if (this.state.playerCard.indexOf('25') !== -1) {
-                this.setState({ playerToken: 1 })
+            const currUser = localStorage.getItem('Pseudo')
+            if (this.state.playerCard.indexOf('25') !== -1 && this.state.checkDuplicateRequest === false) {
+                this.setState({ playerToken: 1, checkDuplicateRequest : true })
                 gameSocket.emit('startPlaying', { user: currUser })
-            } else {
-
             }
         }
     }
     canHePlay = () => {
         if (this.state.playerToken === 1) {
             const actualPile = this.state.pile
-            //const playerCard = this.state.playerCard
+            //const playerCard = this.state.playerCard.
             const selCard = this.state.selectedCard
             const ssc = this.sameSelectedCard()
-            const ptc = this.pileTypeCard()
+            const ptc = this.pileTypeCard(this.state.pile)
             if (actualPile.length > selCard.length && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play fewer cards than there are in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
@@ -362,21 +628,36 @@ class Game extends Component {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You need an extra 2 if you want to cut a series of 3 cards', variant: 'danger' }
                 this.setState({ errorMessage: error })
             }
+            else if(this.state.countTurn ===0 && ssc ===20){
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You cant start with a 2.', variant: 'danger' }
+                this.setState({ errorMessage: error })
+            }
             else {
-
-                const message = { type: 'finish', title: 'You just played', message: 'Wait for your turn.', variant: 'success' }
+                const checkEOR = this.isRoundOver()
                 
-                
-                const user = this.state.currentUser
-                let counter = this.state.countTurn
-                counter++;
-                const copyTable = this.state.orderTurn.slice()
-                const nextUser= copyTable[counter]
-                this.setState({ errorMessage: message, playerToken: 0,countTurn: counter})
-                gameSocket.emit('finishTurn', nextUser)
+                if(checkEOR === true ){
+                    const user = this.state.currentUser
+                    const msg={ type: 'turn', title: 'Fin du round', message: `Fin du round, début du prochain round dans : 5`, variant: 'danger' }
+                    this.delSelectedCard()
+                    this.changePile(selCard, ssc)
+                    this.setState({ errorMessage: msg, playerToken: 4, countTurn: 0})
+                    gameSocket.emit('endOfRound', user )
+                }
+                else{ 
+                    const message = { type: 'finish', title: 'You just played', message: 'Wait for your turn.', variant: 'success' }
+                    
+                    
+                    const user = this.state.currentUser
+                    let counter = this.state.countTurn
+                    counter++;
+                    this.setState({ errorMessage: message, playerToken: 0,countTurn: counter})
+                    const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                    const nextUser = this.state.ordList[indexNextUser+1]
+                    gameSocket.emit('finishTurn', nextUser)
 
-                this.delSelectedCard()
-                this.changePile(selCard, ssc)
+                    this.delSelectedCard()
+                    this.changePile(selCard, ssc)
+                }
             }
 
         }
@@ -394,7 +675,7 @@ class Game extends Component {
             gameSocket.emit('chgpile', {newcds :newCards, gid : game_id})
         }
         else{
-            //switch socket.
+            //switch socke
             const game_id= this.state.game_id
             gameSocket.emit('chgpile', {newcds :newCards, gid : game_id})
         }
@@ -406,6 +687,78 @@ class Game extends Component {
                 <Button>Play selected cards</Button>
             </div>
         )
+    }
+    startingNextRound = async () => {
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        if(this.state.playerToken === 4){
+            let count = 5
+                gameSocket.emit('resetPile', count)
+            while(count!==0){
+                let msg={ type: 'turn', title: 'Fin du round', message: `Fin du round, début du prochain round dans : ${count}`, variant: 'danger' }
+                this.setState({errorMessage : msg})
+                await delay(1000)
+                count--
+            }
+                const newPile = []
+                const msg = { type: 'start', title: 'La partie a recommencé', message: `Vous avez fini le dernier tours, a vous de jouer.`, variant: 'info' }
+                this.setState({errorMessage: msg, pile : [], playerToken : 1, countPass : 0, countTurn : 0})
+                
+        } else {
+            let count = 5
+            const nextStart = this.state.nextStarter
+             while(count !== 0){
+                let msg={ type: 'turn', title: 'Fin du round',message: `${nextStart} vient de cloturer le round, début du prochain round dans : ${count} secondes`, variant: 'danger' }
+                console.log(count)
+                this.setState({errorMessage : msg})
+                await delay(1000)
+                count--
+            }
+            
+            const newPile = []
+            const msg = { type: 'start', title: 'La partie a recommencé', message: `${nextStart} a fini le dernier tours, a lui de jouer.`, variant: 'info' }
+            this.setState({errorMessage: msg, pile : newPile, countPass : 0, countTurn : 0})
+        }
+    }
+    passTheTurn = () => {
+        
+
+        const message = { type: 'finish', title: 'You just pass your turn', message: 'Wait for your turn.', variant: 'warning' }
+                
+        let counter = this.state.countTurn
+        let counterPass= this.state.countPass
+
+        if(counter < 1){
+            const message = { type: 'rules', title: 'You cant pass your turn', message: 'You cant pass when you are the 1st to play.', variant: 'danger' }
+            this.setState({errorMessage: message})
+        }
+        else{
+            if(this.state.previousPlayerBeforePass === undefined){
+                counter++;
+                counterPass++;
+                this.setState({ errorMessage: message, playerToken: 0,countTurn: counter, countPass: counterPass})
+                const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                const nextUser = this.state.ordList[indexNextUser+1]
+                let prevUser
+                console.log(indexNextUser-1 === -1)
+                if((indexNextUser-1) === -1){
+                    prevUser = this.state.ordList[Number(this.state.ordList.length)-1]
+                }
+                else{
+                    prevUser = this.state.ordList[Number(indexNextUser)-1]
+                }
+
+                gameSocket.emit('finishTurnPass', {user : nextUser, count: counterPass, winUser : prevUser})
+            }  
+            else {
+                counter++;
+                counterPass++;
+                this.setState({ errorMessage: message, playerToken: 0,countTurn: counter, countPass: counterPass})
+                const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                const nextUser = this.state.ordList[indexNextUser+1]
+                const prevUser = this.state.previousPlayerBeforePass
+                gameSocket.emit('finishTurnPass', {user : nextUser, count: counterPass, winUser : prevUser})
+            }   
+        }
     }
     isThereErrorMessage = () => {
         if (this.state.errorMessage.type === 'rules') {
@@ -436,6 +789,33 @@ class Game extends Component {
                     </Alert>
                 </Row>
             )
+        } else if(this.state.errorMessage.type ==='turn'){
+            return (
+                <Row style={this.state.defStyle}>
+                    <Alert variant={this.state.errorMessage.variant} onClose={() => this.resetError()} dismissible>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
+                        {this.state.errorMessage.message}
+                    </Alert>
+                </Row>
+            )
+        } else if(this.state.errorMessage.type === 'start'){
+            return (
+                <Row style={this.state.defStyle}>
+                    <Alert variant={this.state.errorMessage.variant} onClose={() => this.resetError()} dismissible>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
+                        {this.state.errorMessage.message}
+                    </Alert>
+                </Row>
+            )
+        } else if(this.state.errorMessage.type === 'exchange'){
+            return (
+                <Row style={this.state.defStyle}>
+                    <Alert variant={this.state.errorMessage.variant} onClose={() => this.resetError()}>
+                        <Alert.Heading>{this.state.errorMessage.title}</Alert.Heading>
+                        {this.state.errorMessage.message}
+                    </Alert>
+                </Row>
+            )
         }
 
     }
@@ -444,7 +824,9 @@ class Game extends Component {
             return (
                 <div>
                     <Row style={this.state.defStyle}>
-                        {
+                        {this.state.player4.finish === true ?
+                                        <Alert variant='primary'>This player finished at the {this.state.winnerList.indexOf(this.state.player4.pseudo)+1} place</Alert>
+                                        :
                             this.state.player4.cards.map((value, key) => {
                                 return <Carte num={value} index={key} identity='othercards' />
                             })}
@@ -469,13 +851,16 @@ class Game extends Component {
             return (
                 <div>
                     <Row style={this.state.defStyle}>
-                        {
+                        {this.state.player5.finish === true ?
+                                        <Alert variant='primary'>This player finished at the {this.state.winnerList.indexOf(this.state.player5.pseudo)+1} place</Alert>
+                                        :
                             this.state.player5.cards.map((value, key) => {
                                 return <Carte num={value} index={key} identity='othercards' />
                             })}
                     </Row>
                     <br />
                     <Row style={this.state.defStyle}>
+
                         {this.state.player5.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player5.pseudo}</span> : <span></span>}
                     </Row>
                 </div>
@@ -488,14 +873,80 @@ class Game extends Component {
             )
         }
     }
+    classementRendu = () => {
+        const classement = this.state.finalList
+        const title = this.state.titleList
+        console.log('-------classement-------')
+        console.log(classement)
+        console.log('-------classement--------')
+        let rows = []
+        for(let i=0;i < classement.length; i++){
+            rows.push(<tr><td>{i+1}</td><td>{classement[i].user}</td><td>{title[classement[i].rang-1]}</td></tr>)
+        }
+        return(
+            <div>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nickname</th>
+                            <th>Title</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </Table>
+            </div>
+        )
+    }
     componentDidMount() {
         const currUser = this.state.currentUser;
         const gameId = this.state.gameId
         gameSocket.on('connection', function (data) {
 
         })
-        // Requete backend pour savoir les cartes de l'utilisateur local
+        // Requete backend pour savoir les cartes de l'utilisateur local.
+    
+
         gameSocket.emit('join_game', {gid: this.state.game_id, user: this.state.currentUser})
+
+        gameSocket.on('playerList', (sdata) => {
+            let rawList = []
+            let winList= []
+            let tokList = []
+            for(let i=0; i < sdata.length; i++){
+                winList.push('')
+            }
+            console.log('iwn')
+            console.log(winList)
+            sdata.forEach(({user, token, rang}) => {
+                rawList.push(user)
+                tokList.push({user : user, token : token})
+                if(this.state.currentUser === user){
+                    if (rang !== '0'){
+                        this.setState({playerToken: token, currentPlayerFinished: true})
+                        winList.splice(Number(rang)-1,1, user)
+                    }
+                    else{
+                        winList.splice(winList.length-1, winList.length)
+                    }
+                    this.setState({playerToken: token})
+                }
+                else if(rang !=='0'){
+                    winList.splice(Number(rang)-1,1, user)
+                } else {
+                    winList.splice(winList.length-1, winList.length)
+                }
+                
+            })
+
+            if(winList[2] === ''){
+                winList.splice(2, 1)
+            }
+            this.setState({unordList : rawList, tokenList : sdata, winnerList : winList, tokenList : tokList})
+            // FAIRE FONCTION POUR FAIRE LISTE PROPRE.
+        })
         gameSocket.on('userCard',(sdata) => {
             const json = sdata
             json.forEach(({ user, card }) => {
@@ -507,21 +958,20 @@ class Game extends Component {
                 }, this.canHeStart)
             })
         })
-        // Requete backend pour avoir le nombre de carte des joueurs
+        // Requete backend pour avoir le nombre de carte des joueurs..
         gameSocket.on('othersCount',(sdata) =>{
             const json = sdata
+            const players = []
             this.setState({ playersData: json })
                 json.forEach(({ user, Ncards }) => {
-                    const passerelle = user + '|' + Ncards
-                    this.setState(state => {
-                        const players = state.players.concat(passerelle)
-                        return {
-                            players,
-                        };
-                }, this.generatePlayersData)
+                    const passerelle = []
+                    passerelle.push(user)
+                    passerelle.push(Ncards)
+                    players.push(passerelle)
             })
+            this.setState({players : players}, this.generatePlayersData)
         })
-        
+
         gameSocket.on('cardsPot', (sdata) => {
             const json = sdata
             json.forEach(({ user, card }) => {
@@ -537,46 +987,415 @@ class Game extends Component {
         gameSocket.on('newpile', (sdata) =>{
             const newpile = sdata
             this.setState({ pile: newpile })
+            gameSocket.emit('requestUpdate', this.state.currentUser)
         })
-
+        gameSocket.on('newRound', (sdata)=>{
+            const msg={ type: 'turn', title: 'Fin du round', message: `${sdata} vient de cloturer le round, début du prochain round dans : 5 secondes`, variant: 'danger' }
+            this.setState({errorMessage : msg, nextStarter: sdata})
+            this.startingNextRound()
+        })
         gameSocket.on('playerdeconnexion', (sdata) =>{
             const player = sdata.user;
         })
         gameSocket.on('userPlayed', (sdata)=>{
+
+
             let counter = this.state.countTurn
             counter++;
             if(sdata===currUser){
-                const msg={ type: 'turn', title: 'La partie a commencé', message: `C'est a toi de jouer chef`, variant: 'success' }
-                this.setState({playerToken: 1, errorMessage : msg})
+                if(this.state.currentPlayerFinished===true){
+                    const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                    const nextUser = this.state.ordList[indexNextUser+1]
+                    gameSocket.emit('finishTurn', nextUser)
+                }
+                else{
+                    const msg={ type: 'turn', title: 'A ton tour', message: `C'est a toi de jouer chef`, variant: 'success' }
+                    this.setState({playerToken: 1, errorMessage : msg})
+                }
             }
-            this.setState({countTurn: counter})
+            if(this.state.previousPlayerBeforePass !== undefined){
+                this.setState({previousPlayerBeforePass : undefined, countTurn: counter, countPass:0})
+            }
+            else {
+                this.setState({countTurn: counter, countPass:0})
+            }
+            gameSocket.on('needPotHistory', '')
+        })
+        gameSocket.on('potHist', (sdata)=>{
+            const countturnjson = sdata.length
+            this.setState({ countRound : countturnjson})
+        })
+        gameSocket.on('deliverHistory', (sdata)=> {
+
+            const json = sdata
+            const potHisList = []
+            json.forEach(({potHistory}) => {
+                potHisList.push(potHistory)
+            })
+            this.setState({potHistory : potHisList})
+
+        })
+        gameSocket.on('userPassed', (sdata) => {
+            let counter = this.state.countTurn
+            let counterPass = sdata.count
+            const prevUser = sdata.winUser
+
+            console.log('------counterpass---------')
+            console.log(counterPass)
+            console.log('------counterpass---------')
+            counter++;
+            if(counterPass >= (this.state.plList.length-this.state.winnerList.length)){
+                if(prevUser === this.state.currentUser){
+                    this.setState({playerToken : 4}, this.startingNextRound)
+                }
+                else{
+                    this.setState({nextStarter: prevUser}, this.startingNextRound)
+                }
+            }
+            else if(sdata.user===currUser){
+                if(this.state.currentPlayerFinished===true){
+                    const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                    const nextUser = this.state.ordList[indexNextUser+1]
+                    sdata.user = nextUser
+                    gameSocket.emit('finishTurnPass', sdata)
+                }
+                else{
+                    const msg={ type: 'turn', title: 'A ton tour', message: `C'est a toi de jouer chef`, variant: 'success' }
+                    this.setState({playerToken: 1, errorMessage : msg})
+                }
+            }
+            this.setState({countTurn: counter, countPass: counterPass, previousPlayerBeforePass: prevUser})
         })
         gameSocket.on('gameStarted', (sdata)=>{
             const msg = { type: 'start', title: 'La partie a commencé', message: `${sdata} dispose de la dame de coeur, il commence la partie`, variant: 'info' }
             this.setState({errorMessage: msg})
         })
-        const playerCard=this.state.playerCard
+        gameSocket.on('updateCards', (sdata) =>{
+            const json = sdata
+            const players = []
+            this.setState({ playersData: json })
+                json.forEach(({ user, Ncards }) => {
+                    const passerelle = []
+                    passerelle.push(user)
+                    passerelle.push(Ncards)
+                    players.push(passerelle)
+            })
+            this.updatePlayersData(players)
+        })
+        gameSocket.on('someoneFinished', (sdata)=>{
+            console.log('==========SOMEONEFINISHED==========')
+            console.log('==========SOMEONEFINISHED===========')
+            console.log(sdata)
+            console.log('==========SOMEONEFINISHED===========')
+            console.log('==========SOMEONEFINISHED==========')
+            if(this.state.player1.pseudo === sdata.user){
+                const player = this.state.player1
+                player.finish = true;
+                this.setState({player1 : player})
+            }
+            else if(this.state.player2.pseudo === sdata.user){
+                const player = this.state.player2
+                player.finish = true;
+                this.setState({player2 : player})
+            }
+            else if(this.state.player3.pseudo === sdata.user){
+                const player = this.state.player3
+                player.finish = true;
+                this.setState({player3 : player})
+            }
+            else if(this.state.player4.pseudo === sdata.user){
+                const player = this.state.player4
+                player.finish = true;
+                this.setState({player4 : player})
+            }
+            else if(this.state.player5.pseudo === sdata.user){
+                const player = this.state.player5
+                player.finish = true;
+                this.setState({player5 : player})
+            }
+            this.setState({winnerList: sdata.winlist})
+        })
+        gameSocket.on('endOfGame', (sdata)=> {
+            sdata.sort(function (a,b){
+                return a.rang - b.rang
+            });
+            this.setState({finalList : sdata, everyoneFinished: true, currentPlayerFinished: true})
 
+        })
+        gameSocket.on('playerReady', (sdata)=>{
+            let waitList = this.state.readyList
+            waitList.push(sdata)
+            this.setState({readyList : waitList})
+        })
+        gameSocket.on('playerNotReady', (sdata)=>{
+            let waitList = this.state.readyList
+            waitList.splice(waitList.indexOf(sdata), 1)
 
+            this.setState({readyList : waitList})
+        })
+
+        gameSocket.on('giveCards', (sdata) => {
+            const classmnt = this.state.finalList
+            console.log('============classmnt=============')
+            console.log(classmnt)
+            console.log(classmnt.length)
+            console.log('============classmnt=============')
+            let rank;
+            this.setState({selectedCard: []})
+            for(let i = 0; i < classmnt.length; i++){
+                console.log(classmnt[i].user)
+                console.log(this.state.currentUser)
+                console.log(classmnt[i].user === this.state.currentUser)
+                console.log('=================================')
+                if(classmnt[i].user === this.state.currentUser){
+                    rank = classmnt[i].rang
+                    console.log(rank)
+                }
+            }
+            if(rank === '1'){
+                console.log(rank+ ' === 1')
+                const msg = { type: 'exchange', title: 'Vous devez donner des cartes ', message: `Vous devez choisir 2 cartes de votre choix a donner au clochard, celui ci vous donnera ses meilleures cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: [], ownRank : rank})
+                gameSocket.emit('retrieveCards', this.state.currentUser)
+            }
+            else if(rank === '2'){
+                console.log(rank+ ' === 2')
+                const msg = { type: 'exchange', title: 'Vous devez donner une carte', message: `Vous devez choisir une cartes de votre choix a donner au vice clochard, celui ci vous donnera sa meilleure carte`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: [], ownRank : rank})
+                gameSocket.emit('retrieveCards', this.state.currentUser)
+            }
+            else if(rank==='3'){
+                console.log(rank+ ' === 3')
+                const msg={ type: 'exchange', title: 'Vous devez patienter', message: `Vous devez patientez pendant que les autres joueurs s'échangent leurs cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: [],ownRank : rank, playerTraded: true})
+            }
+            else if(rank === '4'){
+                console.log(rank+ ' === 4')
+                this.selBestCards(1)
+                const msg = { type: 'exchange', title: 'Vous devez donner une carte', message: `Vous devez confirmer le choix automatique des cartes a donner au vice president, celui ci vous donnera une carte de son choix.`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: [], ownRank : rank})
+                gameSocket.emit('retrieveCards', this.state.currentUser)
+            }
+            else if(rank === '5'){
+                console.log(rank+ ' === 5')
+                this.selBestCards(2)
+                const msg = { type: 'exchange', title: 'Vous devez donner une carte', message: `Vous devez confirmer le choix automatique des cartes a donner aupresident, celui ci vous donnera deux carte de son choix.`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: [], ownRank : rank})
+                gameSocket.emit('retrieveCards', this.state.currentUser)
+            }
+            
+        })
+        gameSocket.on('switchCards', (sdata)=>{
+            const json = sdata
+            json.forEach(({ user, card }) => {
+                this.setState(state => {
+                    const playerCard = state.playerCard.concat(card)
+                    return {
+                        playerCard,
+                    };
+                })
+            })
+            this.setState({cardExchange : true, everyoneFinished: false})
+        })
+        
+        gameSocket.on('exchangeRdy', (sdata) => {
+            const rdyExList= this.state.readyExList
+            console.log('EXHCNAGERDY =========> ')
+            console.log(rdyExList)
+            console.log(sdata)
+            console.log('EXHCNAGERDY =========> ')
+            rdyExList.push(sdata)
+            if(rdyExList.length === this.state.exNum){
+                window.location.reload();
+            }
+            this.setState({readyExList: rdyExList})
+        })
     }
 
     delSelectedCard = () => {
         const selCard = this.state.selectedCard
-        var userCard = this.state.playerCard
-        gameSocket.emit('delcard',{gid: this.state.game_id, us:this.state.currentUser, sc : this.state.selectedCard, usc : this.state.playerCard})
-        gameSocket.on('delcardReturn', (sdata)=>{
-            const userCard = sdata;
-            this.setState({ playerCard: userCard, selectedCard: [] })
+        const userCards = this.state.playerCard
+        console.log('-------selcard - user  -------')
+        console.log(this.state.unordList)
+        console.log(this.state.unordList.length-2)
+        console.log(this.state.winnerList)
+        console.log(this.state.winnerList.length)
+        console.log(this.state.winnerList.length === this.state.unordList.length-2)
+        console.log('-------selcard - user  -------')
+        console.log('**********CURR USER *********')
+        console.log(this.state.currentUser)
+        console.log('**********CURR USER *********')
+        if(selCard.length - userCards.length === 0){
+            if(this.state.winnerList.length === 0){
+                let winList= this.state.winnerList
+                winList.push(this.state.currentUser)
+                this.setState({currentPlayerFinished: true, winnerList : winList})
+                gameSocket.emit('delCardFinish', {gid: this.state.game_id, us: this.state.currentUser, finlist: winList, rank: '1'})
+                const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                const nextUser = this.state.ordList[indexNextUser+1]
+                gameSocket.emit('endOfRound', nextUser )
+            }else {
+                if(this.state.winnerList.length === 1){
+                    let winList= this.state.winnerList
+                    winList.push(this.state.currentUser)
+                    this.setState({currentPlayerFinished: true, winnerList : winList})
+                    gameSocket.emit('delCardFinish', {gid: this.state.game_id, us:this.state.currentUser, finlist: winList, rank: '2'})
+                    const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                    const nextUser = this.state.ordList[indexNextUser+1]
+                    gameSocket.emit('endOfRound', nextUser )
+                }
+                else if(this.state.winnerList.length === this.state.unordList.length-2){
+                    let winList= this.state.winnerList
+                    winList.push(this.state.currentUser)
+                    const list = this.state.unordList
+                    let lastuser
+    
+                    for(let i = 0; i < list.length; i++){
+                        if(winList.includes(list[i])=== false){
+                            lastuser = list[i]
+                        }
+                    }
+                    winList.push(lastuser)
+                    const sendingData = {vicebeggar : this.state.currentUser, beggar: lastuser, gid: this.state.game_id}
+                    console.log('=====SENDINGDATA====')
+                    console.log('=====SENDINGDATA=====')
+                    console.log(sendingData)
+                    console.log('=====SENDINGDATA=====')
+                    console.log('=====SENDINGDATA====')
+                    gameSocket.emit('gameIsFinished', sendingData)
+                    this.setState({currentPlayerFinished: true, winnerList : winList})
+                }
+                else if(this.state.winnerList.length >= 2){
+                    console.log('??????????????????????????')
+                    console.log('??????????????????????????')
+                    console.log('??????????????????????????')
+                    console.log('??????????????????????????')
+                    let winList= this.state.winnerList
+                    winList.push(this.state.currentUser)
+                    this.setState({currentPlayerFinished: true, winnerList : winList})
+                    gameSocket.emit('delCardFinish', {gid: this.state.game_id, us:this.state.currentUser, finlist: winList, rank: '3'})
+                    const indexNextUser = this.state.ordList.indexOf(this.state.currentUser)
+                    const nextUser = this.state.ordList[indexNextUser+1]
+                    gameSocket.emit('endOfRound', nextUser )
+                }
+            }
+
+            
+        }   
+        else {
+            gameSocket.emit('delcard',{gid: this.state.game_id, us:this.state.currentUser, sc : this.state.selectedCard, usc : userCards})
+            gameSocket.on('delcardReturn', (sdata)=>{
+                const userCard = sdata;
+                this.setState({ playerCard: userCard, selectedCard: [] })
         })
+    }
     }
     closeAlert = () => {
         this.setState({ showAlert: false })
     }
-
-    componentDidUpdate() {
+    selBestCards = (num) => {
+        const pCards = this.state.playerCard
+        let selCards = []
+        if(num === 1){
+            selCards = ['3']
+            for(let i = 0; i < pCards.length; i++ ){
+                const numPile = this.whatCardIs(pCards[i]).split(':')
+                const selPile1 = this.whatCardIs(selCards[0]).split(':')
+                if(selPile1[0] <= numPile[0] ){
+                    selCards.splice(0 , 1, pCards[i])
+                }
+            }
+        }
+        else if (num === 2){
+            selCards = ['3' , '16']
+            for(let i = 0; i < pCards.length; i++ ){
+                const numPile = this.whatCardIs(pCards[i]).split(':')
+                const selPile1 = this.whatCardIs(selCards[0]).split(':')
+                const selPile2 = this.whatCardIs(selCards[0]).split(':')
+                if(selPile1[0] <= numPile[0] ){
+                    selCards.splice(0 , 1, pCards[i])
+                }
+                else if(selPile2[0] <= numPile[0]){
+                    selCards.splice(1, 1, pCards[i])
+                }
+            }
+        }
+        this.setState({selectedCard : selCards})
+    
     }
 
-
+    giveCards = () => {
+        const selCards = this.state.selectedCard
+        const rank = this.state.ownRank
+        const winList = this.state.winnerList
+        let userCard = this.state.playerCard
+        console.log('EEEEEEEEEEEEEEEEEEOOOOHG')
+        console.log(rank)
+        if(rank === '1'){
+            if(this.state.selectedCard.length === 2){
+                gameSocket.emit('exchangeCards', {num: 2, pseudo: winList[winList.length-1], cards: selCards, usr: this.state.currentUser})
+                for (let i = 0; i < selCards.length; i++) {
+                    const index = userCard.indexOf(selCards[i])
+                    userCard.splice(index, 1)
+                  }
+                const msg={ type: 'exchange', title: 'Vous devez patienter', message: `Vous devez patientez pendant que les autres joueurs s'échangent leurs cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: userCard, selectedCard: [], playerTraded: true})
+                
+            }
+            else {
+                const msg = { type: 'exchange', title: 'Vous devez choisir 2 cartes ', message: `Vous devez choisir 2 cartes de votre choix a donner au clochard, celui ci vous donnera ses meilleures cartes`, variant: 'danger' }
+                this.setState({errorMessage:msg})
+            }
+            
+        }
+        else if(rank === '2'){
+            if(this.state.selectedCard.length === 1){
+                gameSocket.emit('exchangeCards', {num: 1, pseudo: winList[winList.length-2], cards: selCards, usr: this.state.currentUser})
+                for (let i = 0; i < selCards.length; i++) {
+                    const index = userCard.indexOf(selCards[i])
+                    userCard.splice(index, 1)
+                  }
+                const msg={ type: 'exchange', title: 'Vous devez patienter', message: `Vous devez patientez pendant que les autres joueurs s'échangent leurs cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: userCard, selectedCard: [], playerTraded: true})
+            }
+            else{
+                const msg = { type: 'exchange', title: 'Vous devez choisir 1 carte ', message: `Vous devez choisir une cartes de votre choix a donner au vice clochard, celui ci vous donnera sa meilleure carte`, variant: 'danger' }
+                this.setState({errorMessage:msg})
+            }
+            
+        }
+        else if(rank === '4'){
+            if(this.state.selectedCard.length === 1){
+                gameSocket.emit('exchangeCards', {num: 1, pseudo: winList[0], cards: selCards, usr: this.state.currentUser})
+                for (let i = 0; i < selCards.length; i++) {
+                    const index = userCard.indexOf(selCards[i])
+                    userCard.splice(index, 1)
+                  }
+                const msg={ type: 'exchange', title: 'Vous devez patienter', message: `Vous devez patientez pendant que les autres joueurs s'échangent leurs cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: userCard, selectedCard: [], playerTraded: true})
+            }
+            else{
+                const msg = { type: 'exchange', title: 'Vous devez choisir 1 carte ', message: `Vous devez confirmer le choix automatique des cartes a donner au vice president, celui ci vous donnera une carte de son choix.`, variant: 'danger' }
+                this.setState({errorMessage:msg})
+            }
+            
+        }
+        else if(rank === '5'){
+            if(this.state.selectedCard.length === 2){
+                gameSocket.emit('exchangeCards', {num: 2, pseudo: winList[0], cards: selCards, usr: this.state.currentUser})
+                for (let i = 0; i < selCards.length; i++) {
+                    const index = userCard.indexOf(selCards[i])
+                    userCard.splice(index, 1)
+                  }
+                const msg={ type: 'exchange', title: 'Vous devez patienter', message: `Vous devez patientez pendant que les autres joueurs s'échangent leurs cartes`, variant: 'info' }
+                this.setState({errorMessage: msg, playerCard: userCard, selectedCard: [], playerTraded: true})
+            }
+            else{
+                const msg = { type: 'exchange', title: 'Vous devez choisir 2 cartes ', message: `Vous devez confirmer le choix automatique des cartes a donner aupresident, celui ci vous donnera deux carte de son choix`, variant: 'danger' }
+                this.setState({errorMessage:msg})
+            }            
+        }
+    }
     render() {
         return (
             <div style={{
@@ -587,18 +1406,21 @@ class Game extends Component {
                 <Container fluid>
                     <Row>
                         <Col>
-                            {/* Rien */}
+                            {/* Rien / */}
                         </Col>
                         <Col>
                             <Container fluid >
                                 <Row style={this.state.defStyle}>
-                                    {
+                                    {this.state.player1.finish === true ?
+                                        <Alert variant='primary'>This player finished at the {this.state.winnerList.indexOf(this.state.player1.pseudo)+1} place</Alert>
+                                        :
                                         this.state.player1.cards.map((value, key) => {
                                             return <Carte num={value} index={key} identity='othercards' />
                                         })}
                                 </Row>
                                 <br />
                                 <Row style={this.state.defStyle}>
+
                                     {this.state.player1.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player1.pseudo}</span> : <span></span>}
                                 </Row>
                             </Container>
@@ -612,7 +1434,10 @@ class Game extends Component {
                     <Row>
                         <Col>
                             <Row style={this.state.defStyle}>
-                                {
+                                
+                                    {this.state.player2.finish === true ?
+                                        <Alert variant='primary'>This player finished at the {this.state.winnerList.indexOf(this.state.player2.pseudo)+1} place</Alert>
+                                        :
                                     this.state.player2.cards.map((value, key) => {
                                         return <Carte num={value} index={key} identity='othercards' />
                                     })}
@@ -627,27 +1452,41 @@ class Game extends Component {
                             <Row style={this.state.defStyle}>
                                 {this.state.switcher === true ? <span id={String(this.state.switcher)}>Pile</span> : <span id={String(this.state.switcher)}>Pile</span>}
                             </Row>
+                            {this.state.cardExchange === true ?
+                                <Row style={this.state.defStyle}>
+                                    <Alert variant='primary'> {this.state.readyExList.length} / {this.state.exNum} players are ready.</Alert>
+                                    <br/>
+                                    <Alert variant='primary'> Wait while players finish their trades </Alert>
+                                </Row>
+                            :
                             <Row style={this.state.defStyle}>
                                 {
-                                    this.state.pile === [] ? <span>VIDE</span> : this.state.pile.map((value, key) => {
+                                    this.state.everyoneFinished ? this.classementRendu() : this.state.pile.map((value, key) => {
                                         return <Carte num={value} index={key} identity='cards' />
                                     })
                                 }
                             </Row>
+                            }               
                             <br />
-                            <Row>
-
+                            <Row><Col>
+                                {this.state.everyoneFinished ? <Row style={this.state.defStyle}><Alert variant='primary'> {this.state.readyList.length} / {this.state.ordList.length} players are ready.</Alert></Row> : <span></span>}
+                                {this.state.everyoneFinished === true ? this.state.isReady===false ? <div><Row style={this.state.defStyle}><Button block onClick={()=> this.rdyForAnthrGame()}>Ready for another game</Button></Row><br/></div> : <div><Row style={this.state.defStyle}><Button block onClick={()=> this.rdyForAnthrGame()}>Not ready</Button></Row><br/></div> : <span> </span> }
+                                {this.state.finalList[0].user === this.state.currentUser ? this.state.readyList.length === this.state.ordList.length ? <div><Row style={this.state.defStyle}><Button variant="primary" block  onClick={()=> this.startAnothrGame()}>Launch next game</Button></Row></div> : <div><Row style={this.state.defStyle}><Button variant="secondary" block disabled>Launch next game</Button><br/></Row></div> : <span></span>}
+                                </Col>
                             </Row>
                         </Col>
                         <Col>
                             <Row style={this.state.defStyle}>
-                                {
+                                {this.state.player3.finish === true ?
+                                        <Alert variant='primary'>This player finished at the {this.state.winnerList.indexOf(this.state.player3.pseudo)+1} place</Alert>
+                                        :
                                     this.state.player3.cards.map((value, key) => {
                                         return <Carte num={value} index={key} identity='othercards' />
                                     })}
                             </Row>
                             <br />
                             <Row style={this.state.defStyle}>
+
                                 {this.state.player3.pseudo !== null ? <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>{this.state.player3.pseudo}</span> : <span></span>}
                             </Row>
                         </Col>
@@ -669,8 +1508,35 @@ class Game extends Component {
                 <br />
                 <br />
                 <Container fluid>
+                    {this.state.cardExchange === true ?
+                    <div>
+                        <Row>
+                            <Col style={this.state.defStyle}>
+                            {
+                                this.state.playerCard.map((value, index) => {
+                                    if (this.state.selectedCard.indexOf(value) !== -1) {
+                                        return <Carte num={value} index={index} identity='usercards' action={this.showCard} style={this.state.cardStyle} />;
+                                    } else {
+                                        return <Carte num={value} index={index} identity='usercards' action={this.showCard} />;
+                                    }
+                                })
+                            }
+                            </Col>
+                    {this.state.selectedCard.length >= 1 && this.state.playerTraded === false ?
+                            <Col style={this.state.defStyle}>
+                                <Button onClick={() => this.giveCards()} block>Give cards</Button>
+                            </Col> 
+                            :
+                            <Col style={this.state.defStyle}>
+                                <Button variant="secondary" block disabled> Give cards</Button>
+                            </Col>}
+                        </Row>
+                    </div>
+                    :
+                    <div>
+                    {this.state.currentPlayerFinished === true ? <Row><Col style={this.state.defStyle}><Alert variant='success'>You finished, wait everyone for the next game.</Alert></Col></Row> : 
                     <Row>
-                        {this.state.playerToken ===1 ? <Col style={this.state.defStyle}><Button variant='secondary' block disable>pass</Button></Col> : <Col style={this.state.defStyle}><Button block >pass</Button></Col>}
+                        {this.state.playerToken === 1 ? <Col style={this.state.defStyle}><Button block onClick={()=> this.passTheTurn()}>pass</Button></Col> : <Col style={this.state.defStyle}><Button variant='secondary' block disable>pass</Button></Col>}
                         <Col style={this.state.defStyle}>
                             {
                                 this.state.playerCard.map((value, index) => {
@@ -683,8 +1549,9 @@ class Game extends Component {
                             }
                         </Col>
                         {this.state.selectedCard.length > 0 ? this.state.playerToken === 1 ? <Col style={this.state.defStyle}><Button onClick={() => this.canHePlay()} block>Play selected cards</Button></Col> :<Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col> : <Col style={this.state.defStyle}><Button variant="secondary" block disabled>Play selected cards</Button></Col>}
-
-                    </Row>
+                        
+                    </Row>}
+                    </div>}
                 </Container>
                 <br />
                 <br />

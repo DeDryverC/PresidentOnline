@@ -200,9 +200,10 @@ exports.putPlayerLobby = (req, res) => {
     gameId: req.body.gameId,
     pseudo: req.body.pseudo,
     token: req.body.token,
+    rang: req.body.rang
   };
 
-  game.putPlayerLobby(gameInfo.gameId, gameInfo.pseudo, gameInfo.token, (err, data) => {
+  game.putPlayerLobby(gameInfo.gameId, gameInfo.pseudo, gameInfo.token, gameInfo.rang, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
@@ -527,4 +528,109 @@ exports.exist = (req, res) => {
       res.send(data);
     }
   })
+}
+
+exports.putInPotHistory = (req, res) => {
+
+  const gameInfo = {
+    gameId: req.body.gameId,
+    card: req.body.card
+  };
+
+  game.putInPotHistory(gameInfo.gameId, gameInfo.card, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pool.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error putting in potHistory ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.createPotHistory = (req, res) => {
+
+  const gameInfo = {
+    gameId: req.body.gameId
+  };
+
+  game.createPotHistory(gameInfo.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error creating pot history with gameId"
+        });
+      }
+    }
+  });
+}
+
+exports.getPotHistory = (req, res) => {
+  game.getPotHistory(req.params.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found pot history with that gameId.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error fetching pot history with that gameId "
+        });
+      }
+    }
+    else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
+
+exports.wipeDeck = (req, res) => {
+  game.wipeDeck(req.body.gameId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found game with gameId ${req.params.gameId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error wiping deck in " + req.params.gameId,
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  })
+}
+
+exports.setRank = (req, res) => {
+
+  game.setRank(req.body.gameId, req.body.user, req.body.rang, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error setting rank in lobby ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
 }
