@@ -22,6 +22,9 @@ module.exports = (app) => {
     app.post("/history/set", history.setGameInHistory);
     app.delete("/delete", game.deleteGame);
     app.post("/deck", game.distribDeck);
+    app.post("/pothistory",game.createPotHistory)
+    app.post("/pothistory/card", game.putInPotHistory);
+    app.get("/pothistory/:gameId", game.getPotHistory);
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);
@@ -45,7 +48,9 @@ module.exports = (app) => {
     app.get("/ccount/:gameId/:userId", game.getCardsCount);
     app.get("/game/:code", game.getGameId);
     app.post("/deck", game.distribDeck);
+    app.post("/rank", game.setRank);
     
     
     app.delete("/poold", game.deletePool);
+    app.delete("/deck/wipe", game.wipeDeck);
 };

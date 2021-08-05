@@ -73,6 +73,9 @@ class Home extends React.Component {
             }
         }
         for (let item of this.state.pool) {
+            console.log('gamId')
+            console.log(this.state.gameId)
+            console.log('gamId')
             if (this.state.gameId === item.gameId) { isIn = true }
         }
         if (!isIn) {
@@ -83,8 +86,11 @@ class Home extends React.Component {
         }
     };
     async handleOwnerJoin(gameId, pseudo) {
-        //puts himself in the lobby as owner
-
+        //puts himself in the lobby as ownerr
+        console.log('hereherehere')
+        console.log('hereherehere')
+        console.log('hereherehere')
+        console.log('hereherehere')
         lobbySocket.emit('repGameCreated', { user: pseudo, gid: gameId, token: 1 })
         this.setState({ playerToken: 1, gameId: gameId, createGame: undefined });
         localStorage.setItem("gameId", gameId);
@@ -137,7 +143,7 @@ class Home extends React.Component {
                 body: JSON.stringify({
                     gameId: localStorage.getItem("joinedGame"),
                     pseudo: this.state.pseudo,
-                    token: 1,
+                    token: 3,
                 })
             })
 
@@ -241,11 +247,13 @@ class Home extends React.Component {
             })
     }
 
-    launchGame = () => {
+    launchGame = async () => {
 
         const lobby = this.state.lobby
         const gameId = this.state.gameId
-        fetch('http://localhost:5000/deck', {
+        const copyLobby = this.state.lobby
+        const user = this.state.pseudo
+        await fetch('http://localhost:5000/deck', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -257,114 +265,48 @@ class Home extends React.Component {
                 lobby: lobby,
             })
         })
+        await fetch('http://localhost:5000/toggle',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: gameId,
+                pseudo: user
+            })
+        })
+        this.createTableHistory()
+    
 
-        const copyLobby = this.state.lobby
-        const user = this.state.pseudo
         let index;
         copyLobby.map((data, keys) => {
             if (data.user === user) {
                 index = keys
             }
         })
-        let orderedLobby;
-        switch (index) {
-            case 0:
-                copyLobby.splice(index, 1)
-                orderedLobby = copyLobby.slice()
-                break;
-            case 1:
-                copyLobby.splice(index, 1)
-                orderedLobby = copyLobby.slice()
-                copyLobby.map((data, keys) => {
-                    if (keys === 0) {
-                        orderedLobby[copyLobby.length - 1] = data
-                    }
-                    else {
-                        orderedLobby[keys - 1] = data
-                    }
-                })
-                break;
-            case 2:
-                copyLobby.splice(index, 1)
-                orderedLobby = copyLobby.slice()
-                copyLobby.map((data, keys) => {
-                    if (keys === 0) {
-                        orderedLobby[copyLobby.length - 2] = data
-                    } else if (keys === 1) {
-                        orderedLobby[copyLobby.length - 1] = data
-                    }
-                    else {
-                        orderedLobby[keys - 1] = data
-                    }
-                })
-                break;
-            case 3:
-                copyLobby.splice(index, 1)
-                orderedLobby = copyLobby.slice()
-                copyLobby.map((data, keys) => {
-                    if (keys === 0) {
-                        orderedLobby[copyLobby.length - 3] = data
-                    } else if (keys === 1) {
-                        orderedLobby[copyLobby.length - 2] = data
-                    }
-                    else if (keys === 2) {
-                        orderedLobby[copyLobby.length - 1] = data
-                    }
-                    else {
-                        orderedLobby[keys - 1] = data
-                    }
-                })
-                break;
-            case 4:
-                copyLobby.splice(index, 1)
-                orderedLobby = copyLobby.slice()
-                copyLobby.map((data, keys) => {
-                    if (keys === 0) {
-                        orderedLobby[copyLobby.length - 4] = data
-                    } else if (keys === 1) {
-                        orderedLobby[copyLobby.length - 3] = data
-                    } else if (keys === 2) {
-                        orderedLobby[copyLobby.length - 2] = data
-                    } else if (keys === 3) {
-                        orderedLobby[copyLobby.length - 1] = data
-                    }
-                    else {
-                        orderedLobby[keys - 1] = data
-                    }
-                })
-                break;
-            case 5:
-                copyLobby.split(index, 1)
-                orderedLobby = copyLobby.slice()
-                copyLobby.map((data, keys) => {
-                    if (keys === 0) {
-                        orderedLobby[copyLobby.length - 5] = data
-                    } else if (keys === 1) {
-                        orderedLobby[copyLobby.length - 4] = data
-                    } else if (keys === 2) {
-                        orderedLobby[copyLobby.length - 3] = data
-                    } else if (keys === 3) {
-                        orderedLobby[copyLobby.length - 2] = data
-                    } else if (keys === 4) {
-                        orderedLobby[copyLobby.length - 1] = data
-                    }
-                    else {
-                        orderedLobby[keys - 1] = data
-                    }
-                })
-                break;
-            default:
-                break;
-        }
-
-
         localStorage.setItem('user', user)
         localStorage.setItem('gameId', gameId)
-        localStorage.setItem('turn', orderedLobby)
         lobbySocket.emit('launchGame', gameId)
         window.location.href = "http://localhost:3000/game"
     }
 
+    createTableHistory= async () =>{
+        const gameId = this.state.gameId
+        
+        await fetch('http://localhost:5000/pothistory',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Acces-Control-Allow-Origin": "true"
+            },
+            body: JSON.stringify({
+                gameId: gameId,
+            })
+        })
+    }
 
 
 
@@ -468,100 +410,6 @@ class Home extends React.Component {
                     index = keys
                 }
             })
-            let orderedLobby;
-            switch (index) {
-                case 0:
-                    copyLobby.splice(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys)=>{
-                        orderedLobby.splice(keys,1,data.user)
-                    })
-                    break;
-                case 1:
-                    copyLobby.splice(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys) => {
-                        if (keys === 0) {
-                            orderedLobby.splice(copyLobby.length - 1 ,1,data.user)
-                        }
-                        else {
-                            orderedLobby.splice(keys - 1 ,1,data.user)
-                        }
-                    })
-                    break;
-                case 2:
-                    copyLobby.splice(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys) => {
-                        if (keys === 0) {
-                            orderedLobby.splice(copyLobby.length - 2 ,1,data.user)
-                        } else if (keys === 1) {
-                            orderedLobby.splice(copyLobby.length - 1 ,1,data.user)
-                        }
-                        else {
-                            orderedLobby.splice(keys - 1 ,1,data.user)
-                        }
-                    })
-                    break;
-                case 3:
-                    copyLobby.splice(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys) => {
-                        if (keys === 0) {
-                            orderedLobby.splice(copyLobby.length - 3 ,1,data.user)
-                        } else if (keys === 1) {
-                            orderedLobby.splice(copyLobby.length - 2 ,1,data.user)
-                        }
-                        else if (keys === 2) {
-                            orderedLobby.splice(copyLobby.length - 1 ,1,data.user)
-                        }
-                        else {
-                            orderedLobby.splice(keys - 1 ,1,data.user)
-                        }
-                    })
-                    break;
-                case 4:
-                    copyLobby.splice(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys) => {
-                        if (keys === 0) {
-                            orderedLobby.splice(copyLobby.length - 4 ,1,data.user)
-                        } else if (keys === 1) {
-                            orderedLobby.splice(copyLobby.length - 3 ,1,data.user)
-                        } else if (keys === 2) {
-                            orderedLobby.splice(copyLobby.length - 2 ,1,data.user)
-                        } else if (keys === 3) {
-                            orderedLobby.splice(copyLobby.length - 1 ,1,data.user)
-                        }
-                        else {
-                            orderedLobby.splice(keys - 1 ,1,data.user)
-                        }
-                    })
-                    break;
-                case 5:
-                    copyLobby.split(index, 1)
-                    orderedLobby = copyLobby.slice()
-                    copyLobby.map((data, keys) => {
-                        if (keys === 0) {
-                            orderedLobby.splice(copyLobby.length - 5 ,1,data.user)
-                        } else if (keys === 1) {
-                            orderedLobby.splice(copyLobby.length - 4 ,1,data.user)
-                        } else if (keys === 2) {
-                            orderedLobby.splice(copyLobby.length - 3 ,1,data.user)
-                        } else if (keys === 3) {
-                            orderedLobby.splice(copyLobby.length - 2 ,1,data.user)
-                        } else if (keys === 4) {
-                            orderedLobby.splice(copyLobby.length - 1 ,1,data.user)
-                        }
-                        else {
-                            orderedLobby.splice(keys - 1 ,1,data.user)
-                        }
-                    })
-                    break;
-                default:
-                    break;
-            }
-            localStorage.setItem('turn', orderedLobby)
             localStorage.setItem('user', user)
             localStorage.setItem('gameId', gameId)
 
