@@ -56,12 +56,13 @@ io.on('connection', (socket) => {
   socket.on('join_game', function (data) {
     const game_id = data.gid
     const user = data.user
-    console.log(`Player ${user} received his cards`)
+  
     socket.leaveAll();
     socket.join(game_id)
     socket.channel = game_id
     socket.user = user
     console.log(`Player ${user} connected to ${game_id} .`)
+    
     
     fetch(`http://localhost:5000/lobby/${game_id}`)
       .then(response => response.json())
@@ -81,6 +82,8 @@ io.on('connection', (socket) => {
     fetch(`http://localhost:5000/pothistory/${game_id}`)
       .then(response => response.json())
       .then(json => { socket.emit('potHist', json)})
+    
+    console.log(`Player ${user} received his cards`)
   })
 
   socket.on('chgpile', (data) => {
@@ -91,7 +94,6 @@ io.on('connection', (socket) => {
     newCards.map((value, key) => {
       const fetchmsg = `http://localhost:5000/pots/${game_id}/` + String(value)
       newpile.push(value)
-      console.log(fetchmsg)
       fetch(fetchmsg).catch(erreur => { throw erreur})
       fetch('http://localhost:5000/pothistory/card', {
                 method: 'POST',
@@ -173,11 +175,7 @@ io.on('connection', (socket) => {
       .then(response => response.json())
       .then(json => { socket.emit('updateCards', json) })
   })
-  socket.on('finishTurnPass', (data) => {
-    console.log('=====pass=====')
-    console.log(`${data}`)
-    console.log('=====pass=====')
-    
+  socket.on('finishTurnPass', (data) => {  
     socket.to(socket.channel).emit('userPassed', data)
   })
   socket.on('startPlaying', (data) => {
@@ -193,9 +191,6 @@ io.on('connection', (socket) => {
                 pseudo: data.user
             })
         })
-    console.log('=====start playin=====')
-    console.log(data)
-    console.log('=====startplayin=====')
     socket.to(socket.channel).emit('gameStarted', data.user)
     socket.emit('gameStarted', data.user)
   })
@@ -203,9 +198,6 @@ io.on('connection', (socket) => {
     fetch(`http://localhost:5000/potd/${socket.channel}`)
   })
   socket.on('endOfRound', data => {
-    console.log("==========NEWROUNRD=========")
-    console.log("==========NEWROUNRD=========")
-    console.log("==========NEWROUNRD=========")
     
     fetch('http://localhost:5000/pothistory/card', {
                 method: 'POST',
@@ -222,16 +214,10 @@ io.on('connection', (socket) => {
     socket.to(socket.channel).emit('newRound', socket.user)
   })
   socket.on('delCardFinish', (data)=>{
-    console.log(' ++ DATA NOT FINISHED ++ ')
-    console.log(data)
     
     const rank = data.rank
     const user = data.us
     const list= data.finlist
-    console.log(socket.channel)
-    console.log(user)
-    console.log(rank)
-    console.log(' ++ DATA NOT FINISHED ++ ')
     fetch('http://localhost:5000/rank', {
       method: 'POST',
       headers: {
@@ -250,9 +236,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('gameIsFinished', async (data)=> {
-    console.log(' ++ DATA FINISHED ++ ')
-    console.log(data)
-    console.log(' ++ DATA FINISHED ++ ')
     const game_id = data.gid
     const beggar = data.beggar
     const vicebeggar = data.vicebeggar
@@ -302,13 +285,9 @@ io.on('connection', (socket) => {
   })
   socket.on('refreshEOG', async (data)=>{
     let jsoned
-    console.log("data")
-    console.log(data)
     await fetch(`http://localhost:5000/lobby/${data}`)
       .then(response => response.json())
       .then(json => {jsoned = json})
-    console.log("jsoned")
-    console.log(jsoned)
     socket.emit('endOfGame', jsoned) 
   })
 
@@ -357,7 +336,7 @@ io.on('connection', (socket) => {
             position: data[i].rang
         })
       })
-      await fetch('http://localhost:5000/toggle/', {
+      await fetch('http://localhost:5000/toggle/zero', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -422,26 +401,6 @@ io.on('connection', (socket) => {
           lobby: jsonlobby,
       })
     })
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-    console.log('allo ?')
-
-
     io.in(socket.channel).emit('giveCards', socket.user)
   })
   socket.on('exchangeCards', async (data)=>{
@@ -462,6 +421,18 @@ io.on('connection', (socket) => {
       await fetch(`http://localhost:5000/icard/${socket.channel}/${recieveUsr}/${card1}`)
       await fetch(`http://localhost:5000/icard/${socket.channel}/${recieveUsr}/${card2}`)
     }
+    await fetch(`http://localhost:5000/toggle/zero`, {
+      method: 'POST',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          "Acces-Control-Allow-Origin": "true"
+      },
+      body: JSON.stringify({
+          gameId: socket.channel,
+          pseudo: usr,
+      })
+    })
     socket.to(socket.channel).emit('exchangeRdy', usr )
   })
   socket.on('retrieveCards', (data) => {
@@ -568,11 +539,6 @@ ioLobby.on('connection', (socket) => {
     socket.channel = data.gid;
     socket.user = data.user;
     socket.token = data.token;
-
-    console.log('socket.gameid')
-    console.log(socket.gameId)
-
-
     //Ajoute qqun dans le lobby
     try {
       await fetch('http://localhost:5000/lobbyp', {
@@ -598,9 +564,6 @@ ioLobby.on('connection', (socket) => {
         .then(response => response.json())
         .then(json => {
           const yes = json
-          console.log('yes ++++')
-          console.log(yes)
-          console.log('yes  ----')
           socket.emit('ownerInfoLobby', json);
         })
 
@@ -615,9 +578,6 @@ ioLobby.on('connection', (socket) => {
       console.log(`${socket.user} a créer le lobby ${socket.gameId}`)
     }
     catch (error) {
-      console.log('===================================')
-      console.log('==========TRYCATCH ERROR===========')
-      console.log('===================================')
       console.log(error)
       socket.emit('errorRepCreateGame', error)
     }
@@ -737,9 +697,6 @@ ioLobby.on('connection', (socket) => {
       console.log(`${socket.user} a fermé le lobby ${socket.gameId}`)
     }
     catch (error) {
-      console.log('===================================')
-      console.log('==========TRYCATCH ERROR===========')
-      console.log('===================================')
       console.log(error)
     }
   })
@@ -786,9 +743,6 @@ ioLobby.on('connection', (socket) => {
         .then(response => response.json())
         .then(json => {
           const yes = json
-          console.log('yes ++++')
-          console.log(yes)
-          console.log('yes  ----')
           socket.emit('repPlayerJoin', json);
           socket.to(socket.gameId).emit('playerJoinLobby', json)
         })
@@ -796,9 +750,6 @@ ioLobby.on('connection', (socket) => {
 
     }
     catch (error) {
-      console.log('===================================')
-      console.log('==========TRYCATCH ERROR===========')
-      console.log('===================================')
       socket.emit('errorJoinLobby', error)
       console.log(error)
     }

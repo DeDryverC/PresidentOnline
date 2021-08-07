@@ -49,7 +49,7 @@ module.exports = (app) => {
     app.get("/game/:code", game.getGameId);
     app.post("/deck", game.distribDeck);
     app.post("/rank", game.setRank);
-    
+    app.post("toggle/zero", game.setPlayerTokenZero);
     
     app.delete("/poold", game.deletePool);
     app.delete("/deck/wipe", game.wipeDeck);

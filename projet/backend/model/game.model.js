@@ -421,5 +421,17 @@ game.setRank = (gameId, user, rang, result) => {
     });
 };
 
+game.setPlayerTokenZero = (gameId, pseudo, result) => {
+    let lobby = gameId + "Lobby";
+    mysql.query(`UPDATE ${lobby} SET token = 0 WHERE user = ${pseudo}`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
 
 module.exports = game;
