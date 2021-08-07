@@ -634,3 +634,27 @@ exports.setRank = (req, res) => {
     }
   });
 }
+
+exports.setPlayerTokenZero = (req, res) => {
+  const gameInfo = {
+    gameId: req.body.gameId,
+    pseudo: req.body.pseudo,
+  };
+
+  game.setPlayerTokenZero(gameInfo.gameId, gameInfo.pseudo, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found lobby.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error toggling token in lobby ",
+        });
+      }
+    } else {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.send(data);
+    }
+  });
+}
