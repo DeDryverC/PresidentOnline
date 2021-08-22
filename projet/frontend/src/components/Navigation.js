@@ -393,12 +393,11 @@ class Navigation extends Component {
                     
                     <CookieConsent
                                 onAccept={localStorage.setItem('Cookies',true)}
-                                debug={true}
                                 location="bottom"
                                 style={{ backgroundColor : 'DarkRed', fontSize:20}}
                                 buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
                                 buttonText="I agree !"
-                                expires={182}>
+                                expires={365}>
                              
                                 This website uses cookies
                     </CookieConsent>
