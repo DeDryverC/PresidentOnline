@@ -1,21 +1,28 @@
-FROM php:apache
-RUN apt-get update
-RUN apt-get install curl vim nano git -y
-RUN apt-get install npm nodejs -y
+FROM node:14
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Create app directory
+WORKDIR /usr/src/app
 
-RUN a2enmod rewrite
-RUN a2enmod headers
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
-RUN cd /var/www/html && npm install --global yarn && yarn install
+RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-#connection bdd
-RUN docker-php-ext-install pdo pdo_mysql
+# Bundle app source
+COPY . .
+
+EXPOSE 8080
+CMD [ "node", "server.js" ]
+
+CMD tail -f /dev/null
+
+###
+###COPY www/presidentonline.conf /etc/apache2/sites-available/presidentonline.conf
 
 
-COPY docker/www/presidentonline.conf /etc/apache2/sites-available/presidentonline.conf
-
-
-RUN a2dissite 000-default.conf
-RUN a2ensite presidentonline.conf
+###RUN a2dissite 000-default.conf
+###RUN a2ensite presidentonline.confcd ..

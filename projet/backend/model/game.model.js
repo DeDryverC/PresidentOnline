@@ -21,7 +21,7 @@ game.createTable = (gameId, result) => {
 game.createLobby = (gameId, result) => {
     console.log("reached model");
     let lobby = gameId + "Lobby";
-    mysql.query(`CREATE TABLE ${lobby} (user VARCHAR(45) NOT NULL, token BOOLEAN NOT NULL);`, (err, res) => {
+    mysql.query(`CREATE TABLE ${lobby} (user VARCHAR(45) NOT NULL, token BOOLEAN NOT NULL, rang VARCHAR(45) NOT NULL);`, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
@@ -32,7 +32,6 @@ game.createLobby = (gameId, result) => {
     });
 
 }
-
 game.getGameId = (code, result) => {
     mysql.query(`SELECT gameId from GamePool where code = "${code}"`, (err, res) => {
         if (err) {
@@ -120,9 +119,9 @@ game.getLobby = (gameId, result) => {
     })
 }
 
-game.putPlayerLobby = (gameId, pseudo, token, result) => {
+game.putPlayerLobby = (gameId, pseudo, token, rang, result) => {
     let lobby = gameId + "Lobby";
-    mysql.query(`INSERT INTO ${lobby} (user, token) VALUES ("${pseudo}", "${token}");`, (err, res) => {
+    mysql.query(`INSERT INTO ${lobby} (user, token, rang) VALUES ("${pseudo}", "${token}", "${rang}");`, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
@@ -161,7 +160,7 @@ game.getPlayerToken = (gameId, pseudo, result) => {
 
 game.togglePlayerLobby = (gameId, pseudo, result) => {
     let lobby = gameId + "Lobby";
-    mysql.query(`UPDATE ${lobby} SET token = IF (token, 0, 1) WHERE user = ${pseudo}`, (err, res) => {
+    mysql.query(`UPDATE ${lobby} SET token = IF (token, 0, 1) WHERE user = '${pseudo}'`, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
@@ -357,45 +356,82 @@ game.exist = (gameId, result) => {
     })
 }
 
-game.distribDeck = (gameId, lobby, result) => {
-    //let lobby=[{"user":"dédélacastagne","token":1},{"user":"RoulBe","token":0},{"user":"Seldric","token":0},{"user":"poulna","token":0}]
-    let shuffledDeck = Array.from({ length: 52 }, (v, k) => k + 1);
-    shuffledDeck = shuffledDeck.sort((a, b) => 0.5 - Math.random());
-    let arrayJoueurs = []
-    for (let i = 0; i < lobby.length; i++) {
-        arrayJoueurs.push([])
-    }
-    for (let i = 0; i < parseInt(52 / lobby.length); i++) {
-        for (let y = 0; y < arrayJoueurs.length; y++) {
-            arrayJoueurs[y].push(shuffledDeck[shuffledDeck.length - 1]);
-            shuffledDeck.pop();
-        }
 
-    }
-    let requete = `INSERT INTO ${gameId} (user, card) VALUES `
-    for (let i = 0; i < arrayJoueurs.length; i++) {
-        for (let y in arrayJoueurs[i]) {
-            if (arrayJoueurs[i][y] == arrayJoueurs[arrayJoueurs.length - 1][arrayJoueurs[i].length - 1]) {
-                requete = requete + "('" + lobby[i].user + "'," + arrayJoueurs[i][y] + ");";
-            }
-            else {
-                requete = requete + "('" + lobby[i].user + "'," + arrayJoueurs[i][y] + "),";
-            }
-        }
-
-    }
-    console.log(requete)
-    mysql.query(requete, (err, res) => {
+game.createPotHistory = (gameId, result) => {
+    let lobby = gameId + "PotHistory";
+    mysql.query(`CREATE TABLE ${lobby} (potHistory VARCHAR(45) NOT NULL);`, (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
             return;
         }
-        console.log("pot :", res);
+        console.log(res);
         result(null, res);
     });
 
 }
+game.putInPotHistory = (gameId, card, result) => {
+    let pothistory = gameId + "PotHistory";
+    mysql.query(`INSERT INTO ${pothistory} (potHistory) VALUES ("${card}");`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+game.getPotHistory = (gameId, result) => {
+    let game = gameId + "PotHistory";
+    mysql.query(`SELECT * from ${game}`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log("model res: ", res);
+        result(null, res);
+    });
+}
 
+game.wipeDeck = (gameId, result) => {
+    mysql.query(`DELETE from ${gameId} `, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
+
+game.setRank = (gameId, user, rang, result) => {
+    let lobby = gameId + "Lobby";
+    console.log('[non]')
+    mysql.query(`UPDATE ${lobby} SET rang = ${rang} WHERE user = '${user}'`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+};
+
+game.setPlayerTokenZero = (gameId, pseudo, result) => {
+    let lobby = gameId + "Lobby";
+    mysql.query(`UPDATE ${lobby} SET token = 0 WHERE user = ${pseudo}`, (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+        console.log(res);
+        result(null, res);
+    });
+}
 
 module.exports = game;
