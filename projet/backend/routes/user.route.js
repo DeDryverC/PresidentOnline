@@ -6,7 +6,8 @@ module.exports = (app) => {
     const statistics = require("../controllers/statistics.controller");
     const profil = require("../controllers/profil.controller");
     const game = require("../controllers/game.controller");
-    const login = require("../controllers/login.controller")
+    const login = require("../controllers/login.controller");
+    const supprimer = require("../controllers/supprimer.controller");
     
 
     app.post("/table", game.createTable);
@@ -22,6 +23,7 @@ module.exports = (app) => {
     app.post("/history/set", history.setGameInHistory);
     app.delete("/delete", game.deleteGame);
     app.post("/deck", game.distribDeck);
+    app.delete("/delprofile/:pseudo", supprimer.deleteProfile);
 
     app.get("/history/:userId", history.getHistory);
     app.get("/statistics/:pseudo", statistics.getStatistics);

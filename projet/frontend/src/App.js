@@ -39,6 +39,7 @@ class App extends Component {
             actionSwitchPage = {this.pageStateSwitch}
           />
         </Route>
+
         <Route exact path="/login">
           <Login/>
         </Route>

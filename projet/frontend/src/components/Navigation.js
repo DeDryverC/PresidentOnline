@@ -4,6 +4,9 @@ import { ButtonGroup, Button, Row, Col, Container } from 'react-bootstrap';
 import Home from '../pages/Home/Home';
 import Howto from '../pages/Howto/Howto'; 
 import Rules from '../pages/Rules/Rules';
+import CookieConsent from 'react-cookie-consent';
+import Popup from 'reactjs-popup';
+
 //import Login from '../pages/Login/Login'
 
 class Navigation extends Component {
@@ -14,6 +17,7 @@ class Navigation extends Component {
            connected: localStorage.getItem('Connect'),
            connectedAsGuest: localStorage.getItem('ConnectedAsGuest'),
            guestPseudo : '',
+           cookiesAccept : localStorage.getItem('Cookies')
            
         
         
@@ -24,6 +28,7 @@ class Navigation extends Component {
       }
     
 
+  
     pageSwitch= () => {
 
         const actualPage = this.props.actualPage;
@@ -77,13 +82,15 @@ class Navigation extends Component {
             //afficher en tant qu'user connecté
 
             
-            window.location.href= "https://president-online.netlify.app/"
+            window.location.href= "http://localhost:3000/"
             
             
     }
 
+    
     render() {
-        if(this.state.connected==="true"){
+        
+        if(this.state.connected==="true" && this.state.cookiesAccept==="true"){
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">
@@ -183,7 +190,7 @@ class Navigation extends Component {
                                         
         }
 
-        if(this.state.connectedAsGuest==="true"){
+        if(this.state.connectedAsGuest==="true" && this.state.cookiesAccept==="true"){
             return (
                 <main id="maincomponent">
                     <Container fluid="lg">
@@ -383,6 +390,19 @@ class Navigation extends Component {
                         </Row>
     
                     </Container>
+                    
+                    <CookieConsent
+                                onAccept={localStorage.setItem('Cookies',true)}
+                                debug={true}
+                                location="bottom"
+                                style={{ backgroundColor : 'DarkRed', fontSize:20}}
+                                buttonStyle={{backgroundColor:"palegoldenrod", fontSize:20}}
+                                buttonText="I agree !"
+                                expires={182}>
+                             
+                                This website uses cookies
+                    </CookieConsent>
+                
                 </main>
             );
         }

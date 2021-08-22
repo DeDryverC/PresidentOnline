@@ -3,6 +3,7 @@ import React from "react";
 import NavigationProfil from "../../components/NavigationProfil";
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
 
 class Profil extends React.Component {
 
@@ -55,6 +56,38 @@ class Profil extends React.Component {
     };
 
 
+    handleSubmit(event) {
+        //console.log(this.state.pseudo)
+        event.preventDefault();
+        fetch(`http://localhost:5000/delprofile/${localStorage.getItem("Pseudo")}`,{
+             
+              method:'DELETE',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                "Access-Control-Allow-Origin":"true"
+              },
+              body: JSON.stringify({
+                pseudo:localStorage.getItem("Pseudo"),
+              }),
+              
+              
+            }).then(response => response.json())
+            .then(json => {
+
+              }).catch((error) => {
+               
+                
+                
+                alert("Can't delete your account, try again.");
+                
+          });
+          alert("Your account has been deleted !")
+          localStorage.setItem('Connect', false)
+          window.location.href= "http://localhost:3000/"
+    }
+
+
     render() {
         return (
             <html>
@@ -85,6 +118,11 @@ class Profil extends React.Component {
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {this.state.playerWins} </h2><br></br>
                         <h2 style={{textAlign: "center", fontSize: 32, color:'white', marginTop:'9%'}}> Ratio : </h2>
                         <h2 style={{textAlign: "center", fontSize: 25, color:'white'}}> {(this.state.playerWins/this.state.donneesstats.length).toFixed(2)} Win(s) per lose </h2><br></br>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button style={{color:"red", fontSize: 35}}variant="outline-info" onClick={this.handleSubmit} block> Delete my account</Button>
                     </Col>
                     
                 </Row>     
