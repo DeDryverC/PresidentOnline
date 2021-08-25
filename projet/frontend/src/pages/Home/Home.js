@@ -427,7 +427,11 @@ class Home extends React.Component {
                     <Col style={{
                         border: '2px solid moccasin',
                         borderRadius: '10px',
-                        backgroundColor: 'palegoldenrod'
+                        backgroundColor: 'palegoldenrod',
+                        bottom: 0,
+                        overflowY: 'scroll',
+                        maxHeight: '500px',
+                        width: '700px'
                     }}> {this.state.message.txt === undefined ? <a></a> : this.showMessage()}
                         <Row>
                             <h4>Lobby: {this.state.joinedGame}</h4>
@@ -474,7 +478,11 @@ class Home extends React.Component {
                     <Col style={{
                         border: '2px solid moccasin',
                         borderRadius: '10px',
-                        backgroundColor: 'palegoldenrod'
+                        backgroundColor: 'palegoldenrod',
+                        bottom: 0,
+                        overflowY: 'scroll',
+                        maxHeight: '500px',
+                        width: '700px'
                     }}> {this.state.message.txt === undefined ? <a></a> : this.showMessage()}
 
                         <Row>
@@ -517,7 +525,11 @@ class Home extends React.Component {
                     <Col style={{
                         border: '2px solid moccasin',
                         borderRadius: '10px',
-                        backgroundColor: 'palegoldenrod'
+                        backgroundColor: 'palegoldenrod',
+                        bottom: 0,
+                        overflowY: 'scroll',
+                        maxHeight: '500px',
+                        width: '700px'
                     }}> {this.state.message.txt === undefined ? <a></a> : this.showMessage()}
                         <Row>
                             <Button

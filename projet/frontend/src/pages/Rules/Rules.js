@@ -7,7 +7,11 @@ export default function Rules(){
                             <Col style = {{
                             border: '2px solid moccasin',
                             borderRadius: '10px',
-                            backgroundColor: 'palegoldenrod'
+                            backgroundColor: 'palegoldenrod',
+                            bottom: 0,
+                            overflowY: 'scroll',
+                            maxHeight: '500px',
+                            width: '700px'
                             }}>
                                 <Row> 
                                     <h2> Rules </h2>
@@ -89,6 +93,24 @@ export default function Rules(){
                                                         When a round is over (and there is a new president, beggar etc), the beggar starts the next round.
                                                     </li>
                                                 </ul>
+                                            </Row>
+                                            <Row>
+                                                <h5>Game Modifiers</h5>
+                                            </Row>
+                                            <Row>
+                                                <h6>Eight Stop</h6>
+                                                    <ul>
+                                                        <li>This game modifier makes the eight cards more powerful in a game of President.</li>
+                                                        <li>When a player plays any number of 8s, the turn cycle immediately ends.</li>
+                                                        <li>When that happens, that player can start a new sequence.</li>
+                                                    </ul>
+                                                <h6>Revolution</h6>
+                                                    <ul>
+                                                        <li>Revolution time!</li>
+                                                        <li>When a player plays all four cards of the same value (a set), card strength reverses!</li>
+                                                        <li>That means: 3 is now the strongest card and 2 is the weakest card.</li>
+                                                        <li>This effect lasts until the end of the round or someone also plays a set during a round.</li>
+                                                    </ul>
                                             </Row>
                                         </Col>
                                     </Container>

@@ -6,6 +6,7 @@ import Howto from '../pages/Howto/Howto';
 import Rules from '../pages/Rules/Rules';
 import CookieConsent from 'react-cookie-consent';
 import Popup from 'reactjs-popup';
+import Chatbox from './ChatSocket/Chatbox'
 
 //import Login from '../pages/Login/Login'
 
@@ -19,8 +20,6 @@ class Navigation extends Component {
            guestPseudo : '',
            cookiesAccept : localStorage.getItem('Cookies')
            
-        
-        
            } 
         this.handleClick = this.handleClick.bind(this);
         this.handleLoginGuest = this.handleLoginGuest.bind(this);
@@ -182,6 +181,9 @@ class Navigation extends Component {
                             <Col fluid>
                                 {this.pageSwitch()}
                             </Col>
+                            <Col>
+                                <Chatbox />
+                            </Col>
                         </Row>
     
                     </Container>
@@ -274,6 +276,9 @@ class Navigation extends Component {
                             </Col>
                             <Col fluid>
                                 {this.pageSwitch()}
+                            </Col>
+                            <Col>
+                                <Chatbox />
                             </Col>
                         </Row>
     

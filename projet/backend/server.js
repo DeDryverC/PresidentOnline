@@ -451,8 +451,49 @@ server.listen(GAME_PORT, () => {
   console.log(`Game socket listening on port ${GAME_PORT}`)
 })
 
+/********** CHAT SOCKET **********/
+const serverChat = http.createServer(app)
+const ioChat = socketio(serverChat)
+const {addUser, removeUser, getUser, getRoomUsers} = require('./users')
 
+ioChat.on('connection', (socket) => {
+  console.log(`new client ${socket.id} connected`)
+  socket.emit('connection', null)
 
+  socket.on('join_room', ({chatName, roomName}, callback) => {
+      const {error, user} = addUser({id: socket.id, chatName, roomName})
+      if(error) return callback(error)
+
+      socket.emit('message', {user: 'admin', text: `Hi, ${user.chatName}!`})
+      socket.broadcast.to(user.roomName).emit('message', {user: 'admin', text: `${user.chatName} has entered the chat!`})
+
+      socket.join(user.roomName)
+
+  })
+
+  socket.on('send_message', (message, callback) => {
+      const user = getUser(socket.id)
+      ioChat.to(user.roomName).emit('message', {user: user.chatName, text: message})
+  })
+
+  socket.on('reconnect', () => {
+    console.log(`client ${socket.id} reconnected`)
+
+  })
+
+  socket.on('disconnect', () => {
+    console.log(`client ${socket.id} disconnected`)
+  })
+
+  socket.on('reconnect_error', () => {
+    console.log('cannot reconnect')
+  })
+
+})
+
+serverChat.listen(CHAT_PORT, () => {
+  console.log(`Chat socket started on port ${CHAT_PORT}`)
+})
 
 /********** LOBBY SOCKET**********/
 

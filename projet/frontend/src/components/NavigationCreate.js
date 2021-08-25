@@ -6,13 +6,16 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Button from 'react-bootstrap/Button'
 import Select from 'react-select'
+import { ThemeConsumer } from 'react-bootstrap/esm/ThemeProvider';
 
 const options = [
     { value: '4', label: '4' },
     { value: '5', label: '5' },
     { value: '6', label: '6' },
 
-  ]
+]
+
+
 
 class NavigationCreate extends Component{
     constructor(props){
@@ -20,13 +23,19 @@ class NavigationCreate extends Component{
         this.state={
             gameId: undefined,
             players: undefined,
-            code: undefined
+            code: undefined,
+            isEightTrue: undefined,
+            isRevTrue: undefined
         }
         this.handleCreate = this.handleCreate.bind(this);
     }
 
     handleCreate(event){
         event.preventDefault();
+        /*
+        localStorage.setItem('isEightTrue',)
+        localStorage.setItem('isRevTrue',)
+        */
         fetch('http://localhost:5000/table',{
             method: 'POST',
             headers: {
@@ -37,7 +46,9 @@ class NavigationCreate extends Component{
             body: JSON.stringify({
                 gameId: this.state.gameId,
                 players: this.state.players,
-                code: this.state.code
+                code: this.state.code,
+                isEightTrue: this.state.isEightTrue,
+                isRevTrue: this.state.isRevTrue
             }),
         
         }).then(response => response.json())
@@ -127,7 +138,11 @@ class NavigationCreate extends Component{
                                 <Col md= 'auto' style = {{
                                 border: '2px solid moccasin',
                                 borderRadius: '10px',
-                                backgroundColor: 'palegoldenrod'
+                                backgroundColor: 'palegoldenrod',
+                                bottom: 0,
+                                overflowY: 'scroll',
+                                maxHeight: '500px',
+                                width: '700px'
                                 }}>
                                     <Row>
                                         <h2 style={{display: 'block',margin: 'auto'}}> Menu </h2>
@@ -146,7 +161,11 @@ class NavigationCreate extends Component{
                                 <Col style = {{
                                 border: '2px solid moccasin',
                                 borderRadius: '10px',
-                                backgroundColor: 'palegoldenrod'
+                                backgroundColor: 'palegoldenrod',
+                                bottom: 0,
+                                overflowY: 'scroll',
+                                maxHeight: '500px',
+                                width: '700px'
                                 }}>
                                     
                                     <Row>
@@ -171,11 +190,28 @@ class NavigationCreate extends Component{
                                                         <Select options={options} />
                                                     </label>
                                                     <br/><br/>
+
+                                                    <label>
+                                                        <p>Enable Eight Stop? </p>
+                                                        <input
+                                                            type="checkbox"
+                                                            value={this.state.isEightTrue}
+                                                            
+                                                        />
+                                                    </label>
+                                                    <br/> <br/>
+
+                                                    <label>
+                                                        <p>Enable Revolution? </p>
+                                                        <input                                                            
+                                                            type="checkbox"
+                                                            value={this.state.isRevTrue}
+                                                            />
+                                                        </label>
+                                                    <br/><br/>
                                                     <input type="submit" value="Create lobby" />
                                                 </form>
                                                  
-                                               
-    
                                             </Col>
                                         </Container>
                                     </Row>

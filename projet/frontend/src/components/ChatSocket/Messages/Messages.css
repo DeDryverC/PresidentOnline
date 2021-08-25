@@ -1,0 +1,7 @@
+.messages{
+    position: absolute;
+    bottom: 0;
+    overflow-y: scroll;
+    max-height:150px;
+    width: 335px;
+}

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Button, Row, Col, Container, Alert, Image, Table } from 'react-bootstrap';
 import Carte from '../../components/Carte'
 import io, { Socket } from "socket.io-client";
+import Chatbox from '../../components/ChatSocket/Chatbox'
+
 
 /* Game.js
 
@@ -62,6 +64,7 @@ class Game extends Component {
             - exNum: (int) sert pas a grand chose mais je savais pas si cette variable allait etre utile autre part, determine le nombre de joueurs qui doivent échanger leurs cartes.
             - titleList : (Array) Liste des titre pour le classement, pas besoin d'etre une variable globale
             */
+
             playerToken: 0,
             countTurn: 0,
             countPass: 0,
@@ -85,6 +88,17 @@ class Game extends Component {
             readyExList: [],
             exNum: 4,
             titleList: ['President', 'Vice-President', '', 'Vice-Beggar', 'Beggar'],
+
+            /*
+            Game modifiers
+            - isEightTrue : (Bool) default false, determines if an 8 card ends the turn
+            - isRevTrue: (Bool) default false, determines if 4 cards of the same value reverse card strength
+
+            - toggleRev: (Bool) default false, reverse card strength if true 
+            */
+           isEightTrue: localStorage.getItem('isEightTrue'),
+           isRevTrue: localStorage.getItem('isRevTrue'),
+           toggleRev: false,
 
             /* --- socket io ---
             
@@ -341,6 +355,9 @@ class Game extends Component {
         const cardsPile = this.state.pile
         const selCard = this.state.selectedCard
         const cardsNum = this.pileTypeCard(selCard)
+        const ssc = this.sameSelectedCard()
+        const eight = this.state.isEightTrue
+        const rev = this.state.isRevTrue
         const historyPile = this.state.potHistory
         const numHistPile = []
         for (let i = 0; i < selCard.length; i++) {
@@ -351,12 +368,25 @@ class Game extends Component {
         }
         const reversedHistPile = numHistPile.reverse()
         if (reversedHistPile[0] === reversedHistPile[1] && reversedHistPile[1] === reversedHistPile[2] && reversedHistPile[2] === reversedHistPile[3]) {
-            return true
+            return true 
         }
         if (selCard.length === 4) {
+            /*
+                if the revolution mod is active
+                every four cards played flips card strength
+            */
+            if(rev){
+                this.toggleRevolution()
+            }
             return true
         }
         if (cardsNum === 20) {
+            return true
+        }
+        /*
+        if Eight Stop is enabled, any eight played stops the round
+        */
+        if (ssc === 8 && eight){
             return true
         }
         return false
@@ -716,6 +746,22 @@ class Game extends Component {
         }
     }
 
+    /* -- toggleRevolution
+
+    When triggered, reverse card strength with 3 being the strongest and 2 being the weakest
+
+    */
+    toggleRevolution(){
+        if (this.state.playerToken === 1) {
+            const revolution = { type: 'finish', title: 'Revolution', message: 'Revolution! You flipped the card strength!', variant: ''}
+            this.setState(toggleRev, !toggleRev)
+
+        } else {
+            const error = { type: 'Not your turn', title: 'You cant play now', message: 'Its not your turn, wait for it.', variant: '' }
+            this.setState({ errorMessage: error })
+        }
+    }
+
     /* -- canHePlay -- 
     
     Permet de determiner si le joueur peut jouer les cartes séléctionner ou pas ( depends des règles misent de base.)
@@ -727,16 +773,30 @@ class Game extends Component {
             const selCard = this.state.selectedCard
             const ssc = this.sameSelectedCard()
             const ptc = this.pileTypeCard(this.state.pile)
+            const eight = this.state.isEightTrue
+            const canRev = this.state.isRevTrue
+            const rev = this.state.toggleRev
             if (actualPile.length > selCard.length && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play fewer cards than there are in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
-
             }
             else if (ssc === -1 && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play two cards of different value', variant: 'danger' }
                 this.setState({ errorMessage: error })
+            /*
+                this is default checking of card value if it's greater than previous cards played
+            */
             } else if (ssc < ptc && ssc !== 20) {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play one or more cards smaller than those in the pile', variant: 'danger' }
+                this.setState({ errorMessage: error })
+            } 
+            /*
+            only if Revolution is enabled for this game
+            this will check if the cards played are smaller than previously played cards
+            and also if the player is not playing 3s (which in Revolution is the strongest card)
+            */
+            else if (rev === true && ssc > ptc && ssc !== 3) {
+                const error = { type: 'rules', title: 'You cannot play this', message: 'You cannot play one or more cards bigger than those in the pile', variant: 'danger' }
                 this.setState({ errorMessage: error })
             }
             else if (actualPile.length - 1 > selCard.length && ssc === 20) {
@@ -747,7 +807,15 @@ class Game extends Component {
                 const error = { type: 'rules', title: 'You cannot play this', message: 'You cant start with a 2.', variant: 'danger' }
                 this.setState({ errorMessage: error })
             }
-            else {
+            else if(selCard.length === 4 && canRev === true){
+
+            }
+            /* 
+                only if Eight Stop is enabled for this game
+                check if card or cards played consist of 8s
+                if yes, stop the round
+            */
+             else {
                 const checkEOR = this.isRoundOver()
 
                 if (checkEOR === true) {
@@ -1433,7 +1501,7 @@ class Game extends Component {
 
     /* --giveCards --
     
-    Fonction pour échanger les cartes, selon le rang.ééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé
+    Fonction pour échanger les cartes, selon le rang.
     */
     giveCards = () => {
         const selCards = this.state.selectedCard
@@ -1661,11 +1729,15 @@ class Game extends Component {
 
                                 </Row>}
                         </div>}
+                    <Row>
+                        <Col>
+                            <Chatbox />
+                        </Col>
+                    </Row>
                 </Container>
                 <br />
                 <br />
                 <br />
-
                 <div></div>
             </div>
         )

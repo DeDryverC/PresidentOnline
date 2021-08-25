@@ -7,7 +7,11 @@ export default function Howto(){
                 <Col style = {{
                     border: '2px solid moccasin',
                     borderRadius: '10px',
-                    backgroundColor: 'palegoldenrod'
+                    backgroundColor: 'palegoldenrod',
+                    bottom: 0,
+                    overflowY: 'scroll',
+                    maxHeight: '500px',
+                    width: '700px'
                     }}>
                     <Row>        
                         <h2>How to play </h2>
